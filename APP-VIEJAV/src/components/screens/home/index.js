@@ -4,7 +4,7 @@ export default createStackNavigator(
   {Home},
   {
     navigationOptions: {
-      headerStyle: {backgroundColor: 'red'},
+      headerStyle: {backgroundColor: 'black'},
     },
   },
 );

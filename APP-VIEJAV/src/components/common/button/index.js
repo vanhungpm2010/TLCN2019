@@ -26,8 +26,8 @@ export default class ButtonCustom extends Component {
         disabled={disabled}
         marginTop={marginTop}
         containerStyle={containerStyle}
-        type={type}
         titleStyle={titleStyle}
+        type={type}
       />
     );
   }
