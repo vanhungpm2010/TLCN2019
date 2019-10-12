@@ -6,19 +6,13 @@ import {
   Button,
   ToastAndroid
 } from "react-native";
-import Voice from "react-native-voice";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import FunctionHome from "../../common/functionHome";
+import { Divider } from "react-native-elements";
 
 class Home extends Component {
   constructor(props) {
     super(props);
-    Voice.onSpeechResults = res => {
-      alert(Json.stringify(res));
-    };
-    Voice.onSpeechStart = res => {
-      alert(Json.stringify(res));
-    };
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -34,42 +28,39 @@ class Home extends Component {
     headerTitleStyle: { color: "#ffffff", fontSize: 20 },
     headerStyle: { backgroundColor: "#536DFE", color: "white" }
   });
-  handlePress = async () => {
-    await Voice.start("en-US");
-  };
-  handlePressEnd = () => {
-    Voice.stop();
-  };
+
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#E0E0E0", paddingBottom: 10 }}>
-        <Button title="Bat dau" onPress={this.handlePress}></Button>
-        <Button title="Ket thuc" onPress={this.handlePressEnd}></Button>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 2,backgroundColor:'red' }}></View>
+        <View style={{ flex: 4,backgroundColor:'green' }}>
 
-        <FunctionHome
-          title={"Tra Từ Điển"}
-          nameIcon={"pen"}
-          colorIcon={"white"}
-        />
-        <FunctionHome
-          title={"Tra Từ Điển Bằng Giọng Nói"}
-          nameIcon={"microphone"}
-          colorIcon={"#64DD17"}
-        />
-        <FunctionHome
-          title={"Tra Từ Điển Bằng Hình Ảnh"}
-          nameIcon={"camera"}
-          colorIcon={"#D50000"}
-        />
-        <FunctionHome
-          title={"Tra Từ Điển Bằng Cách Vẽ"}
-          colorBackGround={"white"}
-          nameIcon={"pen-fancy"}
-          colorIcon={"#F57C00"}
-        />
+        </View>
       </View>
     );
   }
 }
-
+{
+  /* <FunctionHome
+title={"Tra Từ Điển"}
+nameIcon={"pen"}
+colorIcon={"white"}
+/>
+<FunctionHome
+title={"Tra Từ Điển Bằng Giọng Nói"}
+nameIcon={"microphone"}
+colorIcon={"#64DD17"}
+/>
+<FunctionHome
+title={"Tra Từ Điển Bằng Hình Ảnh"}
+nameIcon={"camera"}
+colorIcon={"#D50000"}
+/>
+<FunctionHome
+title={"Tra Từ Điển Bằng Cách Vẽ"}
+colorBackGround={"white"}
+nameIcon={"pen-fancy"}
+colorIcon={"#F57C00"}
+/> */
+}
 export default Home;

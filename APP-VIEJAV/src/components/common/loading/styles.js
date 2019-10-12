@@ -1,13 +1,29 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from "react-native";
+import Layout from "../../../constants/Layout";
 
 export default StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
+  modalBackground: {
+    position: "absolute",
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "transparent",
+    width: Layout.window.width,
+    height: Layout.window.height
   },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
+  activityIndicatorWrapper: {
+    backgroundColor: "transparent",
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around"
   },
+  image: {
+    width: 200,
+    height: 200,
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "fas",
+    "name": "App Hoc Tieng Nhat",
     "slug": "APP-VIEJAV",
     "privacy": "public",
     "sdkVersion": "35.0.0",
@@ -13,7 +13,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

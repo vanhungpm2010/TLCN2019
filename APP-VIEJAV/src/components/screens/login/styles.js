@@ -17,6 +17,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   viewBackGround: {
+    flex:1,
     borderRadius: 50,
     padding: 10,
     width: '100%',

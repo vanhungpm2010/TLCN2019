@@ -17,14 +17,23 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   viewBackGround: {
+    flex:1,
     borderRadius: 50,
     padding: 10,
     width: '100%',
-    height: '70%',
+    height: '50%',
     justifyContent: 'center',
     alignContent: 'center',
     backgroundColor: '#0700e652',
   },
-  inputStyle: {marginBottom: 20},
-  button: {marginBottom: 5},
+  inputStyle: {},
+  button: {marginBottom: 5, marginTop:10,width:'50%'},
+  backGroudButton: {
+    backgroundColor: '#0700e652',
+  },
+  viewInput:{
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center'
+  }
 });

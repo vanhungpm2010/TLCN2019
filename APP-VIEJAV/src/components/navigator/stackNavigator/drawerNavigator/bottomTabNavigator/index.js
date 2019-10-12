@@ -2,9 +2,9 @@ import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import Home from '../../screens/home';
-import Friend from '../../screens/friends'
-import Lesson from '../../screens/lesson';
+import Home from '../../../../screens/home';
+import Friend from '../../../../screens/friends'
+import Lesson from '../../../../screens/lesson';
 
 const tabHomeBottom = createBottomTabNavigator({
     Home: {
