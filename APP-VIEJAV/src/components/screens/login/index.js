@@ -12,14 +12,16 @@ import Input from "../../common/input";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Button from "../../common/button";
 import styles from "./styles";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import WebService from "../../../services";
-import Storage from "../../../storages";
 import Loadding from "../../common/loading";
 import CheckValue from "../../../helpers/validate";
+import {backGround} from '../../../assets'
 import { LoginACtion } from "../../../actions/loginAction";
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   static navigationOptions = {
     header: null
   };
@@ -35,46 +37,28 @@ class Login extends Component {
     });
   };
   handlePress = () => {
-    let user = { email: "", password: "" };
-    user.email = this.state.user;
+    let user = { username: "", password: "" };
+    user.username = this.state.user;
     user.password = this.state.pass;
-    const result = this.validateInput(user.email, user.password);
+    const result = this.validateInput(user.username, user.password);
     if (result.success === false) {
       showMessage({
         message: result.message,
-        type: "warning"
+        type: "danger"
       });
       return;
     }
     this.props.dispatch(LoginACtion.loginRequest(user));
-    // this.setState({
-    //   loading: true
-    // });
-    // WebService.login(user)
-    //   .then(data => {
-    //     console.log("aaaaaaaaaaaaaaaaaaaaaaa", data);
-    //     this.setState({ loading: false });
-    //     Storage.saveUser(user);
-    //     Storage.saveToken(data.token);
-    //     showMessage({
-    //       message: "Đăng Nhập Thành công",
-    //       type: "success"
-    //     });
-    //     this.props.navigation.navigate("Drawer");
-    //   })
-    //   .catch(err => {
-    //     console.log("err", err);
-    //     this.setState({ loading: false });
-    //     console.log(err);
-    //     showMessage({
-    //       message: "Đăng Nhập Thất Bại",
-    //       type: "danger"
-    //     });
-    //   });
   };
   validateInput = (email, pass) => {
-    if (CheckValue.email(email)) return { success: true };
-    else return { success: false, message: "Nhập đúng địa chỉ email" };
+    if (!CheckValue.notNull(email))
+      return {
+        success: false,
+        message: "Tên tài khoản không được chứa khoảng trắng"
+      };
+    if (!CheckValue.passWord(pass))
+      return { success: false, message: "Mật khẩu phải có ít nhất 8 ký tự" };
+    return { success: true };
   };
   render() {
     const { loading } = this.props;
@@ -82,7 +66,7 @@ class Login extends Component {
       <ImageBackground
         imageStyle={styles.imageBackGround}
         style={styles.container}
-        source={require("../../../assets/nhatban.png")}
+        source={backGround}
       >
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -93,7 +77,7 @@ class Login extends Component {
           <View style={styles.viewBackGround}>
             <Input
               placeholderTextColor={"white"}
-              label={"Tên Đăng Nhập"}
+              label={""}
               leftIcon={
                 <Icon
                   name="user"
@@ -103,12 +87,12 @@ class Login extends Component {
                 />
               }
               stateName={"user"}
-              placeholder={"user@gmail.com"}
+              placeholder={"Tên Đăng Nhập"}
               handleChange={this.handleOnTextChange}
             />
             <Input
               containerStyle={styles.inputStyle}
-              label={"Mật Khẩu"}
+              label={""}
               leftIcon={
                 <Icon
                   name="lock"
@@ -122,28 +106,35 @@ class Login extends Component {
               handleChange={this.handleOnTextChange}
               secureTextEntry={true}
             />
-            <View style={styles.viewButton}>
+            <View style={{ padding: 10 }}>
               <Button
-                type={"clear"}
-                title="Đăng Ký"
-                containerStyle={{ width: "50%" }}
-              />
-              <Button
+                loading={loading}
                 onPress={this.handlePress}
                 type={"clear"}
                 title="Đăng Nhập"
-                containerStyle={{ width: "50%" }}
+              />
+              <Button
+                buttonStyle={styles.backGroudButton}
+                onPress={() => {
+                  this.props.navigation.navigate("SignUp");
+                }}
+                type={"clear"}
+                title="Đăng Ký"
               />
             </View>
-            <Button
+            <View>
+              <Text style={{ color: "white", textAlign: "center" }}>
+                Quên mật khẩu?
+              </Text>
+            </View>
+            {/* <Button
               buttonStyle={styles.backGroudButton}
               containerStyle={styles.button}
               title="Quên Mật Khẩu?"
-            />
+            /> */}
           </View>
         </KeyboardAvoidingView>
         <View style={{ flex: 1 }}></View>
-        {loading && <Loadding />}
       </ImageBackground>
     );
   }

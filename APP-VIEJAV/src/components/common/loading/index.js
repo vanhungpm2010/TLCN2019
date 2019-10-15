@@ -21,5 +21,5 @@ Loadding.propTypes = {
   sizeLoadding: PropTypes.number
 };
 Loadding.defaultProps = {
-  sizeLoadding: 80
+  sizeLoadding: 50
 };

@@ -10,6 +10,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import Button from "../../common/button";
 import styles from "./styles";
+import { backGround } from "../../../assets";
 
 export default class componentName extends Component {
   static navigationOptions = {
@@ -17,7 +18,9 @@ export default class componentName extends Component {
   };
   state = {
     user: "",
-    pass: ""
+    gmail: "",
+    pass: "",
+    rePass:""
   };
   handleOnTextChange = event => {
     this.setState({
@@ -27,12 +30,22 @@ export default class componentName extends Component {
   handlePress = () => {
     // this.props.navigation.push("SignUp");
   };
+  validateInput = (email, pass) => {
+    if (!CheckValue.notNull(email))
+      return {
+        success: false,
+        message: "Tên tài khoản không được chứa khoảng trắng"
+      };
+    if (!CheckValue.passWord(pass))
+      return { success: false, message: "Mật khẩu phải có ít nhất 8 ký tự" };
+    return { success: true };
+  };
   render() {
     return (
       <ImageBackground
         imageStyle={styles.imageBackGround}
         style={styles.container}
-        source={require("../../../assets/nhatban.png")}
+        source={backGround}
       >
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -43,7 +56,7 @@ export default class componentName extends Component {
           <View style={styles.viewBackGround}>
             <Input
               placeholderTextColor={"white"}
-              label={"Tên Đăng Nhập"}
+              label={""}
               leftIcon={
                 <Icon
                   name="user"
@@ -53,12 +66,27 @@ export default class componentName extends Component {
                 />
               }
               stateName={"user"}
-              placeholder={"user@gmail.com"}
+              placeholder={"Tên Đăng Nhập"}
+              handleChange={this.handleOnTextChange}
+            />
+            <Input
+              placeholderTextColor={"white"}
+              label={""}
+              leftIcon={
+                <Icon
+                  name="envelope"
+                  size={20}
+                  color="#FF9100"
+                  style={{ marginRight: 5 }}
+                />
+              }
+              stateName={"gmail"}
+              placeholder={"Gmail"}
               handleChange={this.handleOnTextChange}
             />
             <Input
               containerStyle={styles.inputStyle}
-              label={"Mật Khẩu"}
+              label={""}
               leftIcon={
                 <Icon
                   name="lock"
@@ -72,9 +100,9 @@ export default class componentName extends Component {
               handleChange={this.handleOnTextChange}
               secureTextEntry={true}
             />
-              <Input
+            <Input
               containerStyle={styles.inputStyle}
-              label={"Mật Khẩu"}
+              label={""}
               leftIcon={
                 <Icon
                   name="lock"
@@ -83,13 +111,13 @@ export default class componentName extends Component {
                   style={{ marginRight: 5 }}
                 />
               }
-              stateName={"pass"}
-              placeholder={"Nhập lại"}
+              stateName={"rePass"}
+              placeholder={"Nhập Lại Mật Khẩu"}
               handleChange={this.handleOnTextChange}
               secureTextEntry={true}
             />
             <View style={styles.viewInput}>
-            <Button containerStyle={styles.button} title="Đăng Ký" />
+              <Button containerStyle={styles.button} title="Đăng Ký" />
             </View>
           </View>
         </KeyboardAvoidingView>

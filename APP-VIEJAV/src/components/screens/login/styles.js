@@ -32,6 +32,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   backGroudButton: {
+    marginTop:10,
     backgroundColor: '#0700e652',
   },
 });

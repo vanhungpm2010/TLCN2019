@@ -1,1 +1,1 @@
-export default Host=`https://reqres.in`
+export default Host=`http://35.198.209.252:80/api`

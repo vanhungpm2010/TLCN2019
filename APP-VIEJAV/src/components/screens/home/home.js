@@ -10,11 +10,13 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import FunctionHome from "../../common/functionHome";
 import { Divider } from "react-native-elements";
 
+
 class Home extends Component {
   constructor(props) {
     super(props);
+  
   }
-
+  
   static navigationOptions = ({ navigation }) => ({
     title: "Trang Chủ",
     headerLeft: (

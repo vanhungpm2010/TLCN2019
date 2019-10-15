@@ -1,6 +1,6 @@
 import axios from "axios";
 import Host from "./host";
-import { NavigationActions } from 'react-navigation';
+import Navigator from "../components/navigator/Navigator";
 
 const methods = {
   get: "GET",
@@ -17,10 +17,10 @@ const client = axios.create({
 const Authorization = { token: "" };
 
 const init = ({ token }) => {
-  // if (token) {
-  //   client.defaults.headers.common.Authorization = `Bearer ${token}`;
-  //   Authorization.token = token;
-  // }
+  if (token) {
+    client.defaults.headers.common.Authorization = `Bearer ${token}`;
+    Authorization.token = token;
+  }
   client.defaults.timeout = 30000;
 };
 const request = async (options, isHeader = true) => {
@@ -28,19 +28,21 @@ const request = async (options, isHeader = true) => {
     client.defaults.headers.common.Authorization = null;
   }
   const onSuccess = response => {
-    console.log('respone',response)
+    console.log('respone',response.data)
+    console.log('status',response.status)
     // console.log('[RESPONSE]', JSON.stringify(response, null, 2));
     if (response && response.status !== 200 && response.status !== 202) {
       throw response.data ? response.data.message : "";
     }
+    console.log('ok')
     return response.data ? response.data : {};
   };
   const onError = error => {
-    console.log('vanviet errereara',error)
+    console.log('vanviet errereara',error.message)
     // console.log('[ERROR]', JSON.stringify(error, null, 2));
     if (error.response) {
       if (error.response.status === 401) {
-        NavigationActions.navigate.push("Login")
+        Navigator.navigate("Login");
         return;
       }
       throw error.response.data;
