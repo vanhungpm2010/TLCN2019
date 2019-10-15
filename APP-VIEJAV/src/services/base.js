@@ -1,6 +1,7 @@
 import axios from "axios";
 import Host from "./host";
 import Navigator from "../components/navigator/Navigator";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const methods = {
   get: "GET",
@@ -38,12 +39,16 @@ const request = async (options, isHeader = true) => {
     return response.data ? response.data : {};
   };
   const onError = error => {
-    console.log('vanviet errereara',error.message)
+    console.log('loi error',error.message )
     // console.log('[ERROR]', JSON.stringify(error, null, 2));
     if (error.response) {
       if (error.response.status === 401) {
         Navigator.navigate("Login");
-        return;
+        showMessage({
+          message: "Hết Hạn Đăng Nhập",
+          type: "danger"
+        });
+        throw error;
       }
       throw error.response.data;
     } else if (error.request) {

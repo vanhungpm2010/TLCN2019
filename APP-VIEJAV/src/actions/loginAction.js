@@ -5,7 +5,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import Navigator from "../components/navigator/Navigator";
 
 export const LoginACtion = {
-  loginRequest
+  loginRequest,
 };
 
 loginSuccess = data => {
@@ -20,14 +20,11 @@ loginFalsed = data => {
     data: data
   };
 };
-
 function loginRequest(loginData) {
-
   return dispatch => {
     dispatch({ type: typeAction.IS_LOADING_LOGIN });
     WebService.login(loginData)
       .then(async data => {
-      
         await Storage.saveToken(data.token);
         await Storage.saveUserInfo({
           id: data._id,
