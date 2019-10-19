@@ -3,8 +3,6 @@ import Home from './home';
 export default createStackNavigator(
   {Home},
   {
-    navigationOptions: {
-      headerStyle: {backgroundColor: 'black'},
-    },
+    initialRouteName: 'Home',
   },
 );

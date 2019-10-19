@@ -1,3 +1,3 @@
-import Host from './host'
-export const loginApi= `${Host}/users/login`
-export const registerApi= `${Host}/users`
+export const loginApi= `/users/login`
+export const registerApi= `/users`
+export const putAvartar= `/avatars`

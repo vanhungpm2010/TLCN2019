@@ -19,8 +19,8 @@ export default class componentName extends Component {
   }
 
   updateStorages = async () => {
+    console.log('update')
     await Storages.initialize();
-    console.log("willmout", Storages.getToken());
   };
 
   render() {
@@ -39,7 +39,6 @@ export default class componentName extends Component {
       return (
         <Provider store={Store}>
           <View style={{ flex: 1 }}>
-            {update}
             <StackNavigator
               ref={navigatorRef => {
                 this._rootNavigator = navigatorRef;

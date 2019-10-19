@@ -5,7 +5,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import Navigator from "../components/navigator/Navigator";
 
 export const LoginACtion = {
-  loginRequest,
+  loginRequest
 };
 
 loginSuccess = data => {
@@ -30,14 +30,14 @@ function loginRequest(loginData) {
           id: data._id,
           username: data.username,
           email: data.email,
-          avatar: data.avatar
+          avatar: data.avatarCtr
         });
         dispatch(loginSuccess(data));
-        Navigator.navigate("Drawer");
         showMessage({
           message: "Đăng Nhập Thành công",
           type: "success"
         });
+        Navigator.navigate("LoadingAthu");
       })
       .catch(err => {
         console.log("bi loi", err);

@@ -71,11 +71,42 @@ const put = (url, data, header = true) => request({ url, method: methods.put, da
 const patch = (url, data, header = true) => request({ url, method: methods.patch, data: JSON.stringify(data) }, header);
 
 const del = (url, data, header = true) => request({ url, method: methods.delete, data: JSON.stringify(data) }, header);
+const postFormData = (api, formData,method) => {
+  // console.log('api: ', api, '\nparam: ', formData);
+  return axios({
+    url: `${Host}${api}`,
+    method: `${method}`,
+    data: formData,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${Authorization.token}`,
+    },
+  })
+  // AXIOS.post(api, serializeForm(params))
+    .then((response) => {
+      // console.log(response.data);
+      // if (response.data.statusCode === RESPONSE_STATUS.Authorization) {
+      //   EventRegister.emit('unauth', '');
+      //   return;
+      // }
+      return response.data;
+    })
+    .catch((error) => {
+      // if (error.response.status === RESPONSE_STATUS.Authorization) {
+      //   EventRegister.emit('unauth', '');
+      //   // return;
+      // }
+      // callback(error.response.data);
+      throw error.response.data;;
+    });
+};
 
 export default {
     init,
     get,
     post,
+    postFormData,
     put,
     patch,
     del,

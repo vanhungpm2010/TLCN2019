@@ -76,7 +76,7 @@ class Storage {
   }
 
   async saveUserInfo(userInfo) {
-    // console.log('saveUserInfo: ', userInfo)
+    console.log('saveUserInfo: ', userInfo)
     this._userInfo = { ...this._userInfo, ...userInfo };
     const json = JSON.stringify(this._userInfo);
     // console.log("save user: ", this._userInfo);

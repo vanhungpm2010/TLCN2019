@@ -10,4 +10,9 @@ export default class WebService {
     console.log(Url.registerApi)
   return api.post(Url.registerApi, data);
 };
+static putAvartar = async data => {
+  console.log(Url.putAvartar)
+return api.postFormData(Url.putAvartar, data,'PUT');
+};
+
 }

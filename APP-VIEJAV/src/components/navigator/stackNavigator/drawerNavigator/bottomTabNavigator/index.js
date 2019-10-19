@@ -7,7 +7,7 @@ import Friend from '../../../../screens/friends'
 import Lesson from '../../../../screens/lesson';
 
 const tabHomeBottom = createBottomTabNavigator({
-    Home: {
+    HomeTabBottom: {
     screen: Home,
     navigationOptions: {
       title: 'Trang Chủ',
@@ -15,7 +15,7 @@ const tabHomeBottom = createBottomTabNavigator({
         <Icon name="home" size={17} color={tintColor} />
       ),
     },
-  },Lesson: {
+  },LessonTabBottom: {
     screen: Lesson,
     navigationOptions: {
       tabBarLabel: 'Bài Học',
@@ -24,7 +24,7 @@ const tabHomeBottom = createBottomTabNavigator({
       ),
     },
   },
-  Friend: {
+  FriendTabBottom: {
     screen: Friend,
     navigationOptions: {
       tabBarLabel: 'Bạn Bè',

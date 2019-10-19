@@ -4,19 +4,17 @@ import {
   Text,
   TouchableOpacity,
   Button,
-  ToastAndroid
+  ToastAndroid,
+  Image
 } from "react-native";
+import { Banner } from "../../../assets";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import FunctionHome from "../../common/functionHome";
-import { Divider } from "react-native-elements";
-
 
 class Home extends Component {
   constructor(props) {
     super(props);
-  
   }
-  
+
   static navigationOptions = ({ navigation }) => ({
     title: "Trang Chủ",
     headerLeft: (
@@ -34,9 +32,22 @@ class Home extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 2,backgroundColor:'red' }}></View>
-        <View style={{ flex: 4,backgroundColor:'green' }}>
-
+        <View
+          style={{ flex: 2, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image
+            resizeMode={"contain"}
+            style={{ flex: 1 }}
+            source={Banner}
+          ></Image>
+        </View>
+        <View style={{ flex: 4, backgroundColor: "green" }}>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+            <View style={{ flex: 2, backgroundColor: "red",borderRadius:15,margin:2 }}></View>
+            <View style={{ flex: 4, backgroundColor: "black",borderRadius:15,margin:2  }}></View>
+          </View>
+          <View style={{ flex: 1 }}></View>
+          <View style={{ flex: 1 }}></View>
         </View>
       </View>
     );
