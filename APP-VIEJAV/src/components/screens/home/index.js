@@ -1,8 +1,9 @@
-import {createStackNavigator} from 'react-navigation-stack';
-import Home from './home';
+import { createStackNavigator } from "react-navigation-stack";
+import Home from "./home";
+import CreateCourse from '../createCourse'
 export default createStackNavigator(
-  {Home},
+  { Home,CreateCourse },
   {
-    initialRouteName: 'Home',
-  },
+    initialRouteName: "Home"
+  }
 );
