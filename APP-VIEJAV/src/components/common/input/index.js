@@ -1,12 +1,22 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {Input} from 'react-native-elements';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Input } from "react-native-elements";
 
 export default class InputCommon extends Component {
-  onChangeStateHandle = event => {
-    this.props.handleChange({
-      [this.props.stateName]: event,
-    });
+  onChangeStateHandle = (event = null) => {
+    const {stateName}= this.props
+    console.log('statename',stateName)
+    if (!stateName.id) {
+      this.props.handleChange({
+        [stateName]: event
+      });
+    }else{
+      console.log('statename value: ',stateName.value)
+      this.props.handleChange({
+        [stateName.value]: event,
+        id:stateName.id
+      });
+    }
   };
   render() {
     const {
@@ -23,7 +33,7 @@ export default class InputCommon extends Component {
       containerStyle,
       secureTextEntry,
       placeholderTextColor,
-      inputStyle,
+      inputStyle
     } = this.props;
     return (
       <Input
@@ -42,29 +52,35 @@ export default class InputCommon extends Component {
         disabled={disabled}
         secureTextEntry={secureTextEntry}
         inputStyle={inputStyle}
+        autoFocus={this.props.autoFocus}
       />
     );
   }
 }
 InputCommon.defaultProps = {
-  placeholderTextColor: 'white',
+  autoFocus:false,
+  placeholderTextColor: "white",
   leftIcon: null,
   placeholder: null,
   rightIcon: null,
-  errorStyle: {color: 'red'},
+  errorStyle: { color: "red" },
   errorMessage: null,
   disabled: false,
   label: null,
-  labelStyle: {color: '#FF9100'},
+  labelStyle: { color: "#FF9100" },
   inputContainerStyle: null,
   containerStyle: null,
   secureTextEntry: false,
-  inputStyle: {borderBottomColor: '#FF9100', color: 'white'},
+  inputStyle: { borderBottomColor: "#FF9100", color: "white" }
 };
 InputCommon.propTypes = {
   handleChange: PropTypes.func.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  stateName: PropTypes.string.isRequired,
+  stateName:PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.object.isRequired,
+  ]),
+  autoFocus:PropTypes.bool,
   disabled: PropTypes.bool,
   leftIcon: PropTypes.element,
   placeholder: PropTypes.string,
@@ -77,5 +93,5 @@ InputCommon.propTypes = {
   containerStyle: PropTypes.object,
   secureTextEntry: PropTypes.bool,
   placeholderTextColor: PropTypes.string,
-  inputStyle: PropTypes.object,
+  inputStyle: PropTypes.object
 };
