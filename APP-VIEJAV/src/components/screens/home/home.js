@@ -45,6 +45,7 @@ class Home extends Component {
         this.test.bounce(800).then(endState => {
           console.log("test");
         });
+        break;
         case "studyToTopic":
           this.studyToTopic.bounce(800).then(endState => {
             this.props.navigation.navigate("StudyToTopic");
