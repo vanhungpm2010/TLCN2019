@@ -17,25 +17,34 @@ import Loading from "../../common/loading";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Api from "../../../services";
 import { SocialIcon } from "react-native-elements";
+import Styles from "./styles";
 
+function guidGenerator() {
+  var S4 = function() {
+     return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  };
+  return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      autoFocus:false,
+      disable:false,
+      delete: false,
+      autoFocus: false,
       loading: false,
       titleCourse: "",
       erroTitle: "",
       data: [
         {
-          id: "0",
+          id: guidGenerator(),
           valueText: "",
           valueDefine: "",
           erroText: "",
           erroDefine: ""
         },
         {
-          id: "1",
+          id:guidGenerator(),
           valueText: "",
           valueDefine: "",
           erroText: "",
@@ -64,11 +73,9 @@ class Home extends Component {
     return { status: true, mess: "Không được để chống" };
   };
   submitCreateCourse = () => {
-    console.log("submit");
     const { titleCourse, data } = this.state;
     const result = this.validate(titleCourse);
     if (!result.status) {
-      console.log(result.mess);
       this.setState({ erroTitle: result.mess });
       return;
     } else {
@@ -84,7 +91,6 @@ class Home extends Component {
       const resultText = this.validate(item.valueText);
       const resultData = this.validate(item.valueDefine);
       if (!resultText.status) {
-        console.log("index", index);
         data[index].erroText = resultText.mess;
         this.setState({ data });
         validate = false;
@@ -104,7 +110,6 @@ class Home extends Component {
     });
     if (!validate) return;
     const content = { title: titleCourse, content: contentSubmit };
-    console.log("content", content);
     this.setState({ loading: true });
     Api.createCourse(content)
       .then(data => {
@@ -130,48 +135,84 @@ class Home extends Component {
   }
 
   handleOnTextChange = event => {
+    console.log(event)
     this.setState({
       ...event
     });
   };
   handleOnDefineContent = event => {
     const { data } = this.state;
-    data[event.id].valueDefine = event.valueDefine;
-    this.setState({ data });
+    console.log('event',event)
+    data.map((item,index)=>{
+      if(item.id === event.id)
+       item.valueDefine=event.valueDefine
+     })
+     this.setState({ data });
   };
   handleOnTextContent = event => {
     const { data } = this.state;
-    data[event.id].valueText = event.valueText;
+    console.log('data',data)
+    data.map((item,index)=>{
+     if(item.id === event.id)
+      item.valueText=event.valueText
+    })
+    // const result= data.filter((item => item.id === event.id))
+    // data[event.id.toString()].valueText = event.valueText;
     this.setState({ data });
   };
-  handleAddContent=()=>{
-    const {data}=this.state
+  handleAddContent = () => {
+    const { data } = this.state;
     data.push({
-      id:data.length,
+      id: guidGenerator(),
       valueText: "",
       valueDefine: "",
       erroText: "",
       erroDefine: ""
-    })
-    this.setState({data,autoFocus:true})
-  }
+    });
+    console.log('data add',data)
+
+    if (data.length > 2) this.setState({ delete: true });
+
+    this.setState({ data, autoFocus: true });
+  };
+  handleDelete = id => {
+    const { data } = this.state;
+    console.log('leght',data.length)
+    const result = data.filter(item => item.id !== id);
+    console.log('data sub',data)
+
+    if (result.length <= 2) this.setState({ delete: false });
+    this.setState({ data: result });
+  };
+
   renderItem = ({ item, index, move, moveEnd, isActive }) => {
-    console.log("iteam", item.erroText);
+    handleMove=()=>{
+      return (move)
+    }
     return (
       <TouchableOpacity
         style={{
-          shadowOffset: { width: 10, height: 10 },
-          shadowColor: "black",
-          shadowOpacity: 1,
-          elevation: 3,
-          backgroundColor: "white",
-          margin: 10,
-          padding: 10,
+          ...Styles.iteam,
           backgroundColor: isActive ? "#E1F5FE" : "white"
         }}
-        onLongPress={move}
-        onPressOut={moveEnd}
+        onLongPress={this.handleMove}
+        onPressOut={()=>{
+          moveEnd
+        }}
       >
+        {this.state.delete && (
+          <TouchableOpacity
+            onPress={() => this.handleDelete(item.id)}
+            style={{ position: "absolute", top: 0, right: 0 }}
+          >
+            <Icon
+              color={"gray"}
+              name={"times-circle"}
+              size={20}
+              style={{ marginRight: 5, marginTop: 5 }}
+            />
+          </TouchableOpacity>
+        )}
         <Input
           inputStyle={{ color: "black" }}
           inputContainerStyle={{ marginBottom: 10 }}
@@ -181,6 +222,7 @@ class Home extends Component {
           value={item.valueText}
           errorMessage={item.erroText}
           autoFocus={this.state.autoFocus}
+          disabled={this.state.disable}
         />
         <Input
           inputStyle={{ color: "black" }}
@@ -190,6 +232,8 @@ class Home extends Component {
           handleChange={this.handleOnDefineContent}
           value={item.valueDefine}
           errorMessage={item.erroDefine}
+          disabled={this.state.disable}
+
         />
       </TouchableOpacity>
     );
@@ -197,27 +241,10 @@ class Home extends Component {
 
   render() {
     const { data, erroTitle, loading } = this.state;
-    console.log("data", data);
     return (
-      <View style={{ flex: 1, backgroundColor: "#FFEBEE" }}>
-        <TouchableOpacity
-          onPress={this.handleAddContent}
-          style={{
-            alignItems:'center',
-            justifyContent:'center',
-            width: 70,
-            height: 70,
-            borderRadius: 70,
-            backgroundColor: "#FF6D00",
-            shadowOffset: { width: 10, height: 10 },
-            shadowColor: "black",
-            shadowOpacity: 1,
-            elevation: 3,
-            position: 'absolute',right: 0, bottom: 0,
-            zIndex: 100
-          }}
-        >
-          <Icon  name="plus" size={35} color={'white'}/>
+      <View style={Styles.container}>
+        <TouchableOpacity onPress={this.handleAddContent} style={Styles.plus}>
+          <Icon name="plus" size={35} color={"white"} />
         </TouchableOpacity>
         <View style={{ paddingBottom: 15 }}>
           <Input
@@ -236,7 +263,7 @@ class Home extends Component {
               data={data}
               renderItem={this.renderItem}
               keyExtractor={(item, index) => `draggable-item-${item.id}`}
-              scrollPercent={1}
+              scrollPercent={0}
               onMoveEnd={({ data }) => this.setState({ data })}
             />
           </View>

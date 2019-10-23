@@ -11,7 +11,8 @@ import Drawer from '../../../screens/drawer'
 const DrawerNavigatorConfig = {
   initialRouteName: 'HomeDrawer',
   drawerPosition: 'left',
-  contentComponent:Drawer
+  contentComponent:Drawer,
+  drawerType:'back'
 };
 export default createDrawerNavigator(
   {

@@ -5,7 +5,6 @@ import { Input } from "react-native-elements";
 export default class InputCommon extends Component {
   onChangeStateHandle = (event = null) => {
     const {stateName}= this.props
-    console.log('statename',stateName)
     if (!stateName.id) {
       this.props.handleChange({
         [stateName]: event

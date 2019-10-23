@@ -31,28 +31,28 @@ class Home extends Component {
     headerStyle: { backgroundColor: "#536DFE", color: "white" }
   });
   handleViewRefTest = ref => (this.test = ref);
-  handleViewRefcreateCourse= ref => (this.createCourse = ref);
+  handleViewRefcreateCourse = ref => (this.createCourse = ref);
+  handleViewRefStudyToTopic= ref => (this.studyToTopic = ref);
   bounce = name => {
     switch (name) {
       case "createCourse":
         this.createCourse.bounce(800).then(endState => {
-          console.log('CreateCourse')
+          console.log("CreateCourse");
           this.props.navigation.navigate("CreateCourse");
         });
         break;
       case "test":
-          this.test.bounce(800).then(endState => {
-            console.log('test')
+        this.test.bounce(800).then(endState => {
+          console.log("test");
+        });
+        case "studyToTopic":
+          this.studyToTopic.bounce(800).then(endState => {
+            this.props.navigation.navigate("StudyToTopic");
           });
         break;
       default:
         break;
     }
-    // if (name === "createCourse") {
-    //   this.view.bounce(800).then(endState => {
-    //     this.props.navigation.navigate("CreateCourse");
-    //   });
-    // }
   };
   render() {
     console.log("home");
@@ -94,49 +94,54 @@ class Home extends Component {
                 <Text style={{ color: "white", fontSize: 20 }}>Đề Thi</Text>
               </Animatable.View>
             </TouchableWithoutFeedback>
-            <Animatable.View
-              animation="fadeIn"
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                flex: 4,
-                backgroundColor: "#64DD17",
-                borderRadius: 15,
-                margin: 2
-              }}
-            >
-              <Image
-                style={{ width: "30%", height: "50%" }}
-                source={Chude}
-              ></Image>
-              <Text style={{ color: "white", fontSize: 20 }}>
-                Học Theo Chủ Đề
-              </Text>
-            </Animatable.View>
+            <TouchableWithoutFeedback onPress={() => this.bounce("studyToTopic")}>
+              <Animatable.View
+                ref={this.handleViewRefStudyToTopic}
+                animation="fadeIn"
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flex: 4,
+                  backgroundColor: "#64DD17",
+                  borderRadius: 15,
+                  margin: 2
+                }}
+              >
+                <Image
+                  style={{ width: "30%", height: "50%" }}
+                  source={Chude}
+                ></Image>
+                <Text style={{ color: "white", fontSize: 20 }}>
+                  Học Theo Chủ Đề
+                </Text>
+              </Animatable.View>
+            </TouchableWithoutFeedback>
           </View>
           <View style={{ flex: 1, flexDirection: "row" }}>
-          <TouchableWithoutFeedback
+            <TouchableWithoutFeedback
               onPress={() => this.bounce("createCourse")}
             >
-            <Animatable.View
-              ref={this.handleViewRefcreateCourse}
-              animation="bounceInUp"
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                flex: 1,
-                backgroundColor: "#F57C00",
-                borderRadius: 15,
-                margin: 2
-              }}
-            >
-              <Image
-                style={{ width: "50%", height: "50%" }}
-                source={TaoKhoaHoc}
-              ></Image>
-              <Text style={{ color: "white", fontSize: 20 }}>Tạo Học Phần</Text>
-            </Animatable.View>
+              <Animatable.View
+                ref={this.handleViewRefcreateCourse}
+                animation="bounceInUp"
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flex: 1,
+                  backgroundColor: "#F57C00",
+                  borderRadius: 15,
+                  margin: 2
+                }}
+              >
+                <Image
+                  style={{ width: "50%", height: "50%" }}
+                  source={TaoKhoaHoc}
+                ></Image>
+                <Text style={{ color: "white", fontSize: 20 }}>
+                  Tạo Học Phần
+                </Text>
+              </Animatable.View>
             </TouchableWithoutFeedback>
             <Animatable.View
               ref={this.handleCreateCourse}
@@ -175,9 +180,7 @@ class Home extends Component {
             </Animatable.View>
           </View>
           <View style={{ flex: 1, flexDirection: "row" }}>
-            <TouchableWithoutFeedback
-              onPress={() => this.bounce("")}
-            >
+            <TouchableWithoutFeedback onPress={() => this.bounce("")}>
               <Animatable.View
                 animation="fadeIn"
                 style={{
@@ -224,27 +227,5 @@ class Home extends Component {
     );
   }
 }
-{
-  /* <FunctionHome
-title={"Tra Từ Điển"}
-nameIcon={"pen"}
-colorIcon={"white"}
-/>
-<FunctionHome
-title={"Tra Từ Điển Bằng Giọng Nói"}
-nameIcon={"microphone"}
-colorIcon={"#64DD17"}
-/>
-<FunctionHome
-title={"Tra Từ Điển Bằng Hình Ảnh"}
-nameIcon={"camera"}
-colorIcon={"#D50000"}
-/>
-<FunctionHome
-title={"Tra Từ Điển Bằng Cách Vẽ"}
-colorBackGround={"white"}
-nameIcon={"pen-fancy"}
-colorIcon={"#F57C00"}
-/> */
-}
+
 export default Home;
