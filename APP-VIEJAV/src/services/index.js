@@ -18,4 +18,17 @@ export default class WebService {
     console.log(Url.putAvartar);
     return api.postFormData(Url.putAvartar, data, "PUT");
   };
+  static getCourses = async() => {
+    console.log(Url.getCourses);
+    return api.get(Url.getCourses);
+  };
+  static deleteCourses = async(id) => {
+    console.log(Url.deleteCoures);
+    return api.del(Url.deleteCoures,id);
+  };
+  static getDetailCourses = async(id) => {
+    console.log(Url.getDetailCourses);
+    return api.get(Url.getDetailCourses,id);
+  };
+  
 }

@@ -50,6 +50,7 @@ function Drawer(props) {
       }
     }
   ];
+  console.log("user",props.user)
   const hanldeEditPress = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,

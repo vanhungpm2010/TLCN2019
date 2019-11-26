@@ -41,14 +41,19 @@ class Home extends Component {
           valueText: "",
           valueDefine: "",
           erroText: "",
-          erroDefine: ""
+          erroDefine: "",
+          language:"VietNamese",
+          languageCode:"vi"
+
         },
         {
           id:guidGenerator(),
           valueText: "",
           valueDefine: "",
           erroText: "",
-          erroDefine: ""
+          erroDefine: "",
+          language:"VietNamese",
+          languageCode:"vi"
         }
       ]
     };
@@ -86,7 +91,9 @@ class Home extends Component {
     data.map((item, index) => {
       const content = {
         text: item.valueText,
-        mean: item.valueDefine
+        mean: item.valueDefine,
+        language:item.languageCode
+
       };
       const resultText = this.validate(item.valueText);
       const resultData = this.validate(item.valueDefine);
@@ -118,6 +125,7 @@ class Home extends Component {
           message: "Tạo Học Phần Thành Công",
           type: "success"
         });
+        this.props.navigation.navigate('StudyToTopic')
       })
       .catch(err => {
         this.setState({ loading: false });
@@ -125,6 +133,7 @@ class Home extends Component {
           message: "Tạo Học Phần Thất Bại",
           type: "danger"
         });
+        return
       });
   };
   componentDidMount() {
@@ -133,16 +142,31 @@ class Home extends Component {
       submitCreateCourse: this.submitCreateCourse
     });
   }
+componentWillReceiveProps(nextProps) {
+  if(this.props.navigation.getParam("language") !== nextProps.navigation.getParam("language"))
+    {
+      const {data} = this.state
+      let language=nextProps.navigation.getParam("language")
+      data.map((value,index)=>{
+        if(value.id === language.id){
+          value.language=language.name
+          value.languageCode=language.code
+        }
+      })
+      this.setState({
+        data
+      })
+      
+    }
+}
 
   handleOnTextChange = event => {
-    console.log(event)
     this.setState({
       ...event
     });
   };
   handleOnDefineContent = event => {
     const { data } = this.state;
-    console.log('event',event)
     data.map((item,index)=>{
       if(item.id === event.id)
        item.valueDefine=event.valueDefine
@@ -151,7 +175,6 @@ class Home extends Component {
   };
   handleOnTextContent = event => {
     const { data } = this.state;
-    console.log('data',data)
     data.map((item,index)=>{
      if(item.id === event.id)
       item.valueText=event.valueText
@@ -169,7 +192,6 @@ class Home extends Component {
       erroText: "",
       erroDefine: ""
     });
-    console.log('data add',data)
 
     if (data.length > 2) this.setState({ delete: true });
 
@@ -177,18 +199,19 @@ class Home extends Component {
   };
   handleDelete = id => {
     const { data } = this.state;
-    console.log('leght',data.length)
     const result = data.filter(item => item.id !== id);
-    console.log('data sub',data)
 
     if (result.length <= 2) this.setState({ delete: false });
     this.setState({ data: result });
   };
-
+  _handleLan =(id)=>{
+    this.props.navigation.navigate("Language",{ id })
+  }
   renderItem = ({ item, index, move, moveEnd, isActive }) => {
     handleMove=()=>{
       return (move)
     }
+  
     return (
       <TouchableOpacity
         style={{
@@ -235,11 +258,14 @@ class Home extends Component {
           disabled={this.state.disable}
 
         />
+  <TouchableOpacity onPress={()=>this._handleLan(item.id)} style={{padding:10}}><Text style={{color:"green"}}>Ngôn Ngữ:{item.language}</Text></TouchableOpacity>
       </TouchableOpacity>
     );
   };
 
   render() {
+  
+    console.log("lange",this.props.navigation.getParam("language"))
     const { data, erroTitle, loading } = this.state;
     return (
       <View style={Styles.container}>

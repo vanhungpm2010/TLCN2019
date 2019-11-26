@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-class Lesson extends Component {
+import { createStackNavigator } from "react-navigation-stack";
+import Lesson from "./lesson";
 
-  render() {
-    return <View style={{flex: 1, backgroundColor: 'red'}} />;
+
+export default createStackNavigator(
+  { Lesson},
+  {
+    initialRouteName: "Lesson"
   }
-}
-
-export default Lesson;
+);

@@ -25,6 +25,7 @@ const init = ({ token }) => {
   client.defaults.timeout = 30000;
 };
 const request = async (options, isHeader = true) => {
+  console.log("option",options)
   if (!isHeader) {
     client.defaults.headers.common.Authorization = null;
   }
@@ -50,6 +51,7 @@ const request = async (options, isHeader = true) => {
         });
         throw error;
       }
+      console.log(error.response.data)
       throw error.response.data;
     } else if (error.request) {
       throw error;
@@ -70,7 +72,7 @@ const put = (url, data, header = true) => request({ url, method: methods.put, da
 
 const patch = (url, data, header = true) => request({ url, method: methods.patch, data: JSON.stringify(data) }, header);
 
-const del = (url, data, header = true) => request({ url, method: methods.delete, data: JSON.stringify(data) }, header);
+const del = (url, params, header = true) => request({ url,params,method: methods.delete}, header);
 const postFormData = (api, formData,method) => {
   // console.log('api: ', api, '\nparam: ', formData);
   return axios({
