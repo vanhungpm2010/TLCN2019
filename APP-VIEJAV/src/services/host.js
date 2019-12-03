@@ -1,1 +1,1 @@
-export default Host=`http://192.168.0.8:3001/api`
+export default Host=`http://34.68.110.193/api`

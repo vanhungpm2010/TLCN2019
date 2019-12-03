@@ -30,5 +30,8 @@ export default class WebService {
     console.log(Url.getDetailCourses);
     return api.get(Url.getDetailCourses,id);
   };
-  
+  static getTopic = async(id) => {
+    console.log(Url.getTopic);
+    return api.get(Url.getTopic);
+  };
 }
