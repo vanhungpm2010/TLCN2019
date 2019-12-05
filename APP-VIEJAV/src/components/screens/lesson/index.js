@@ -6,6 +6,6 @@ import DetailLesson from "../getLesson";
 export default createStackNavigator(
   { Lesson,DetailLesson},
   {
-    initialRouteName: "DetailLesson"
+    initialRouteName: "Lesson"
   }
 );

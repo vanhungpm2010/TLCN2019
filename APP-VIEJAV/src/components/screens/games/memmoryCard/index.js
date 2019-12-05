@@ -162,9 +162,7 @@ export default class GetCourse extends Component {
       start: true
     });
   };
-  // componentDidMount(){
 
-  // }
 
   componentWillUnmount() {
     clearInterval(this.interval);

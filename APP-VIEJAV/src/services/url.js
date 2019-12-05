@@ -5,4 +5,8 @@ export const createCoures= `/courses`
 export const deleteCoures= `/courses`
 export const getCourses= `/users/get-courses-latest`
 export const getDetailCourses= `/courses`
+//topics
 export const getTopic= `/topics`
+//history
+export const setHistory= `/histories/set-history`
+

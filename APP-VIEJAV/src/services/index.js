@@ -34,4 +34,11 @@ export default class WebService {
     console.log(Url.getTopic);
     return api.get(Url.getTopic);
   };
+  static getQuizDetail = async(id) => {
+    return api.get(`/topics/${id}/learn`);
+  };
+  static setHistory = async data => {
+    console.log(Url.setHistory);
+    return api.post(Url.setHistory, data);
+  };
 }
