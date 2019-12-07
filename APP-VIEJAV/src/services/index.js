@@ -34,11 +34,23 @@ export default class WebService {
     console.log(Url.getTopic);
     return api.get(Url.getTopic);
   };
+  static getDetailLesson = async(id) => {
+    return api.get(`/topics/${id}`);
+  };
   static getQuizDetail = async(id) => {
     return api.get(`/topics/${id}/learn`);
   };
   static setHistory = async data => {
     console.log(Url.setHistory);
     return api.post(Url.setHistory, data);
+  };
+  //challenge
+  static getChallenge =()=> {
+    console.log(Url.getChallenge);
+    return api.get(Url.getChallenge);
+  };
+  static getDetailChanll=(id)=> {
+    console.log(Url.getChallenge);
+    return api.get(`/challenge/${id}`);
   };
 }

@@ -9,4 +9,5 @@ export const getDetailCourses= `/courses`
 export const getTopic= `/topics`
 //history
 export const setHistory= `/histories/set-history`
-
+//challge
+export const getChallenge= `challenge`

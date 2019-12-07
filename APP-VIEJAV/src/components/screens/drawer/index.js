@@ -35,12 +35,6 @@ function Drawer(props) {
       icon: "home"
     },
     {
-      id: "2",
-      title: "Menu",
-      screen: "Menu",
-      icon: "sign-out-alt"
-    },
-    {
       id: "3",
       title: "Đăng Xuất",
       icon: "sign-out-alt",

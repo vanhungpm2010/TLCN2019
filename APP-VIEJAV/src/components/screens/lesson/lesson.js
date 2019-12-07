@@ -54,7 +54,7 @@ class Lesson extends Component {
       });
       return
     }
-    this.props.navigation.navigate('DetailLesson',{id})
+    this.props.navigation.navigate('StudyLesson',{id})
 
 
   }

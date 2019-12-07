@@ -26,7 +26,7 @@ class Detail extends Component {
       timer: 20,
       quizPlay: {},
       totalQuiz: 0,
-      righQuiz: 0,
+      righQuiz: [],
       currentQuiz: 0,
       endQuiz: false,
       visible: true,
@@ -48,19 +48,25 @@ class Detail extends Component {
   componentDidMount() {
     console.log("params ne", this.props.navigation.getParam("id"));
     this.setState({ loading: true });
-
     Service.getQuizDetail(this.props.navigation.getParam("id"))
       .then(data => {
+        let arr=[];
         this.setState({
           quizData: data,
           quizPlay: data[0],
           totalQuiz: data.length,
-          righQuiz: data[0].answer_id,
           endQuiz: false,
           endTotalQuiz: data.length,
           loading: false
         });
+        data.map((val,index)=>{
+          arr.push(val.answer_id)
+      
+         })
+         this.setState({righQuiz:arr})
+         
       })
+  
       .catch(err => {
         console.log(err);
         this.setState({ loading: false });
@@ -96,7 +102,9 @@ class Detail extends Component {
       return;
     }
     //tl dung
-    if (index === righQuiz) {
+    console.log("index",index,righQuiz[currentQuiz])
+
+    if (index === righQuiz[currentQuiz]) {
       //win game
       if (currentQuiz === totalQuiz - 1) {
         clearInterval(this.interval);
@@ -155,7 +163,6 @@ class Detail extends Component {
       timer: 20,
       quizPlay: quizData[0],
       totalQuiz: quizData.length,
-      righQuiz: quizData[0].answer_id,
       endQuiz: false,
       falseGame: false,
       endTotalQuiz: quizData.length
@@ -202,6 +209,7 @@ class Detail extends Component {
   }
   render() {
     const {
+      righQuiz,
       quizData,
       life,
       timer,
@@ -214,7 +222,7 @@ class Detail extends Component {
       visibleLost,
       loading
     } = this.state;
-
+console.log(righQuiz)
     return (
       <View style={{ flex: 1, backgroundColor: "#FFE082" }}>
         {endQuiz ? (
@@ -263,7 +271,7 @@ class Detail extends Component {
                       Thời Gian: <Text style={{ color: "red" }}>{timer}s </Text>
                     </Text>
                     <Text>
-                      Só Câu:{" "}
+                      Số Câu:{" "}
                       <Text style={{ color: "red" }}>{endTotalQuiz}</Text>
                     </Text>
                   </View>
