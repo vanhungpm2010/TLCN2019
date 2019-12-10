@@ -7,21 +7,22 @@ import Friend from '../screens/friends'
 import Lesson from '../screens/lesson';
 
 const tabHomeBottom = createBottomTabNavigator({
-  LessonTabBottom: {
-    screen: Lesson,
-    navigationOptions: {
-      tabBarLabel: 'Bài Học',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name="graduation-cap" size={17} color={tintColor} />
-      ),
-    },
-  },
+
     HomeTabBottom: {
     screen: Home,
     navigationOptions: {
       title: 'Trang Chủ',
       tabBarIcon: ({tintColor}) => (
         <Icon name="home" size={17} color={tintColor} />
+      ),
+    },
+  },
+  LessonTabBottom: {
+    screen: Lesson,
+    navigationOptions: {
+      tabBarLabel: 'Bài Học',
+      tabBarIcon: ({tintColor}) => (
+        <Icon name="graduation-cap" size={17} color={tintColor} />
       ),
     },
   },

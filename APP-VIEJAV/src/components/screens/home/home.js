@@ -43,7 +43,7 @@ class Home extends Component {
         break;
       case "test":
         this.test.bounce(800).then(endState => {
-          console.log("test");
+          this.props.navigation.navigate("GetChallenge");
         });
         break;
         case "studyToTopic":
@@ -92,7 +92,7 @@ class Home extends Component {
                   style={{ width: "50%", height: "50%" }}
                   source={Dethi}
                 ></Image>
-                <Text style={{ color: "white", fontSize: 20 }}>Đề Thi</Text>
+                <Text style={{ color: "white", fontSize: 20 }}>Thử Thách</Text>
               </Animatable.View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => this.bounce("studyToTopic")}>

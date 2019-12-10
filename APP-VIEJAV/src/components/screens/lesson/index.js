@@ -1,11 +1,12 @@
 import { createStackNavigator } from "react-navigation-stack";
 import Lesson from "./lesson";
 import DetailLesson from "../getLesson";
+import StudyLesson from "../getLesson/StudyLesson";
 
 
 export default createStackNavigator(
-  { Lesson,DetailLesson},
+  { Lesson,DetailLesson,StudyLesson},
   {
-    initialRouteName: "DetailLesson"
+    initialRouteName: "Lesson"
   }
 );

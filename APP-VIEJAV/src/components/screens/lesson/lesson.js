@@ -10,6 +10,7 @@ import {
 import { QuizLesson } from "../../../assets";
 import * as Animatable from "react-native-animatable";
 import Styles from "./styles.js";
+import { showMessage, hideMessage } from "react-native-flash-message";
 import Service from "../../../services";
 import Loading from "../../common/loading";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -45,6 +46,18 @@ class Lesson extends Component {
         this.setState({ loading: false });
       });
   }
+  _handleQuiz=(id,lock)=>{
+    if(lock){
+      showMessage({
+        message: "Bạn Chưa Mở Khóa",
+        type: "danger"
+      });
+      return
+    }
+    this.props.navigation.navigate('StudyLesson',{id})
+
+
+  }
   render() {
     const { topic, loading } = this.state;
     console.log("loading", loading);
@@ -71,6 +84,7 @@ class Lesson extends Component {
                     <TouchableOpacity
                       key={index}
                       style={Styles.topicGame}
+                      onPress={()=>this._handleQuiz(data._id,data.lock)}
                     >
                       <View>
                         <Text style={{ color: "white", fontSize: 20 }}>
@@ -80,10 +94,10 @@ class Lesson extends Component {
                           <Text style={{ color: "blue", fontSize: 10 }}>
                             Question: {data.sumQuestion}
                           </Text>
-                          <Text style={{ color: "white", fontSize: 10 }}>
+                          {/* <Text style={{ color: "white", fontSize: 10 }}>
                             Number Lesson: {data.lesson_number}
-                          </Text>
-                          {data.complete ? (
+                          </Text> */}
+                          {!data.lock ? (
                             <Icon
                               name="check"
                               size={20}
