@@ -1,8 +1,8 @@
-import WebService from "../services";
+import WebService from "@services";
 import * as typeAction from "./typeAction";
-import Storage from "../storages";
+import Storage from "@storages";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import Navigator from "../components/navigator/Navigator";
+import Navigator from "@navigation/Navigator";
 
 export const LoginACtion = {
   loginRequest

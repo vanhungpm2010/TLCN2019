@@ -1,5 +1,5 @@
-import * as typeAction from "../actions/typeAction";
-import Storage from "../storages";
+import * as typeAction from "@actions/typeAction";
+import Storage from "@storages";
 
 
 initialState = {

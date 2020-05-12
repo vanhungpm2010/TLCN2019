@@ -1,1 +1,2 @@
-export default Host=`http://34.68.110.193/api`
+// export default Host = "https://jp-server-kltn.herokuapp.com/api";
+export default Host = "https://japaness-2020.herokuapp.com/api"

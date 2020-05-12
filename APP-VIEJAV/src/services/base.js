@@ -1,6 +1,6 @@
 import axios from "axios";
 import Host from "./host";
-import Navigator from "../components/navigator/Navigator";
+import Navigator from "@navigation/Navigator";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 const methods = {
@@ -25,7 +25,7 @@ const init = ({ token }) => {
   client.defaults.timeout = 30000;
 };
 const request = async (options, isHeader = true) => {
-  console.log("option",options)
+  console.log("option", options)
   if (!isHeader) {
     client.defaults.headers.common.Authorization = null;
   }
@@ -40,7 +40,7 @@ const request = async (options, isHeader = true) => {
     return response.data ? response.data : {};
   };
   const onError = error => {
-    console.log('loi error',error.message )
+    console.log('loi error', error )
     // console.log('[ERROR]', JSON.stringify(error, null, 2));
     if (error.response) {
       if (error.response.status === 401) {

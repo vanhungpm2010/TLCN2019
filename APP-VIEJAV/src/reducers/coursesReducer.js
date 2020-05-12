@@ -1,4 +1,4 @@
-import * as typeAction from "../actions/typeAction";
+import * as typeAction from "@actions/typeAction";
 
 initialState = {
   data: [],

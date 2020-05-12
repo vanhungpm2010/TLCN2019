@@ -1,13 +1,15 @@
+// @refresh reset
+
 import React, { Component } from "react";
-import { View } from "react-native";
-import StackNavigator from "./src/components/navigator/stackNavigator";
+import { View, YellowBox } from "react-native";
+import StackNavigator from "@navigation/stackNavigator";
 import FlashMessage from "react-native-flash-message";
 import { Provider } from "react-redux";
 import { AppLoading } from "expo";
-import Store from "./src/store";
-import NavigatorService from "./src/components/navigator/Navigator";
-import Storages from "./src/storages";
-import Loading from './src/components/common/loading'
+import Store from "@store";
+import NavigatorService from "@navigation/Navigator";
+import Storages from "@storages";
+import Loading from '@components/loading'
 
 export default class componentName extends Component {
   constructor(props) {
@@ -19,11 +21,14 @@ export default class componentName extends Component {
   }
 
   updateStorages = async () => {
-    console.log('update')
     await Storages.initialize();
   };
 
   render() {
+    YellowBox.ignoreWarnings([
+      'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?'
+    ]);
+    
     const { update } = this.state;
     if (!update)
       return (

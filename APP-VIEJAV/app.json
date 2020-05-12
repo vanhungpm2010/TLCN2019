@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "App Hoc Tieng Nhat",
-    "slug": "APP-VIEJAV",
-    "privacy": "public",
     "sdkVersion": "35.0.0",
+    "name": "App Hoc Tieng Nhat",
+    "slug": "app-vietjav",
+    "privacy": "public",
     "platforms": [
       "ios",
       "android",

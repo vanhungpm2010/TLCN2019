@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import api from '../services/base'
+import api from '@services/base'
 
 const NOTI_TOKEN = 'noti_token';
 
