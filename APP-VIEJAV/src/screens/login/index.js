@@ -300,14 +300,14 @@ function Login(props) {
         </View>
 
         <View style={styles.social}>
-          {/* <Button
+          <Button
             containerStyle={styles.btnGoogle}
             icon={<Icon name="google" size={15} color="white" />}
             title="Google"
             titleStyle={styles.titleSocial}
             // onPress={signInWithGoogleAsync}
             type="clear"
-          /> */}
+          />
 
           <Button
             containerStyle={styles.btnFacebook}

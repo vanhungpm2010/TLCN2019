@@ -77,4 +77,7 @@ export default class WebService {
   static seenNotify = () => {
     return api.put(Url.updateSeenNotify);
   }
+  static deleteNotify = (id) => {
+    return api.del(`/notify?_id=${id}`)
+  }
 }

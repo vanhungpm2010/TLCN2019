@@ -42,7 +42,52 @@ const initialValue = {
       answer: 2,
       question: "Khi ai đó nói &quot;Cảm ơn&quot;, trả lời như thế nào?",
       image: "q2_p_mc.jpg"
-    }
+    },
+    {
+      choice_1: "WATASHI WA ANNA DESU",
+      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an01.mp3",
+      choice_2: "WATASHI NO ANNA DESU",
+      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an02.mp3",
+      answer: 1,
+      question: "&quot;Tôi là Anna&quot;, nói chính xác bằng tiếng Nhật là gì?",
+      image: "q1_p_mc.jpg"
+    },
+    {
+      choice_1: "HAJIMEMASHITE",
+      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q2_v_an01.mp3",
+      choice_2: "DÔITASHIMASHITE",
+      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio0/q2_v_an02.mp3",
+      answer: 2,
+      question: "Khi ai đó nói &quot;Cảm ơn&quot;, trả lời như thế nào?",
+      image: "q2_p_mc.jpg"
+    },
+    {
+      choice_1: "WATASHI WA ANNA DESU",
+      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an01.mp3",
+      choice_2: "WATASHI NO ANNA DESU",
+      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an02.mp3",
+      answer: 1,
+      question: "&quot;Tôi là Anna&quot;, nói chính xác bằng tiếng Nhật là gì?",
+      image: "q1_p_mc.jpg"
+    },
+    {
+      choice_1: "HAJIMEMASHITE",
+      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q2_v_an01.mp3",
+      choice_2: "DÔITASHIMASHITE",
+      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio0/q2_v_an02.mp3",
+      answer: 2,
+      question: "Khi ai đó nói &quot;Cảm ơn&quot;, trả lời như thế nào?",
+      image: "q2_p_mc.jpg"
+    },
+    {
+      choice_1: "WATASHI WA ANNA DESU",
+      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an01.mp3",
+      choice_2: "WATASHI NO ANNA DESU",
+      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an02.mp3",
+      answer: 1,
+      question: "&quot;Tôi là Anna&quot;, nói chính xác bằng tiếng Nhật là gì?",
+      image: "q1_p_mc.jpg"
+    },
   ]
 };
 
@@ -104,10 +149,10 @@ const QuestionScreen = ({ navigation }) => {
     //   setVisible(false);
     // }, 2000);
 
-    this.interval = setInterval(
-      () => setTime(prevState => ({ time: prevState.time + 1 })),
-      1000
-    );
+    // this.interval = setInterval(
+    //   () => setTime(prevState => ({ time: prevState.time + 1 })),
+    //   1000
+    // );
   };
 
   useEffect(() => {

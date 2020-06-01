@@ -1,6 +1,5 @@
 {
   "expo": {
-    "sdkVersion": "35.0.0",
     "name": "App Hoc Tieng Nhat",
     "slug": "app-vietjav",
     "privacy": "public",
@@ -25,6 +24,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "notification": {
+      "iosDisplayInForeground": true
     }
   }
 }

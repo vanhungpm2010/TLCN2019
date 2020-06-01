@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   StatusBar,
+  RefreshControl
 } from "react-native";
 import * as Speech from "expo-speech";
 import { QuizLesson } from "@assets";
@@ -26,7 +27,7 @@ import SearchRoute from './search';
 const initialLayout = { width: Dimensions.get("window").width };
 
 const Friend = ({ navigation }) => {
-  const [friends, setFriends] = useState([]);
+  const [friends, setFriends] = useState(null);
   const [text, onChangeText] = useState("");
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -34,6 +35,7 @@ const Friend = ({ navigation }) => {
     // { key: "second", title: "Tìm kiếm" },
     { key: "third", title: "Lời mời" }
   ]);
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   keyExtractor = (item, index) => index.toString();
 
@@ -61,12 +63,15 @@ const Friend = ({ navigation }) => {
   );
 
   const getList = () => {
+    setIsRefreshing(true);
     WebService.getFriends()
       .then(async (data) => {
         setFriends(data.friends);
+        setIsRefreshing(false);
       })
       .catch((err) => {
         console.log("bi loi", err);
+        setIsRefreshing(false);
         showMessage({
           message: err,
           type: "danger",
@@ -79,8 +84,17 @@ const Friend = ({ navigation }) => {
       keyExtractor={this.keyExtractor}
       data={friends}
       renderItem={this.renderItem}
+      refreshing={isRefreshing}
+      onRefresh={() => onRefresh()}
+      onEndReachedThreshold={0}
     />
   );
+
+  const onRefresh = () => {
+    console.log('bbb');
+     getList();
+   
+  }
 
   const addFriend = (id) => {
     WebService.addFriend({ friend_id: id })

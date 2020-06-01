@@ -38,12 +38,12 @@ const NotificationList = (props: any) => {
 
   const hasBeenSeen = () => {
     WebService.seenNotify()
-    .then(data => {
-      console.log(data)
-    })
-    .catch(err => {
-      console.log("bi loi", err);
-    });
+      .then(data => {
+        console.log(data)
+      })
+      .catch(err => {
+        console.log("bi loi", err);
+      });
   }
 
   const getList = () => {
@@ -59,21 +59,23 @@ const NotificationList = (props: any) => {
         // });
       });
   }
-  const _onHandleAccept = (value) => {
-    WebService.addFriend({ friend_id: value})
-    .then(async data => {
+  const _onHandleAccept = async (idNotify, friend_id) => {
+
+    try {
+      await WebService.addFriend({ friend_id: friend_id });
+      await WebService.deleteNotify(idNotify);
+
       showMessage({
         message: 'Success',
         type: 'success'
       });
       Navigator.navigate('Home');
-    })
-    .catch(err => {
+    } catch (err) {
       showMessage({
         message: 'Something went wrong',
         type: "danger"
       });
-    });
+    }
   }
 
   const _onHandleCancel = (value) => {
@@ -84,7 +86,7 @@ const NotificationList = (props: any) => {
     <ViewVertical style={{ backgroundColor: '#fff' }}>
       <ViewVertical style={styles.container}>
 
-        {data
+        {(data || data.length !== 0)
           ? <FlatList
             data={data}
             keyExtractor={item => {
@@ -117,7 +119,7 @@ const NotificationList = (props: any) => {
                         </Text>
                         <ViewHorizontal style={styles.boxFooter}>
                           <TouchableOpacity
-                            onPress={() => _onHandleAccept(item._id)}
+                            onPress={() => _onHandleAccept(item._id, item.sentUser._id)}
                             style={styles.btnAccept}
                           >
                             <Text style={styles.btnText}>Đồng ý</Text>
