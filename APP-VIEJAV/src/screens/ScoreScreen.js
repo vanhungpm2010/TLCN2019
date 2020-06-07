@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Title, Button, Text } from "react-native-paper";
 import {
@@ -12,7 +12,14 @@ import Logo from "../components/Logo";
 import colors from "../configs/colors";
 import Navigator from "@navigation/Navigator";
 
-const ScoreScreen = (props) => {
+const ScoreScreen = ({ route, navigation }) => {
+  // Navigator.getParam('score', 0);
+  // const score =  route.params;
+  // console.log('route', score)
+  // useEffect(() => {
+  //   set
+  // }, [navigation])
+
   return (
     <Background>
       <View style={styles.container}>
@@ -21,7 +28,7 @@ const ScoreScreen = (props) => {
         <View style={styles.card}>
           <Title>Time out</Title>
           <Title>Game Over</Title>
-          <Paragraph children={"34"} style={styles.point} />
+          <Paragraph children={navigation?.getParam('score')} style={styles.point} />
           <View style={styles.trick}>
             <Text style={styles.trickText}>.</Text>
           </View>

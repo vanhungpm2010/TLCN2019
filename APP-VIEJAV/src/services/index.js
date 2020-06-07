@@ -53,7 +53,10 @@ export default class WebService {
     console.log(Url.getChallenge);
     return api.get(`/challenge/${id}`);
   };
-  //
+  static getChallengeByLevel = level => {
+    return api.get(`/challenge?level=${level}`)
+  };
+  // Friend
   static getMe = () => {
     return api.get(Url.getMe);
   };
@@ -71,13 +74,17 @@ export default class WebService {
     return api.get(Url.getBoard);
   };
 
+  // Notification
   static getListNoti = () => {
     return api.get(Url.getListNoti);
   }
   static seenNotify = () => {
     return api.put(Url.updateSeenNotify);
   }
-  static deleteNotify = (id) => {
+  static deleteNotify = id => {
     return api.del(`/notify?_id=${id}`)
+  }
+  static updateTokenNotify = data => {
+    return api.put(`/users/token`, data)
   }
 }

@@ -22,24 +22,25 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { ListItem, Input } from "react-native-elements";
 import { TabView, SceneMap } from "react-native-tab-view";
 import SecondRoute from "./request";
-import SearchRoute from './search';
+// import SearchRoute from './search';
 
 const initialLayout = { width: Dimensions.get("window").width };
 
 const Friend = ({ navigation }) => {
-  const [friends, setFriends] = useState(null);
+  const [friends, setFriends] = useState([]);
+  const [searchFriends, setSearchFriends] = useState([]);
   const [text, onChangeText] = useState("");
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "Danh sách" },
-    // { key: "second", title: "Tìm kiếm" },
+    { key: "second", title: "Tìm kiếm" },
     { key: "third", title: "Lời mời" }
   ]);
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  keyExtractor = (item, index) => index.toString();
+  const keyExtractor = (item, index) => index.toString();
 
-  renderItem = ({ item }) => (
+  const renderItem = ({ item }) => (
     <ListItem
       title={item.username}
       subtitle={item.isOnline ? "Online" : "Offline"}
@@ -73,7 +74,7 @@ const Friend = ({ navigation }) => {
         console.log("bi loi", err);
         setIsRefreshing(false);
         showMessage({
-          message: err,
+          message: 'bi loi',
           type: "danger",
         });
       });
@@ -81,13 +82,78 @@ const Friend = ({ navigation }) => {
 
   const FirstRoute = () => (
     <FlatList
-      keyExtractor={this.keyExtractor}
+      keyExtractor={keyExtractor}
       data={friends}
-      renderItem={this.renderItem}
+      renderItem={renderItem}
       refreshing={isRefreshing}
       onRefresh={() => onRefresh()}
       onEndReachedThreshold={0}
     />
+  );
+
+  const renderItemSearch = ({ item }) => {
+    return (
+      <ListItem
+      keyExtractor={keyExtractor}
+      title={item.username}
+      subtitle={item.isOnline ? "Online" : <Text style={{color: 'gray'}}>Offline</Text>}
+      leftAvatar={{
+        source: item.avatar && { uri: item.avatar },
+        // title: item.name[0],
+      }}
+      subtitleStyle={{ color: "green" }}
+      bottomDivider
+      chevron
+      rightTitle={
+        item?.type == "notFriend" ? (
+          <TouchableOpacity onPress={() => addFriend(item._id)}>
+            <Icon name="user-plus" size={14} color="black" />
+          </TouchableOpacity>
+        ) : (
+          ""
+        )
+      }
+    />
+    )
+  };
+
+  const search = () => {
+    if (text == "") {
+      return;
+    }
+    WebService.searchFriend(text)
+      .then(async (data) => {
+        setSearchFriends(data);
+      })
+      .catch((err) => {
+        console.log("bi loi", err);
+        showMessage({
+          message: err,
+          type: "danger",
+        });
+      });
+  };
+
+  const SearchRoute = () => (
+    <View style={[styles.scene, { backgroundColor: "#673ab7" }]}>
+      <Input
+        placeholder="Search friend by username"
+        leftIconContainerStyle={{ paddingRight: 10 }}
+        leftIcon={<Icon name="search" size={14} color="black" />}
+        rightIcon={
+          <TouchableOpacity onPress={search}>
+            <Text>Search</Text>
+          </TouchableOpacity>
+        }
+        onChangeText={(text) => onChangeText(text)}
+        value={text}
+      />
+      <FlatList
+        keyExtractor={keyExtractor}
+        data={searchFriends}
+        renderItem={renderItemSearch}
+    />
+    </View>
   );
 
   const onRefresh = () => {
@@ -97,7 +163,7 @@ const Friend = ({ navigation }) => {
   }
 
   const addFriend = (id) => {
-    WebService.addFriend({ friend_id: id })
+    WebService.addFriend({ friend_id: id, is_request: true })
       .then(async (data) => {
         console.log(data);
         showMessage({
@@ -121,7 +187,7 @@ const Friend = ({ navigation }) => {
 
   const renderScene = SceneMap({
     first: FirstRoute,
-    // second: SearchRoute,
+    second: SearchRoute,
     third: SecondRoute
   });
 

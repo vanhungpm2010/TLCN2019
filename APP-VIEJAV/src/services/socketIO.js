@@ -1,6 +1,6 @@
 import socketIO from "socket.io-client";
 
-const SERVER_URL = `https://japaness-2020.herokuapp.com`;
+const SERVER_URL = `https://e4d775969166.ngrok.io`;
 
 // Initialize Socket IO:
 const socket = socketIO(SERVER_URL, {
@@ -14,7 +14,7 @@ export const startSocketIO = (store) => {
   socket.connect();
 
   socket.on("connect", () => {
-    console.log("connect");
+    console.log("connect", store.id);
     // console.log('store', store)
     socket.io.opts.query = {
       user_id: store.id,

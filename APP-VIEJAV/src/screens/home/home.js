@@ -17,6 +17,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
+import WebService from "../../services";
 
 class Home extends Component {
   constructor(props) {
@@ -62,9 +63,16 @@ class Home extends Component {
         alert("Failed to get push token for push notification!");
         return;
       }
-      token = await Notifications.getExpoPushTokenAsync();
-      console.log("token Notification", token);
-      this.setState({ expoPushToken: token });
+      try {
+        token = await Notifications.getExpoPushTokenAsync();
+
+        console.log("token Notification", token);
+        await WebService.updateTokenNotify({ token: token});
+
+        this.setState({ expoPushToken: token });
+      } catch(error) {
+        console.log(error)
+      }
     } else {
       alert("Must use physical device for Push Notifications");
     }

@@ -30,7 +30,7 @@ function loginRequest(loginData) {
           id: data._id,
           username: data.username,
           email: data.email,
-          avatar: data.avatarCtr
+          avatar: data.avatar
         });
         dispatch(loginSuccess(data));
         showMessage({

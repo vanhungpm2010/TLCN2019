@@ -14,10 +14,12 @@ const SearchRoute = (props) => {
   const [text, onChangeText] = useState("");
   const [friends, setFriends] = useState([]);
 
-  keyExtractor = (item, index) => index.toString();
+  const keyExtractor = (item, index) => index.toString();
 
-  renderItem = ({ item }) => (
-    <ListItem
+  const renderItem = ({ item }) => {
+    return (
+      <ListItem
+      keyExtractor={keyExtractor}
       title={item.username}
       subtitle={item.isOnline ? "Online" : "Offline"}
       leftAvatar={{
@@ -37,7 +39,9 @@ const SearchRoute = (props) => {
         )
       }
     />
-  );
+    )
+    
+    };
 
   const search = () => {
     if (text == "") {
@@ -72,10 +76,10 @@ const SearchRoute = (props) => {
         value={text}
       />
       <FlatList
-        keyExtractor={this.keyExtractor}
+        keyExtractor={keyExtractor}
         data={friends}
-        renderItem={this.renderItem}
-      />
+        renderItem={renderItem}
+    />
     </View>
   );
 };

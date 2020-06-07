@@ -20,104 +20,40 @@ import ModalBox from "../../components/ModalBox";
 import Answer from "./components/answer";
 import styles from "./styles";
 import Navigator from "@navigation/Navigator";
-
-const initialValue = {
-  level: 1,
-  time: 15,
-  data: [
-    {
-      choice_1: "WATASHI WA ANNA DESU",
-      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an01.mp3",
-      choice_2: "WATASHI NO ANNA DESU",
-      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an02.mp3",
-      answer: 1,
-      question: "&quot;Tôi là Anna&quot;, nói chính xác bằng tiếng Nhật là gì?",
-      image: "q1_p_mc.jpg"
-    },
-    {
-      choice_1: "HAJIMEMASHITE",
-      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q2_v_an01.mp3",
-      choice_2: "DÔITASHIMASHITE",
-      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio0/q2_v_an02.mp3",
-      answer: 2,
-      question: "Khi ai đó nói &quot;Cảm ơn&quot;, trả lời như thế nào?",
-      image: "q2_p_mc.jpg"
-    },
-    {
-      choice_1: "WATASHI WA ANNA DESU",
-      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an01.mp3",
-      choice_2: "WATASHI NO ANNA DESU",
-      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an02.mp3",
-      answer: 1,
-      question: "&quot;Tôi là Anna&quot;, nói chính xác bằng tiếng Nhật là gì?",
-      image: "q1_p_mc.jpg"
-    },
-    {
-      choice_1: "HAJIMEMASHITE",
-      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q2_v_an01.mp3",
-      choice_2: "DÔITASHIMASHITE",
-      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio0/q2_v_an02.mp3",
-      answer: 2,
-      question: "Khi ai đó nói &quot;Cảm ơn&quot;, trả lời như thế nào?",
-      image: "q2_p_mc.jpg"
-    },
-    {
-      choice_1: "WATASHI WA ANNA DESU",
-      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an01.mp3",
-      choice_2: "WATASHI NO ANNA DESU",
-      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an02.mp3",
-      answer: 1,
-      question: "&quot;Tôi là Anna&quot;, nói chính xác bằng tiếng Nhật là gì?",
-      image: "q1_p_mc.jpg"
-    },
-    {
-      choice_1: "HAJIMEMASHITE",
-      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q2_v_an01.mp3",
-      choice_2: "DÔITASHIMASHITE",
-      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio0/q2_v_an02.mp3",
-      answer: 2,
-      question: "Khi ai đó nói &quot;Cảm ơn&quot;, trả lời như thế nào?",
-      image: "q2_p_mc.jpg"
-    },
-    {
-      choice_1: "WATASHI WA ANNA DESU",
-      choice_1_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an01.mp3",
-      choice_2: "WATASHI NO ANNA DESU",
-      choice_2_voice: "https://japaness-2020.herokuapp.com/api/assets/challenge/audio/q1_v_an02.mp3",
-      answer: 1,
-      question: "&quot;Tôi là Anna&quot;, nói chính xác bằng tiếng Nhật là gì?",
-      image: "q1_p_mc.jpg"
-    },
-  ]
-};
+import WebService from '../../services';
+import Host from '../../services/host'
 
 const QuestionScreen = ({ navigation }) => {
-  const [quiz, setQuiz] = useState(initialValue);
-  const [current, setCurrent] = useState(initialValue.data[0]);
+  // const [quiz, setQuiz] = useState(initialValue);
+  const [current, setCurrent] = useState({});
   const [time, setTime] = useState(15);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [score, setScore] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(1);
+  const [data, setData] = useState([]);
 
   const onChoose = choice => {
     if (choice !== current.answer) {
-      Navigator.navigate("ScoreScreen");
+      Navigator.navigate("ScoreScreen", {score: score});
       return;
     }
     let point = score + 5;
     setScore(point);
-    setTime(initialValue.time);
+    setTime(15);
     nextQuestion();
   };
 
   const nextQuestion = () => {
-    setCurrent(initialValue.data[1]);
+    setCurrent(data[questionNumber + 1]);
     setQuestionNumber(questionNumber + 1);
+    if(questionNumber + 1 === 10) {
+      setQuestionNumber(1);
+      getChallenge(current.level + 1)
+    }
   };
 
   const openAudio = async url => {
-    console.log('url', url)
     try {
       const playbackObject = await Audio.Sound.createAsync(
         { uri: url },
@@ -125,7 +61,7 @@ const QuestionScreen = ({ navigation }) => {
       );
       await playbackObject.playAsync();
     } catch (error) {
-      // Alert.alert("Lỗi khi phát audio");
+      Alert.alert("Lỗi khi phát audio");
     }
   };
 
@@ -148,37 +84,54 @@ const QuestionScreen = ({ navigation }) => {
     // setTimeout(() => {
     //   setVisible(false);
     // }, 2000);
-
-    // this.interval = setInterval(
-    //   () => setTime(prevState => ({ time: prevState.time + 1 })),
-    //   1000
-    // );
+    setInterval(
+      () => setTime(prevState => ({ time: prevState.time + 1 })),
+      1000
+    )
   };
 
+  const getChallenge = level => {
+    setLoading(true)
+    WebService.getChallengeByLevel(level)
+    .then(response => {
+      setData(response);
+      setCurrent(response[0])
+      setLoading(false)
+    },
+      error => {
+        console.log(error);
+        setLoading(false)
+      }
+    )
+  }
+
   useEffect(() => {
-    if (time == initialValue.time && !visible) {
-      startGame();
-    }
+    // if (time == initialValue.time && !visible) {
+    //   startGame();
+    // }
     if (!time) {
-      Navigator.navigate("ScoreScreen", { score: questionNumber});
+      // props.navigation.navigate("ScoreScreen", { score: 1});
+      navigation.navigate("ScoreScreen", { score: score});
     }
 
-    // let interval = setInterval(() => {
-    //   setTime(time => time - 1);
-    // }, 1000);
+    let interval = setInterval(() => {
+      setTime(time => time - 1);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [time, visible]);
 
-  // const questionNumber = 10 - quiz.data.length;
+  useEffect(() => {
+    getChallenge(1);
+  }, [])
 
   return (
     <Background source={require("../../assets/backgroundLv1.png")}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <PaperText text={`Level ${quiz.level}`} style={styles.textWhite} />
+          <PaperText text={`Level ${current?.level}`} style={styles.textWhite} />
           <View style={styles.time}>
-            <PaperText text={'15'} style={styles.textWhite} />
+            <PaperText text={time} style={styles.textWhite} />
           </View>
           <View style={styles.coin}>
             <Image width={10} source={require("../../assets/coin.png")} />
@@ -201,25 +154,25 @@ const QuestionScreen = ({ navigation }) => {
           </View>
           <Image
             style={styles.image}
-            source={require("../../assets/backgroundLv3.png")}
+            source={{uri: `${Host}/assets/challenge/photo/${current.image}`}}
           />
           <PaperText
             text={
-              current.question ? current.question.replace(/&quot;/g, '"') : null
+              current?.question ? current.question.replace(/&quot;/g, '"') : null
             }
             style={styles.questionText}
           />
         </View>
 
         <Answer
-          value={current.choice_1}
-          openAudio={() => openAudio(current.choice_1_voice)}
+          value={current?.choice_1}
+          openAudio={() => openAudio(current?.choice_1_voice)}
           choose={() => onChoose(1)}
         />
 
         <Answer
-          value={current.choice_2}
-          openAudio={() => openAudio(current.choice_2_voice)}
+          value={current?.choice_2}
+          openAudio={() => openAudio(current?.choice_2_voice)}
           choose={() => onChoose(2)}
         />
 
@@ -241,7 +194,7 @@ const QuestionScreen = ({ navigation }) => {
       </View>
       <ModalBox isVisible={visible} onClose={() => setVisible(false)}>
         <View style={{ flex: 1 }}>
-          <Title style={styles.titleModal}>Level {initialValue.level}</Title>
+          <Title style={styles.titleModal}>Level {current?.level}</Title>
         </View>
         <View style={styles.trick}>
           <Text style={styles.trickText}>.</Text>
