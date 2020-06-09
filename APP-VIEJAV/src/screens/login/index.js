@@ -170,19 +170,19 @@ import Logo from "components/Logo";
 // import Button from "components/Button";
 import TextInput from "components/TextInput";
 // import { login } from "../services/apiUser";
-// import { Token } from "../storages";
+import { Token } from "../../storages";
 // import { theme } from "../../core/theme";
 import { nameValidator, passwordValidator } from "../../core/utils";
 // import { background } from "@assets";
 import { LoginACtion } from "../../actions/loginAction";
+import WebService from '../../services';
 import styles from './styles';
 
-function Login(props) {
+const Login = ({ navigation }) => {
   const [username, setUsername] = useState({ value: "tranvanviet", error: "" });
   const [password, setPassword] = useState({ value: "11223344", error: "" });
   const [isRemember, setIsRemember] = useState(false);
-
-  // const { userActions } = useActions();
+  
   const dispatch = useDispatch();
   const loading = useSelector(state => state.login.loading)
 
@@ -232,11 +232,16 @@ function Login(props) {
         
         const { data } = profile.picture;
 
-        profile.picture = data.url;
-        userActions.save(profile);
-        await Token.save(token)
+        const body = {
+          email: profile.email,
+          id: profile.id,
+          name: profile.name,
+          avatar: data.url
+        }
+        dispatch(LoginACtion.loginSocial(body));
+        // await Token.save(token)
 
-        Alert.alert("Logged in!", `Hi ${profile.name}!`);
+        alert("Logged in!", `Hi ${profile.name}!`);
         navigation.navigate("App");
 
         return;
@@ -288,7 +293,7 @@ function Login(props) {
 
         <Button
           loading={loading}
-          style={styles.btnLogin}
+          buttonStyle={styles.btnLogin}
           type="clear"
           onPress={_onLoginPressed}
           title="Sign In"

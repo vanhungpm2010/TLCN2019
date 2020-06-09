@@ -35,7 +35,7 @@ const QuestionScreen = ({ navigation }) => {
 
   const onChoose = choice => {
     if (choice !== current.answer) {
-      Navigator.navigate("ScoreScreen", {score: score});
+      Navigator.navigate("ScoreScreen", { score: score });
       return;
     }
     let point = score + 5;

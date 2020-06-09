@@ -10,7 +10,7 @@ export default class Loadding extends Component {
     return (
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>
-          <ActivityIndicator size="large" color="#D50000" />
+          <ActivityIndicator size="large" color="#ffffff" />
         </View>
       </View>
     );

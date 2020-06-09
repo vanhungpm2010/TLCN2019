@@ -1,4 +1,7 @@
-export const loginApi= `/users/login`
+// Auth
+export const loginApi= `/users/login`;
+export const loginSocial = `/users/login-fb`;
+
 export const registerApi= `/users`
 export const putAvartar= `/avatars`
 export const createCoures= `/courses`
