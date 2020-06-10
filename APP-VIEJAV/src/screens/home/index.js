@@ -8,11 +8,12 @@ import MemmoryCard from "../games/memmoryCard";
 import GetChallenge from "../getChallenge";
 import GetDetailChallenge from "../getChallenge/getDetailChallge";
 import NotificationList from "../notification-list";
-
+import DashBoardScreen from '../dash-board';
 
 export default createStackNavigator(
   {
     Home,
+    DashBoardScreen,
     CreateCourse,
     StudyToTopic,
     GetCourese,
@@ -23,6 +24,8 @@ export default createStackNavigator(
     NotificationList
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "DashBoardScreen",
+    mode: 'modal',
+    headerMode: 'screen'
   }
 );

@@ -44,6 +44,15 @@ function Drawer(props) {
         moveScreen("Profile");
       }
     },
+    {
+      id: "3",
+      title: "DashBoardScreen",
+      icon: "user-circle",
+      onPress: () => {
+        console.log("ok");
+        moveScreen("DashBoardScreen");
+      }
+    },
     // {
     //   id: "3",
     //   title: "Challenge Run",
@@ -72,7 +81,7 @@ function Drawer(props) {
       }
     },
   ];
-  console.log("user",props.user)
+  // console.log("user",props.user)
   const hanldeEditPress = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -134,22 +143,7 @@ function Drawer(props) {
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Logo style={styles.logo}/>
-        <Text>APP JAV</Text>
-      </View>
-
-      <View style={styles.header}>
-        <Avatar
-          containerStyle={styles.avartar}
-          size="large"
-          activeOpacity={0.7}
-          showEditButton={true}
-          rounded
-          onEditPress={hanldeEditPress}
-          source={{
-            uri: props.user.avatar
-          }}
-        />
-        <Text style={{ color: "#000000" }}>Xin Chào: {props.user.username}</Text>
+        <Text style={{color: '#28D063', fontSize: 18}}>STUDY JAPANESE</Text>
       </View>
       <ScrollView style={styles.scrollVew}>
         {list.map((item, i) => {

@@ -22,7 +22,8 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { ListItem, Input } from "react-native-elements";
 import { TabView, SceneMap } from "react-native-tab-view";
 import SecondRoute from "./request";
-// import SearchRoute from './search';
+
+import { war } from '../../assets';
 
 const initialLayout = { width: Dimensions.get("window").width };
 
@@ -50,18 +51,19 @@ const Friend = ({ navigation }) => {
       }}
       subtitleStyle={{ color: "green" }}
       bottomDivider
-      chevron
+      // chevron
       rightTitle={
-        item.type && item.type == "notFriend" ? (
-          <TouchableOpacity onPress={() => addFriend(item._id)}>
-            <Icon name="user-plus" size={14} color="black" />
-          </TouchableOpacity>
-        ) : (
-          ""
-        )
+        <TouchableOpacity onPress={() => inviteWar(item._id)}>
+          <Image source={war} style={styles.war} resizeMode='contain'/>
+        </TouchableOpacity>
       }
     />
   );
+
+  const inviteWar = id => {
+    console.log(id);
+    
+  } 
 
   const getList = () => {
     setIsRefreshing(true);
@@ -234,6 +236,10 @@ const styles = StyleSheet.create({
   scene: {
     flex: 1,
   },
+  war: {
+    width: 20,
+    height: 20
+  }
 });
 
 Friend.navigationOptions = ({ navigation }) => ({

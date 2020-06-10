@@ -37,5 +37,9 @@ export default StyleSheet.create({
     },
     titleItem: {
         color: "#707D82" 
+    },
+    badge: {
+        color: '#ffffff',
+        marginRight: 10
     }
 })
