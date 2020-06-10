@@ -13,6 +13,11 @@ import {
   Text as TextElements,
   Button,
 } from "react-native-elements";
+import * as ImagePicker from "expo-image-picker";
+import { showMessage } from "react-native-flash-message";
+import FilterImage from "helpers/filterImage";
+import { useDispatch } from 'react-redux'
+
 import WebService from "../../services";
 
 // import Paragraph from "../components/Paragraph";
@@ -23,9 +28,14 @@ import BackButton from "../../components/BackButton";
 // import { Token, User } from "../storages";
 import styles from "./styles";
 import Storage from '@storages'
+import { UserACtion } from "@actions/userAction";
+import Loadding from '../../components/loading';
 
 const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   // const { state } = useStore();
   const getMe = () => {
@@ -49,8 +59,67 @@ const ProfileScreen = ({ navigation }) => {
     Storage.clearAll();
     navigation.navigate("Login");
   };
-  console.log(user)
-  // const { info } = state.user || "";
+
+  const hanldeEditPress = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 0.2
+    });
+
+    if (result.cancelled) {
+      showMessage({
+        message: "Bạn chưa chọn ảnh xong",
+        type: "danger"
+      });
+      return;
+    }
+
+    let localUri = result.uri;
+    let filename = localUri.split("/").pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let typeFile = match ? `image/${match[1]}` : `image`;
+
+    if (!FilterImage(typeFile)) {
+      showMessage({
+        message: "Chỉ chọn ảnh jpg,png",
+        type: "danger"
+      });
+      return;
+    }
+    let avatar = new FormData();
+    avatar.append("avatar", {
+      uri: localUri,
+      name: filename,
+      type: "image/jpeg"
+    });
+    
+    try {
+      setLoading(true);
+      const data = await WebService.putAvartar(avatar);
+      await Storage.saveUserInfo({
+        username: data.username,
+        email: data.email,
+        avatar: data.avatar
+      });
+      props.dispatch(UserACtion.getUser());
+      showMessage({
+        message: "Sửa Avatar Thành Công",
+        type: "success"
+      });
+    } catch(error) {
+      showMessage({
+        message: "Chọn ảnh quá lớn!",
+        type: "danger"
+      });
+    }
+    setLoading(false);
+  };
+
+  if(loading) {
+    return <Loadding />
+  }
 
   return (
     <Background>
@@ -70,6 +139,8 @@ const ProfileScreen = ({ navigation }) => {
                 ? { uri: user.avatar }
                 : require("../../assets/images/avatar_user.png")
             }
+            onEditPress={hanldeEditPress}
+            showEditButton={true}
           />
 
           <TextElements h4 h4Style={styles.title}>

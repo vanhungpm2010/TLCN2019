@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 // import { Title, Button, Text, IconButton } from "react-native-paper";
 import { Text as TextElements } from "react-native-elements";
@@ -6,6 +6,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
+import { showMessage } from "react-native-flash-message";
 
 import Background from "../components/Background";
 // import Paragraph from "../components/Paragraph";
@@ -15,22 +16,49 @@ import BackButton from "../components/BackButton";
 import Icon from "../components/Icon";
 import colors from "../configs/colors";
 import Button from '../components/Button';
-import Navigator from "@navigation/Navigator";
+import WebService from '../services';
+import Loadding from '../components/loading';
 
-const ChallengeScreen = (props) => {
+const ChallengeScreen = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
+  const [mark, setMark] = useState(0);
+
+  const getHight = async () => {
+    setLoading(true)
+    try {
+      const response = await WebService.getMe();
+      const { markHight } = response
+      
+      setMark(markHight?.challenge || 0)
+    }
+    catch(error) {
+      showMessage({
+        message: error,
+        type: "danger",
+      });
+    }
+    setLoading(false)
+  }
+  
+  useEffect(() => {
+    getHight()
+  }, []);
+
+  if(loading) {
+    return <Loadding />
+  }
   return (
     <Background source={require("../assets/backgroundLv4.png")}>
       <View style={styles.container}>
-        <BackButton goBack={() => Navigator.navigate("Home")} />
-        {/* <Logo style={styles.logo} /> */}
-        {/* <Title style={styles.title}>Challenge</Title>
-        <Title style={styles.subtitle}>Now ...</Title> */}
+        <BackButton goBack={() => navigation.navigate("Home")} />
+
         <TextElements h4 h4Style={{ textAlign: "center", fontWeight: "bold" }}>Challenge</TextElements>
         <TextElements h4 h4Style={{ textAlign: "center", fontWeight: "bold" }}>Now ...</TextElements>
+        
         <Button
           style={styles.btnStart}
           mode="clear"
-          onPress={() => Navigator.navigate("QuestionScreen")}
+          onPress={() => navigation.navigate("QuestionScreen")}
           title="Get Started"
           iconRight
           icon={
@@ -38,17 +66,9 @@ const ChallengeScreen = (props) => {
           }
           titleStyle={styles.btnText}
         >
-          {/* <Text style={styles.btnText}>
-              Get Started   <Icon name="arrow-round-forward" color={colors.white_color} />
-          </Text> */}
-         
         </Button>
-        <Text style={styles.paragraph}>High Score: 4</Text>
-        {/* <Paragraph children={"High Score: 4"} style={styles.paragraph} /> */}
-        {/* <View style={styles.trick}>
-          <Text style={styles.trickText}>.</Text>
-        </View>
-        <View style={styles.trick2}></View> */}
+        <Text style={styles.paragraph}>High Score: {mark}</Text>
+
       </View>
     </Background>
   );
@@ -86,6 +106,7 @@ const styles = StyleSheet.create({
   },
   btnStart: {
     backgroundColor: "#AC8F86",
+    width: '50%',
     marginTop: 10,
     borderRadius: 10,
     padding: 5

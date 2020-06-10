@@ -13,6 +13,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import FilterImage from "helpers/filterImage";
 import Api from "@services";
 import styles from "./styles";
+import Logo from "../../components/Logo";
 
 function Drawer(props) {
   const [loading, setLoading] = useState(false);
@@ -131,6 +132,11 @@ function Drawer(props) {
   };
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Logo style={styles.logo}/>
+        <Text>APP JAV</Text>
+      </View>
+
       <View style={styles.header}>
         <Avatar
           containerStyle={styles.avartar}
@@ -143,7 +149,7 @@ function Drawer(props) {
             uri: props.user.avatar
           }}
         />
-        <Text style={{ color: "white" }}>Xin Chào: {props.user.username}</Text>
+        <Text style={{ color: "#000000" }}>Xin Chào: {props.user.username}</Text>
       </View>
       <ScrollView style={styles.scrollVew}>
         {list.map((item, i) => {
@@ -153,9 +159,9 @@ function Drawer(props) {
                 containerStyle={styles.listItem}
                 titleStyle={styles.titleItem}
                 title={item.title}
-                leftIcon={<Icon name={item.icon} size={17} color={"#FFFDE7"} />}
+                leftIcon={<Icon name={item.icon} size={17} color={"#707D82"} />}
                 bottomDivider
-                chevron={<Icon name={"chevron-right"} color={"white"} />}
+                chevron={<Icon name={"chevron-right"} color={"#707D82"} />}
               />
             </TouchableOpacity>
           );

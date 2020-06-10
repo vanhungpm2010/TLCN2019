@@ -29,7 +29,7 @@ const initialLayout = { width: Dimensions.get("window").width };
 const Friend = ({ navigation }) => {
   const [friends, setFriends] = useState([]);
   const [searchFriends, setSearchFriends] = useState([]);
-  const [text, onChangeText] = useState("");
+  const [text, setText] = useState("");
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "Danh sách" },
@@ -121,6 +121,7 @@ const Friend = ({ navigation }) => {
     if (text == "") {
       return;
     }
+
     WebService.searchFriend(text)
       .then(async (data) => {
         setSearchFriends(data);
@@ -135,7 +136,7 @@ const Friend = ({ navigation }) => {
   };
 
   const SearchRoute = () => (
-    <View style={[styles.scene, { backgroundColor: "#673ab7" }]}>
+    <View style={[styles.scene]}>
       <Input
         placeholder="Search friend by username"
         leftIconContainerStyle={{ paddingRight: 10 }}
@@ -145,7 +146,7 @@ const Friend = ({ navigation }) => {
             <Text>Search</Text>
           </TouchableOpacity>
         }
-        onChangeText={(text) => onChangeText(text)}
+        onChangeText={text => setText(text)}
         value={text}
       />
       <FlatList
@@ -156,6 +157,9 @@ const Friend = ({ navigation }) => {
     </View>
   );
 
+  console.log('text', text);
+  
+
   const onRefresh = () => {
     console.log('bbb');
      getList();
@@ -165,9 +169,9 @@ const Friend = ({ navigation }) => {
   const addFriend = (id) => {
     WebService.addFriend({ friend_id: id, is_request: true })
       .then(async (data) => {
-        console.log(data);
+        search(text)
         showMessage({
-          message: "Add success",
+          message: "Kết bạn thành công",
           type: "success",
         });
       })
@@ -225,7 +229,7 @@ const Friend = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: StatusBar.currentHeight,
+    // marginTop: StatusBar.currentHeight,
   },
   scene: {
     flex: 1,

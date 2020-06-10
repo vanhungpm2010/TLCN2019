@@ -9,6 +9,7 @@ import {
   Text
 } from "react-native";
 import { Audio } from "expo-av";
+import { showMessage } from "react-native-flash-message";
 
 import { Title } from "react-native-paper";
 import { backgroundLv1 } from "../../assets";
@@ -22,6 +23,7 @@ import styles from "./styles";
 import Navigator from "@navigation/Navigator";
 import WebService from '../../services';
 import Host from '../../services/host'
+import Loadding from '../../components/loading';
 
 const QuestionScreen = ({ navigation }) => {
   // const [quiz, setQuiz] = useState(initialValue);
@@ -90,19 +92,19 @@ const QuestionScreen = ({ navigation }) => {
     )
   };
 
-  const getChallenge = level => {
-    setLoading(true)
-    WebService.getChallengeByLevel(level)
-    .then(response => {
+  const getChallenge = async level => {
+    try {
+      setLoading(true)
+      const response = await WebService.getChallengeByLevel(level)
       setData(response);
       setCurrent(response[0])
-      setLoading(false)
-    },
-      error => {
-        console.log(error);
-        setLoading(false)
-      }
-    )
+    } catch(error) {
+      showMessage({
+        message: err,
+        type: "danger",
+      });
+    }
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -111,7 +113,7 @@ const QuestionScreen = ({ navigation }) => {
     // }
     if (!time) {
       // props.navigation.navigate("ScoreScreen", { score: 1});
-      navigation.navigate("ScoreScreen", { score: score});
+      // navigation.navigate("ScoreScreen", { score: score});
     }
 
     let interval = setInterval(() => {
@@ -124,6 +126,10 @@ const QuestionScreen = ({ navigation }) => {
   useEffect(() => {
     getChallenge(1);
   }, [])
+
+  if(loading) {
+    return <Loadding />
+  }
 
   return (
     <Background source={require("../../assets/backgroundLv1.png")}>

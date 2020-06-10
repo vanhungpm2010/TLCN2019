@@ -15,28 +15,36 @@ import BackButton from "../../components/BackButton";
 import { Text as TextElements } from "react-native-elements";
 import styles from "./styles";
 import WebService from "../../services";
+import Loadding from '../../components/loading';
+import { showMessage } from "react-native-flash-message";
 
 const LeaderBoardScreen = ({ navigation }) => {
   const [board, setBoard] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const getBoard = () => {
-    WebService.getBoard()
-      .then(async (data) => {
-        const { result } = data.response;
-        setBoard(result);
-      })
-      .catch((err) => {
-        console.log("bi loi", err);
-        showMessage({
-          message: err,
-          type: "danger",
-        });
+  const getBoard = async () => {
+    try{ 
+      setLoading(true);
+      const data = await WebService.getBoard();
+      const { result } = data.response;
+      setBoard(result);
+    } catch(error) {
+      showMessage({
+        message: err,
+        type: "danger",
       });
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {
     getBoard();
   }, []);
+
+  if(loading) {
+    return <Loadding />
+  }
 
   return (
     <Background>

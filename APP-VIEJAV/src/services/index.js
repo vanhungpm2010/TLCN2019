@@ -62,6 +62,10 @@ export default class WebService {
   static getChallengeByLevel = level => {
     return api.get(`/challenge?level=${level}`)
   };
+  static updateHightMark = data => {
+    return api.put(Url.updateHightMark, data)
+  }
+
   // Friend
   static getMe = () => {
     return api.get(Url.getMe);

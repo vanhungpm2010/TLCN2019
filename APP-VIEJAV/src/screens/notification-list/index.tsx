@@ -52,11 +52,7 @@ const NotificationList = (props: any) => {
         setData(data.result);
       })
       .catch(err => {
-        console.log("bi loi", err);
-        // showMessage({
-        //   message: err,
-        //   type: "danger"
-        // });
+        alert(err);
       });
   }
   const _onHandleAccept = async (idNotify, friend_id) => {
@@ -82,11 +78,11 @@ const NotificationList = (props: any) => {
     console.log('value', value)
   }
 
+  
   return (
     <ViewVertical style={{ backgroundColor: '#fff' }}>
       <ViewVertical style={styles.container}>
-
-        {(data || data.length !== 0)
+        {(data && data.length > 0)
           ? <FlatList
             data={data}
             keyExtractor={item => {
@@ -139,7 +135,9 @@ const NotificationList = (props: any) => {
               )
             }}
           />
-          : 'No notification'
+          : <ViewVertical style={{ alignItems: 'center', justifyContent: 'center'}}>
+              <Text >No notification</Text>
+          </ViewVertical>
         }
       </ViewVertical>
     </ViewVertical>

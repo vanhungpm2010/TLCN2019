@@ -14,11 +14,12 @@ export const getTopic= `/topics`
 export const setHistory= `/histories/set-history`
 //challenge
 export const getChallenge= `challenge`
+export const updateHightMark = '/users/hight-mark';
 
 // getme
 export const getMe = '/users/me';
 export const getFriends = '/users/friends';
-export const addFriend = 'users/add-friend';
+export const addFriend = '/users/add-friend';
 // leader board
 export const getBoard = '/users/hight-mark?topic=true&page=0&limit=5';
 

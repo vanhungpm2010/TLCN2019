@@ -5,9 +5,9 @@ import { theme } from "../core/theme";
 
 const Button = ({ mode, style, children, ...props }) => (
 	<ElementButton
-		style={[
+		containerStyle={[
 			styles.button,
-			mode === "clear" && { backgroundColor: theme.colors.surface },
+			mode === "clear" && { backgroundColor: theme.colors.primary },
 			style
 		]}
 		labelStyle={styles.text}
@@ -21,7 +21,7 @@ const Button = ({ mode, style, children, ...props }) => (
 const styles = StyleSheet.create({
 	button: {
 		width: "100%",
-		// marginVertical: 10,
+		marginVertical: 10,
 	},
 	text: {
 		fontWeight: "bold",

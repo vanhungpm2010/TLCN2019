@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     },
     elevation: 4,
     shadowOpacity: 4,
+    zIndex: 100
   },
   title: {
     textAlign: "center",

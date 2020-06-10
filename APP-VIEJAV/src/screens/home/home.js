@@ -13,6 +13,7 @@ import {
 import { Banner, Dethi, Chude, TaoKhoaHoc } from "@assets";
 import * as Animatable from "react-native-animatable";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { Badge, withBadge } from 'react-native-elements'
 // Push notification
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -24,27 +25,33 @@ class Home extends Component {
     super(props);
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: "Trang Chủ",
-    headerLeft: (
-      <TouchableOpacity
-        style={{ paddingLeft: 10 }}
-        onPress={() => navigation.openDrawer()}
-      >
-        <Icon name="bars" size={25} color={"white"} />
-      </TouchableOpacity>
-    ),
-    headerRight: () => (
-      <TouchableOpacity
-        style={{ paddingRight: 10 }}
-        onPress={() => navigation.navigate("NotificationList")}
-      >
-        <Icon name="bell" size={25} color={"#CF0A2C"} />
-      </TouchableOpacity>
-    ),
-    headerTitleStyle: { color: "#ffffff", fontSize: 20 },
-    headerStyle: { backgroundColor: "#536DFE", color: "white" },
-  });
+  static navigationOptions = ({ navigation }) => {
+    const BadgedIcon = withBadge(1)(Icon);
+    return {
+      title: "Trang Chủ",
+      headerLeft: (
+        <TouchableOpacity
+          style={{ paddingLeft: 10 }}
+          onPress={() => navigation.openDrawer()}
+        >
+          <Icon name="bars" size={25} color={"white"} />
+        </TouchableOpacity>
+      ),
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ paddingRight: 10 }}
+          onPress={() => navigation.navigate("NotificationList")}
+        >
+          <BadgedIcon
+            name="bell"
+            size={22}
+            color="white"
+          />
+        </TouchableOpacity>
+      ),
+      headerTitleStyle: { color: "#ffffff", fontSize: 20 },
+      headerStyle: { backgroundColor: "#536DFE", color: "white" },
+    }};
 
   // push notification
   registerForPushNotificationsAsync = async () => {
@@ -101,7 +108,7 @@ class Home extends Component {
   _handleNotification = notification => {
     Vibration.vibrate();
     this.props.navigation.navigate("NotificationList");
-    // console.log(notification);
+    
     // this.setState({ notification: notification });
   };
 

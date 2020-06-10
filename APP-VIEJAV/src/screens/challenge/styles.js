@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5
   },
   questionText: {
-    fontSize: hp("3%"),
+    fontSize: hp("2.5%"),
     letterSpacing: 0.02,
     color: colors.white_text,
     textShadowColor: "rgba(0, 0, 0, 0.25)",
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: 'flex-end',
     paddingTop: hp("2%")
   },
   btnBack: {
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 200,
+    height: hp('25%'),
     borderRadius: 5,
     marginTop: hp("1%"),
     marginBottom: hp("1%")

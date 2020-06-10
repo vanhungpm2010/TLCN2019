@@ -11,14 +11,14 @@ import Paragraph from "../components/Paragraph";
 import Logo from "../components/Logo";
 import colors from "../configs/colors";
 import Navigator from "@navigation/Navigator";
+import WebService from '../services'
 
 const ScoreScreen = ({ route, navigation }) => {
-  // Navigator.getParam('score', 0);
-  // const score =  route.params;
-  // console.log('route', score)
-  // useEffect(() => {
-  //   set
-  // }, [navigation])
+  useEffect(() => {
+    WebService.updateHightMark({ challenge: navigation?.getParam('score') })
+    .then(res => res)
+    .catch(err => alert(err))
+  }, [navigation?.getParam('score')])
 
   return (
     <Background>
@@ -47,7 +47,7 @@ const ScoreScreen = ({ route, navigation }) => {
           <Button
             style={styles.btnClose}
             mode="contained"
-            onPress={() => Navigator.navigate("Home")}
+            onPress={() => navigation.navigate("Home")}
           >
             <Text
               style={{ fontWeight: "bold", color: "rgba(244, 144, 12, 0.8)" }}
@@ -58,7 +58,7 @@ const ScoreScreen = ({ route, navigation }) => {
           <Button
             style={styles.btnPlay}
             mode="contained"
-            onPress={() => Navigator.navigate("ChallengeScreen")}
+            onPress={() => navigation.navigate("ChallengeScreen")}
           >
             <Text style={{ fontWeight: "bold", color: colors.white_color }}>
               Play Again
