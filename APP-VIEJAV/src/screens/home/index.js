@@ -9,6 +9,7 @@ import GetChallenge from "../getChallenge";
 import GetDetailChallenge from "../getChallenge/getDetailChallge";
 import NotificationList from "../notification-list";
 import DashBoardScreen from '../dash-board';
+import AlphabetScreen from '../alphabet';
 
 export default createStackNavigator(
   {
@@ -21,7 +22,8 @@ export default createStackNavigator(
     MemmoryCard,
     GetChallenge,
     GetDetailChallenge,
-    NotificationList
+    NotificationList,
+    AlphabetScreen
   },
   {
     initialRouteName: "DashBoardScreen",

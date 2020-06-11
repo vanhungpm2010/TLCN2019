@@ -97,4 +97,9 @@ export default class WebService {
   static updateTokenNotify = data => {
     return api.put(`/users/token`, data)
   }
+
+  // Alphabet
+  static getAlphabet = (type, limit) => {
+    return api.get(`/alphabet?limit=${limit}&type=${type}`)
+  }
 }
