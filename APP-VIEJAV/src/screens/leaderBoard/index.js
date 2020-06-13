@@ -15,16 +15,16 @@ import BackButton from "../../components/BackButton";
 import { Text as TextElements } from "react-native-elements";
 import styles from "./styles";
 import WebService from "../../services";
-import Loadding from '../../components/loading';
+import LoadingPage from '../loading';
 import { showMessage } from "react-native-flash-message";
 
 const LeaderBoardScreen = ({ navigation }) => {
   const [board, setBoard] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getBoard = async () => {
     try{ 
-      setLoading(true);
+      setIsLoading(true);
       const data = await WebService.getBoard();
       const { result } = data.response;
       setBoard(result);
@@ -34,17 +34,12 @@ const LeaderBoardScreen = ({ navigation }) => {
         type: "danger",
       });
     }
-
-    setLoading(false);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     getBoard();
   }, []);
-
-  if(loading) {
-    return <Loadding />
-  }
 
   return (
     <Background>
@@ -177,6 +172,8 @@ const LeaderBoardScreen = ({ navigation }) => {
           </View>
         </View> */}
       </View>
+
+      <LoadingPage loading={isLoading}/>
     </Background>
   );
 };

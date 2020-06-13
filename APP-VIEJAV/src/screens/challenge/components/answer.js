@@ -18,7 +18,7 @@ const Answer = ({ value, openAudio, choose }) => (
 );
 const styles = StyleSheet.create({
   anwsers: {
-    paddingTop: hp("1.5%"),
+    paddingTop: hp("1%"),
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",

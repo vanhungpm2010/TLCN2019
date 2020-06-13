@@ -14,3 +14,6 @@ export const backgroundLv1 = require("./backgroundLv1.png");
 export const backgroundLv4 = require("./backgroundLv4.png");
 export const war = require('./war.png');
 export const BACK_ARROW = require('./back.png')
+export const WAR_WHITE = require('./war_white.png')
+export const CLOSE = require('./close.png');
+export const SPEAKER = require('./speaker.png')

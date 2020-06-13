@@ -2,14 +2,14 @@ import React, { memo } from "react";
 import { StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 
-const PaperText = ({ text, style }) => (
+const PaperText = ({ children, style }) => (
     <Text 
         style={[
             styles.text,
             style
         ]}
     >
-        {text}
+        {children}
     </Text>
 )
 

@@ -6,13 +6,15 @@ import {
   Alert,
   Animated,
   TouchableOpacity,
-  Text
+  Text,
 } from "react-native";
 import { Audio } from "expo-av";
 import { showMessage } from "react-native-flash-message";
 
 import { Title } from "react-native-paper";
-import { backgroundLv1 } from "../../assets";
+import { Avatar } from "react-native-elements";
+
+import { backgroundLv1, WAR_WHITE } from "../../assets";
 import Paragraph from "../../components/Paragraph";
 import Background from "../../components/Background";
 import PaperText from "../../components/PaperText";
@@ -21,11 +23,14 @@ import ModalBox from "../../components/ModalBox";
 import Answer from "./components/answer";
 import styles from "./styles";
 import Navigator from "@navigation/Navigator";
-import WebService from '../../services';
-import Host from '../../services/host'
-import Loadding from '../../components/loading';
-import { getInfoRooms, emitAnswerWar } from '../../services/socketIO';
-import { ViewVertical } from "../../components/viewBox.component";
+import WebService from "../../services";
+import Host from "../../services/host";
+import Loadding from "../../components/loading";
+import { getInfoRooms, emitAnswerWar } from "../../services/socketIO";
+import {
+  ViewVertical,
+  ViewHorizontal,
+} from "../../components/viewBox.component";
 import Storage from "@storages";
 
 const QuestionScreen = ({ navigation }) => {
@@ -39,8 +44,7 @@ const QuestionScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [room, setRoom] = useState([]);
 
-
-  const onChoose = async choice => {
+  const onChoose = async (choice) => {
     const user = await Storage.getUserInfo();
 
     if (choice !== current.answer) {
@@ -48,16 +52,22 @@ const QuestionScreen = ({ navigation }) => {
       return;
     }
 
-    let dataEmit = room;
+    if (room?.id) {
+      let dataEmit = room;
 
-    if(room.user1._id === user.id) {
-      dataEmit = { ...room, user1: { ...room.user1, score: room.user1.score  + 1}}
+      if (room.user1._id === user.id) {
+        dataEmit = {
+          ...room,
+          user1: { ...room.user1, score: room.user1.score + 1 },
+        };
+      } else {
+        dataEmit = {
+          ...room,
+          user2: { ...room.user2, score: room.user2.score + 1 },
+        };
+      }
+      emitAnswerWar(dataEmit);
     }
-    else {
-      dataEmit = { ...room, user2: { ...room.user2, score: room.user2.score  + 1}}
-    }
-
-    emitAnswerWar(dataEmit);
 
     let point = score + 5;
     setScore(point);
@@ -68,13 +78,13 @@ const QuestionScreen = ({ navigation }) => {
   const nextQuestion = () => {
     setCurrent(data[questionNumber + 1]);
     setQuestionNumber(questionNumber + 1);
-    if(questionNumber + 1 === 10) {
+    if (questionNumber + 1 === 10) {
       setQuestionNumber(1);
-      getChallenge(current.level + 1)
+      getChallenge(current.level + 1);
     }
   };
 
-  const openAudio = async url => {
+  const openAudio = async (url) => {
     try {
       const playbackObject = await Audio.Sound.createAsync(
         { uri: url },
@@ -91,12 +101,12 @@ const QuestionScreen = ({ navigation }) => {
       { text: "OK", onPress: () => Navigator.navigate("ChallengeScreen") },
       {
         text: "Cancel",
-        
+
         style: "cancel",
         onPress: () => {
           return;
-        }
-      }
+        },
+      },
     ]);
   };
 
@@ -106,30 +116,30 @@ const QuestionScreen = ({ navigation }) => {
     //   setVisible(false);
     // }, 2000);
     setInterval(
-      () => setTime(prevState => ({ time: prevState.time + 1 })),
+      () => setTime((prevState) => ({ time: prevState.time + 1 })),
       1000
-    )
+    );
   };
 
-  const getChallenge = async level => {
+  const getChallenge = async (level) => {
     try {
-      setLoading(true)
-      const response = await WebService.getChallengeByLevel(level)
+      setLoading(true);
+      const response = await WebService.getChallengeByLevel(level);
       setData(response);
-      setCurrent(response[0])
-    } catch(error) {
+      setCurrent(response[0]);
+    } catch (error) {
       showMessage({
         message: err,
         type: "danger",
       });
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
-  const getInfoRoom = info => {
+  const getInfoRoom = (info) => {
     // console.log(info);
-    setRoom(info)
-  }
+    setRoom(info);
+  };
 
   useEffect(() => {
     // if (time == initialValue.time && !visible) {
@@ -141,7 +151,7 @@ const QuestionScreen = ({ navigation }) => {
     }
 
     let interval = setInterval(() => {
-      setTime(time => time - 1);
+      setTime((time) => time - 1);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -149,24 +159,26 @@ const QuestionScreen = ({ navigation }) => {
 
   useEffect(() => {
     getChallenge(1);
-  }, [])
+  }, []);
 
   useEffect(() => {
     getInfoRooms(getInfoRoom);
-  }, [room])
+  }, [room]);
 
-  console.log('rooommmmmm', room);
-  
+  console.log("rooommmmmm", room);
 
-  if(loading) {
-    return <Loadding />
+  if (loading) {
+    return <Loadding />;
   }
 
   return (
     <Background source={require("../../assets/backgroundLv1.png")}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <PaperText text={`Level ${current?.level}`} style={styles.textWhite} />
+          <PaperText
+            text={`Level ${current?.level}`}
+            style={styles.textWhite}
+          />
           <View style={styles.time}>
             <PaperText text={time} style={styles.textWhite} />
           </View>
@@ -175,15 +187,38 @@ const QuestionScreen = ({ navigation }) => {
             <PaperText text={score} style={styles.textWhite} />
           </View>
         </View>
-        <ViewVertical>
-          <Text style={styles.textWhite}>User 1: {room?.user1?.username}</Text>
-          <Text style={styles.textWhite}> score: {room?.user1?.score}</Text>
-        </ViewVertical>
+        {room?.id && (
+          <ViewHorizontal style={styles.infoContainer}>
+            <View style={styles.info}>
+              <Avatar
+                rounded
+                source={{
+                  uri:
+                    "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                }}
+                size="medium"
+              />
+              <PaperText text={"Hùng"} style={styles.textWhite} />
+            </View>
 
-        <ViewVertical>
-          <Text style={styles.textWhite}>User 1: {room?.user2?.username}</Text>
-          <Text style={styles.textWhite}> score: {room?.user2?.score}</Text>
-        </ViewVertical>
+            <View style={styles.score}>
+              <Image source={WAR_WHITE} style={styles.iconWar} />
+              <PaperText text={"2 - 1"} style={styles.textScore} />
+            </View>
+
+            <View style={styles.info}>
+              <Avatar
+                rounded
+                source={{
+                  uri:
+                    "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+                }}
+                size="medium"
+              />
+              <PaperText text={"Việt"} style={styles.textWhite} />
+            </View>
+          </ViewHorizontal>
+        )}
 
         <View style={styles.question}>
           <View style={styles.title}>
@@ -191,21 +226,23 @@ const QuestionScreen = ({ navigation }) => {
               Question {questionNumber}/
               <PaperText text="10" style={styles.textWhite} />
             </Title>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => setVisible(true)}
               style={styles.change}
             >
               <Image width={10} source={require("../../assets/change.png")} />
               <PaperText text="Change" style={styles.textChange} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <Image
             style={styles.image}
-            source={{uri: `${Host}/assets/challenge/photo/${current.image}`}}
+            source={{ uri: `${Host}/assets/challenge/photo/${current.image}` }}
           />
           <PaperText
             text={
-              current?.question ? current.question.replace(/&quot;/g, '"') : null
+              current?.question
+                ? current.question.replace(/&quot;/g, '"')
+                : null
             }
             style={styles.questionText}
           />
@@ -253,7 +290,7 @@ const QuestionScreen = ({ navigation }) => {
 };
 
 QuestionScreen.navigationOptions = {
-  header: null
+  header: null,
 };
 
 export default QuestionScreen;

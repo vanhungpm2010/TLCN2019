@@ -10,9 +10,9 @@ import ButtonPaper from "./ButtonPaper";
 import colors from '../configs/colors';
 import Paragraph from "./Paragraph";
 
-const ModalBox = ({ isVisible, onClose, children }) => (
+const ModalBox = ({ isVisible, onClose, style, children }) => (
   <Modal
-    style={styles.container}
+    style={[styles.container, style]}
     isVisible={isVisible}
     animationIn="slideInLeft"
     animationOut="slideOutRight"
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     elevation: 15,
     shadowOpacity: 0.15,
     position: "absolute",
-    top: hp("40%"),
+    top: hp("25%"),
     left: wp("15%")
   },
   

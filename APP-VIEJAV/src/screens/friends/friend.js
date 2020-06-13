@@ -8,22 +8,34 @@ import {
   StyleSheet,
   Dimensions,
   StatusBar,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import * as Speech from "expo-speech";
 import { QuizLesson } from "@assets";
 import * as Animatable from "react-native-animatable";
 // import Styles from "./styles.js";
 import WebService from "../../services";
-import Loading from "@components/loading";
+// import Loading from "@components/loading";
 import ActionModal from "@components/actionModal";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import { ListItem, Input } from "react-native-elements";
+import { showMessage } from "react-native-flash-message";
+import { ListItem, Input, Avatar } from "react-native-elements";
 import { TabView, SceneMap } from "react-native-tab-view";
 import SecondRoute from "./request";
-import { onStartGame } from '../../services/socketIO';
-import { war } from '../../assets';
+import { onStartGame } from "../../services/socketIO";
+import { war } from "../../assets";
+import LoadingPage from "../loading";
+import { getErrorMessage } from "../../untils/helper";
+import ModalBox from "../../components/ModalBox";
+import {
+  ViewVertical,
+  ViewHorizontal,
+} from "../../components/viewBox.component";
+import PaperText from "../../components/PaperText";
+import Button from "../../components/Button";
+import ModalWar from './modalWar';
+
+import styles from "./styles";
 
 const initialLayout = { width: Dimensions.get("window").width };
 
@@ -32,12 +44,16 @@ const Friend = ({ navigation }) => {
   const [searchFriends, setSearchFriends] = useState([]);
   const [text, setText] = useState("");
   const [index, setIndex] = React.useState(0);
+  const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [timeWait, setTimeWait] = useState(15);
+
   const [routes] = React.useState([
     { key: "first", title: "Danh sách" },
     { key: "second", title: "Tìm kiếm" },
-    { key: "third", title: "Lời mời" }
+    { key: "third", title: "Lời mời" },
   ]);
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const keyExtractor = (item, index) => index.toString();
 
@@ -54,40 +70,42 @@ const Friend = ({ navigation }) => {
       // chevron
       rightTitle={
         <TouchableOpacity onPress={() => inviteWar(item._id)}>
-          <Image source={war} style={styles.war} resizeMode='contain'/>
+          <Image source={war} style={styles.war} resizeMode="contain" />
         </TouchableOpacity>
       }
     />
   );
 
-  const inviteWar = async id => {
-    try{
-      const response = await WebService.inviteFriend({ friend_id: id})
-      console.log('response', response);
-      
-      
-    } catch(error) {
+  const inviteWar = async (id) => {
+    setLoading(true);
+    try {
+      const response = await WebService.inviteFriend({ friend_id: id });
+      if(response) setIsVisible(true);
 
-    }
-  } 
-
-  
-
-  const getList = () => {
-    setIsRefreshing(true);
-    WebService.getFriends()
-      .then(async (data) => {
-        setFriends(data.friends);
-        setIsRefreshing(false);
-      })
-      .catch((err) => {
-        console.log("bi loi", err);
-        setIsRefreshing(false);
-        showMessage({
-          message: 'bi loi',
-          type: "danger",
-        });
+    } catch (error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
       });
+    }
+    setLoading(false);
+  };
+
+  const getList = async () => {
+    setLoading(true);
+    setIsRefreshing(true);
+    try {
+      const data = await WebService.getFriends();
+      setFriends(data.friends);
+    } catch (error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
+      });
+    }
+
+    setIsRefreshing(false);
+    setLoading(false);
   };
 
   const FirstRoute = () => (
@@ -104,27 +122,33 @@ const Friend = ({ navigation }) => {
   const renderItemSearch = ({ item }) => {
     return (
       <ListItem
-      keyExtractor={keyExtractor}
-      title={item.username}
-      subtitle={item.isOnline ? "Online" : <Text style={{color: 'gray'}}>Offline</Text>}
-      leftAvatar={{
-        source: item.avatar && { uri: item.avatar },
-        // title: item.name[0],
-      }}
-      subtitleStyle={{ color: "green" }}
-      bottomDivider
-      chevron
-      rightTitle={
-        item?.type == "notFriend" ? (
-          <TouchableOpacity onPress={() => addFriend(item._id)}>
-            <Icon name="user-plus" size={14} color="black" />
-          </TouchableOpacity>
-        ) : (
-          ""
-        )
-      }
-    />
-    )
+        keyExtractor={keyExtractor}
+        title={item.username}
+        subtitle={
+          item.isOnline ? (
+            "Online"
+          ) : (
+            <Text style={{ color: "gray" }}>Offline</Text>
+          )
+        }
+        leftAvatar={{
+          source: item.avatar && { uri: item.avatar },
+          // title: item.name[0],
+        }}
+        subtitleStyle={{ color: "green" }}
+        bottomDivider
+        chevron
+        rightTitle={
+          item?.type == "notFriend" ? (
+            <TouchableOpacity onPress={() => addFriend(item._id)}>
+              <Icon name="user-plus" size={14} color="black" />
+            </TouchableOpacity>
+          ) : (
+            ""
+          )
+        }
+      />
+    );
   };
 
   const search = () => {
@@ -156,25 +180,25 @@ const Friend = ({ navigation }) => {
             <Text>Search</Text>
           </TouchableOpacity>
         }
-        onChangeText={text => setText(text)}
+        onChangeText={(text) => setText(text)}
         value={text}
       />
       <FlatList
         keyExtractor={keyExtractor}
         data={searchFriends}
         renderItem={renderItemSearch}
-    />
+      />
     </View>
   );
-  
+
   const onRefresh = () => {
-     getList();
-  }
+    getList();
+  };
 
   const addFriend = (id) => {
     WebService.addFriend({ friend_id: id, is_request: true })
       .then(async (data) => {
-        search(text)
+        search(text);
         showMessage({
           message: "Kết bạn thành công",
           type: "success",
@@ -189,70 +213,40 @@ const Friend = ({ navigation }) => {
       });
   };
 
-  const handleStart = response => {
-    if(response) {
-      navigation.navigate('QuestionScreen')
+  const handleStart = (response) => {
+    if (response) {
+      navigation.navigate("QuestionScreen");
     }
-  }
+  };
 
   useEffect(() => {
     getList();
   }, []);
 
   useEffect(() => {
-    onStartGame(handleStart)
-  }, [])
+    onStartGame(handleStart);
+  }, []);
 
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SearchRoute,
-    third: SecondRoute
+    third: SecondRoute,
   });
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={initialLayout}
-      style={styles.container}
-    />
-    // <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-    //   {/* search */}
-    //   <Input
-    //     placeholder="Search friend by username"
-    //     leftIconContainerStyle={{paddingRight: 10}}
-    //     leftIcon={<Icon name="search" size={14} color="black" />}
-    //     rightIcon={
-    //         <TouchableOpacity onPress={searchFriend}>
-    //             <Text>Search</Text>
-    //         </TouchableOpacity>
-    //     }
-    //     onChangeText={text => onChangeText(text)}
-    //     value={text}
-    //   />
-    //   {/* List */}
-    //   <FlatList
-    //     keyExtractor={this.keyExtractor}
-    //     data={friends}
-    //     renderItem={this.renderItem}
-    //   />
-    // </View>
+    <>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={initialLayout}
+        style={styles.container}
+      />
+      <LoadingPage loading={loading} />
+      <ModalWar isVisible={isVisible} onClose={() => setIsVisible(false)}/>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    // marginTop: StatusBar.currentHeight,
-  },
-  scene: {
-    flex: 1,
-  },
-  war: {
-    width: 20,
-    height: 20
-  }
-});
 
 Friend.navigationOptions = ({ navigation }) => ({
   title: "Bạn bè",

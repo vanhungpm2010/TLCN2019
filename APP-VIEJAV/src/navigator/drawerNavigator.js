@@ -9,7 +9,6 @@ import Logout from '@screens/logout'
 import Drawer from '@screens/drawer'
 import ProfileScreen from '@screens/profile';
 import LeaderBoardScreen from '@screens/leaderBoard';
-import AppNotification from '@screens/notification';
 import Challenge from '../screens/challenge';
 
 const DrawerNavigatorConfig = {
@@ -31,9 +30,6 @@ export default createDrawerNavigator(
     },
     Logout: {
       screen: Logout,
-    },
-    Notification: {
-      screen: AppNotification
     },
     Challenge: {
       screen: Challenge

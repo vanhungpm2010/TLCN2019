@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     paddingLeft: wp("5%"),
     paddingRight: wp("5%"),
     paddingBottom: wp("2%"),
-    paddingTop: hp("5%")
+    paddingTop: 40
   },
   header: {
     flexDirection: "row",
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   title: {
     flexDirection: "row",
     alignItems: "center",
-    paddingTop: hp("3%"),
+    paddingTop: hp("0.5%"),
     paddingBottom: hp("0.2%"),
     width: "100%",
     justifyContent: "space-between",
@@ -166,13 +166,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: 'flex-end',
-    paddingTop: hp("2%")
+    paddingTop: hp("1%")
   },
   btnBack: {
     backgroundColor: "rgba(244, 144, 12, 0.5)",
     borderRadius: 30,
     width: wp("50%"),
-    height: hp("6%"),
+    // height: hp("6%"),
     alignContent: "center",
     position: "relative"
   },
@@ -250,6 +250,28 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     color: "rgba(244, 144, 12, 0.8)"
+  },
+  infoContainer: {
+    paddingTop: 10,
+    alignContent: 'space-between',
+    
+  },
+  info: {
+    alignItems: "center",
+    flex: 1
+  },
+  score: {
+
+  },
+  iconWar: {
+    width: 40,
+    height: 40
+  },
+  textScore: {
+    paddingTop: hp('1%'),
+    color: colors.white_text,
+    fontSize: hp("3%"),
+    textAlign: 'center'
   }
 });
 

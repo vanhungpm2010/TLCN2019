@@ -8,7 +8,9 @@ import socketIO from "socket.io-client";
 let socket;
 
 export const socketInitial = id => {
-  const SERVER_URL = `https://22f057b741fb.ngrok.io?user_id=${id}`;
+  // const SERVER_URL = `https://22f057b741fb.ngrok.io?user_id=${id}`;
+  const SERVER_URL = `https://japaness-2020.herokuapp.com?user_id=${id}`;
+
   console.log('socketInitial', id);
   
   socket = socketIO(SERVER_URL, {

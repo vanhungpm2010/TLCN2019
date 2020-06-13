@@ -29,27 +29,27 @@ import BackButton from "../../components/BackButton";
 import styles from "./styles";
 import Storage from '@storages'
 import { UserACtion } from "@actions/userAction";
-import Loadding from '../../components/loading';
+import LoadingPage from '../loading';
+import { getErrorMessage } from '../../untils/helper';
 
 const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
 
-  // const { state } = useStore();
-  const getMe = () => {
-    WebService.getMe()
-    .then(async data => {
-      setUser(data);
-    })
-    .catch(err => {
-      console.log("bi loi", err);
+  const getMe = async () => {
+    setIsLoading(true);
+    try {
+      const response = await WebService.getMe();
+      setUser(response);
+    } catch (error) {
       showMessage({
-        message: err,
+        message: getErrorMessage(error),
         type: "danger"
       });
-    });
+    }
+    setIsLoading(false);
   }
   useEffect(() => {
     getMe();
@@ -96,7 +96,7 @@ const ProfileScreen = ({ navigation }) => {
     });
     
     try {
-      setLoading(true);
+      setIsLoading(true);
       const data = await WebService.putAvartar(avatar);
       await Storage.saveUserInfo({
         username: data.username,
@@ -110,16 +110,12 @@ const ProfileScreen = ({ navigation }) => {
       });
     } catch(error) {
       showMessage({
-        message: "Chọn ảnh quá lớn!",
+        message: getErrorMessage(error),
         type: "danger"
       });
     }
-    setLoading(false);
+    setIsLoading(false);
   };
-
-  if(loading) {
-    return <Loadding />
-  }
 
   return (
     <Background>
@@ -144,7 +140,7 @@ const ProfileScreen = ({ navigation }) => {
           />
 
           <TextElements h4 h4Style={styles.title}>
-            {user.name || user.username || 'Hung Nguyen'}
+            {user.name || user.username || ''}
           </TextElements>
           {/* <Title style={styles.title}></Title> */}
 
@@ -189,6 +185,8 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Log out</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <LoadingPage loading={isLoading} />
     </Background>
   );
 };

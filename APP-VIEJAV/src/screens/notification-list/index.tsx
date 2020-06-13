@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { showMessage } from "react-native-flash-message";
 
 import Text from '../../components/text.component';
 // import Header from 'components/header/header.component';
@@ -19,50 +20,49 @@ import Button from '../../components/Button';
 // import { RootState } from 'reducers/';
 // import { getListNotifications } from 'actions/notification.action';
 // import { strings } from 'utils/i18n';
-import { showMessage, hideMessage } from "react-native-flash-message";
-import Navigator from "@navigation/Navigator";
+
+import Navigator from '../../navigator/Navigator';
+import LoadingPage from '../loading';
+import { getErrorMessage } from '../../untils/helper';
 
 const NotificationList = (props: any) => {
   const [data, setData] = useState([]);
-  // const list: any = useSelector<RootState>((state: RootState) => state.notification.list);
-
-  // const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getList();
   }, []);
 
-  setTimeout(() => {
-    hasBeenSeen();
-  }, 10000);
+  const getList = async () => {
+    setIsLoading(true);
+    try {
+      const data = await WebService.getListNoti();
+      await WebService.seenNotify();
 
-  const hasBeenSeen = () => {
-    WebService.seenNotify()
-      .then(data => {
-        console.log(data)
-      })
-      .catch(err => {
-        console.log("bi loi", err);
+      setData(data.result);
+
+    } catch (error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger"
       });
+    }
+    setIsLoading(false);
   }
 
-  const getList = () => {
-    WebService.getListNoti()
-      .then(async data => {
-        setData(data.result);
-      })
-      .catch(err => {
-        alert(err);
-      });
-  }
   const _onHandleAccept = async item => {
     const { contentMess, sentUser, _id } = item;
+    setIsLoading(true);
 
     try {
       await WebService.deleteNotify(_id);
 
-      if(contentMess.type === 'INVITE_GAME') {
-        await WebService.acceptGame({ friend_id: sentUser._id, content: contentMess.content, accept: true });
+      if (contentMess.type === 'INVITE_GAME') {
+        await WebService.acceptGame({
+          friend_id: sentUser._id,
+          content: contentMess.content,
+          accept: true
+        });
       } else {
         await WebService.addFriend({ friend_id: sentUser._id });
         showMessage({
@@ -71,19 +71,20 @@ const NotificationList = (props: any) => {
         });
         Navigator.navigate('Home');
       }
-    } catch (err) {
+
+    } catch (error) {
       showMessage({
-        message: 'Something went wrong',
+        message: getErrorMessage(error),
         type: "danger"
       });
     }
+    setIsLoading(false);
   }
 
   const _onHandleCancel = (value) => {
     console.log('value', value)
   }
 
-  
   return (
     <ViewVertical style={{ backgroundColor: '#fff' }}>
       <ViewVertical style={styles.container}>
@@ -140,11 +141,13 @@ const NotificationList = (props: any) => {
               )
             }}
           />
-          : <ViewVertical style={{ alignItems: 'center', justifyContent: 'center'}}>
-              <Text >No notification</Text>
+          : <ViewVertical style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Text >No notification</Text>
           </ViewVertical>
         }
       </ViewVertical>
+
+      <LoadingPage loading={isLoading} />
     </ViewVertical>
   )
 }

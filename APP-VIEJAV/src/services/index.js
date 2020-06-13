@@ -107,7 +107,7 @@ export default class WebService {
   }
 
   // Alphabet
-  static getAlphabet = (type, limit) => {
-    return api.get(`/alphabet?limit=${limit}&type=${type}`)
+  static getAlphabet = (type, limit, page = 0) => {
+    return api.get(`/alphabet?limit=${limit}&type=${type}&page=${page}`)
   }
 }
