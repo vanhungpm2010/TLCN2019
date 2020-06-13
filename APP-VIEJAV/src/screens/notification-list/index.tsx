@@ -55,17 +55,22 @@ const NotificationList = (props: any) => {
         alert(err);
       });
   }
-  const _onHandleAccept = async (idNotify, friend_id) => {
+  const _onHandleAccept = async item => {
+    const { contentMess, sentUser, _id } = item;
 
     try {
-      await WebService.addFriend({ friend_id: friend_id });
-      await WebService.deleteNotify(idNotify);
+      await WebService.deleteNotify(_id);
 
-      showMessage({
-        message: 'Success',
-        type: 'success'
-      });
-      Navigator.navigate('Home');
+      if(contentMess.type === 'INVITE_GAME') {
+        await WebService.acceptGame({ friend_id: sentUser._id, content: contentMess.content, accept: true });
+      } else {
+        await WebService.addFriend({ friend_id: sentUser._id });
+        showMessage({
+          message: 'Success',
+          type: 'success'
+        });
+        Navigator.navigate('Home');
+      }
     } catch (err) {
       showMessage({
         message: 'Something went wrong',
@@ -115,7 +120,7 @@ const NotificationList = (props: any) => {
                         </Text>
                         <ViewHorizontal style={styles.boxFooter}>
                           <TouchableOpacity
-                            onPress={() => _onHandleAccept(item._id, item.sentUser._id)}
+                            onPress={() => _onHandleAccept(item)}
                             style={styles.btnAccept}
                           >
                             <Text style={styles.btnText}>Đồng ý</Text>

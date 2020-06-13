@@ -79,6 +79,14 @@ export default class WebService {
   static addFriend = (body) => {
     return api.put(Url.addFriend, body);
   }
+  
+  // Game Challenge
+  static inviteFriend = body => {
+    return api.post(Url.inviteFriend, body)
+  }
+  static acceptGame = body => {
+    return api.post(Url.acceptGame, body)
+  }
 
   static getBoard = () => {
     return api.get(Url.getBoard);

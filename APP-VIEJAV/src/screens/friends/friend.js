@@ -22,7 +22,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { ListItem, Input } from "react-native-elements";
 import { TabView, SceneMap } from "react-native-tab-view";
 import SecondRoute from "./request";
-
+import { onStartGame } from '../../services/socketIO';
 import { war } from '../../assets';
 
 const initialLayout = { width: Dimensions.get("window").width };
@@ -60,10 +60,18 @@ const Friend = ({ navigation }) => {
     />
   );
 
-  const inviteWar = id => {
-    console.log(id);
-    
+  const inviteWar = async id => {
+    try{
+      const response = await WebService.inviteFriend({ friend_id: id})
+      console.log('response', response);
+      
+      
+    } catch(error) {
+
+    }
   } 
+
+  
 
   const getList = () => {
     setIsRefreshing(true);
@@ -158,14 +166,9 @@ const Friend = ({ navigation }) => {
     />
     </View>
   );
-
-  console.log('text', text);
   
-
   const onRefresh = () => {
-    console.log('bbb');
      getList();
-   
   }
 
   const addFriend = (id) => {
@@ -184,12 +187,21 @@ const Friend = ({ navigation }) => {
           type: "danger",
         });
       });
-    console.log(id);
   };
+
+  const handleStart = response => {
+    if(response) {
+      navigation.navigate('QuestionScreen')
+    }
+  }
 
   useEffect(() => {
     getList();
   }, []);
+
+  useEffect(() => {
+    onStartGame(handleStart)
+  }, [])
 
   const renderScene = SceneMap({
     first: FirstRoute,

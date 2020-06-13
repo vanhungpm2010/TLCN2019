@@ -5,13 +5,17 @@ import { Button } from "react-native-elements";
 
 import { ViewVertical } from "../../components/viewBox.component";
 import Text from "../../components/text.component";
+import ModalBox from '../../components/ModalBox';
+
 import WebService from "../../services";
 
 import styles from "./styles";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const AlphabetScreen = ({ navigation }) => {
   const [isSelect, setIsSelect] = useState(false);
   const [data, setData] = useState([]);
+  const [isVisible, setIsVisible] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -25,6 +29,10 @@ const AlphabetScreen = ({ navigation }) => {
       console.log(error);
     }
   };
+
+  const goDetail = () => {
+    setIsVisible(true)
+  }
 
   useEffect(() => {
     onChangeAlphabet();
@@ -63,13 +71,22 @@ const AlphabetScreen = ({ navigation }) => {
           {data &&
             data.map((item, index) => {
               return (
-                <View style={styles.alphabetItem} key={index}>
-                  <Image source={{ uri: item.img}} style={{ width: 65, height: 65}}/>
-                </View>
+                <TouchableOpacity onPress={goDetail} key={index}>
+                  <View style={styles.alphabetItem} >
+                    <Image source={{ uri: item.img}} style={{ width: 65, height: 65}}/>
+                  </View>
+                </TouchableOpacity>
+                
               );
             })}
         </View>
       </ScrollView>
+      <ModalBox isVisible={isVisible} onClose={() => setIsVisible(false)}>
+        <ViewVertical >
+          <Button onPress={() => setIsVisible(false)} title='Close'/>
+        </ViewVertical>
+        <Text>Abc</Text>
+      </ModalBox>
     </ViewVertical>
   );
 };

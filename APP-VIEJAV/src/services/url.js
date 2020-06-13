@@ -26,3 +26,7 @@ export const getBoard = '/users/hight-mark?topic=true&page=0&limit=5';
 // noti
 export const getListNoti = '/notify/user?page=0&limit=5';
 export const updateSeenNotify = '/notify/updateSeen';
+
+// Game
+export const inviteFriend = '/game/invite-friend';
+export const acceptGame = '/game/accept'

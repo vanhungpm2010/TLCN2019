@@ -10,6 +10,7 @@ import GetDetailChallenge from "../getChallenge/getDetailChallge";
 import NotificationList from "../notification-list";
 import DashBoardScreen from '../dash-board';
 import AlphabetScreen from '../alphabet';
+import AlphabetDetail from '../alphabet/components/AlphabetDetail';
 
 export default createStackNavigator(
   {
@@ -23,7 +24,8 @@ export default createStackNavigator(
     GetChallenge,
     GetDetailChallenge,
     NotificationList,
-    AlphabetScreen
+    AlphabetScreen,
+    AlphabetDetail
   },
   {
     initialRouteName: "DashBoardScreen",

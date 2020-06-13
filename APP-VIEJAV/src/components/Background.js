@@ -2,7 +2,8 @@ import React from "react";
 import {
 	ImageBackground,
 	StyleSheet,
-	KeyboardAvoidingView
+	KeyboardAvoidingView,
+	Platform
 } from "react-native";
 
 import { background } from "../assets";
@@ -12,7 +13,7 @@ const Background = ({ children, source }) => (
 		resizeMode="cover"
 		style={styles.background}
 	>
-		<KeyboardAvoidingView style={styles.container} behavior="padding">
+		<KeyboardAvoidingView style={styles.container} behavior={Platform.OS == "ios" ? "padding" : "height"}>
 			{children}
 		</KeyboardAvoidingView>
 	</ImageBackground>
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
 		width: "100%"
 	},
 	container: {
-		flex: 1,
+		flex: 2,
 		padding: 15,
 		paddingTop: 20,
 		width: "100%",

@@ -24,6 +24,9 @@ import Navigator from "@navigation/Navigator";
 import WebService from '../../services';
 import Host from '../../services/host'
 import Loadding from '../../components/loading';
+import { getInfoRooms, emitAnswerWar } from '../../services/socketIO';
+import { ViewVertical } from "../../components/viewBox.component";
+import Storage from "@storages";
 
 const QuestionScreen = ({ navigation }) => {
   // const [quiz, setQuiz] = useState(initialValue);
@@ -34,12 +37,28 @@ const QuestionScreen = ({ navigation }) => {
   const [score, setScore] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(1);
   const [data, setData] = useState([]);
+  const [room, setRoom] = useState([]);
 
-  const onChoose = choice => {
+
+  const onChoose = async choice => {
+    const user = await Storage.getUserInfo();
+
     if (choice !== current.answer) {
       Navigator.navigate("ScoreScreen", { score: score });
       return;
     }
+
+    let dataEmit = room;
+
+    if(room.user1._id === user.id) {
+      dataEmit = { ...room, user1: { ...room.user1, score: room.user1.score  + 1}}
+    }
+    else {
+      dataEmit = { ...room, user2: { ...room.user2, score: room.user2.score  + 1}}
+    }
+
+    emitAnswerWar(dataEmit);
+
     let point = score + 5;
     setScore(point);
     setTime(15);
@@ -107,6 +126,11 @@ const QuestionScreen = ({ navigation }) => {
     setLoading(false)
   }
 
+  const getInfoRoom = info => {
+    // console.log(info);
+    setRoom(info)
+  }
+
   useEffect(() => {
     // if (time == initialValue.time && !visible) {
     //   startGame();
@@ -127,6 +151,13 @@ const QuestionScreen = ({ navigation }) => {
     getChallenge(1);
   }, [])
 
+  useEffect(() => {
+    getInfoRooms(getInfoRoom);
+  }, [room])
+
+  console.log('rooommmmmm', room);
+  
+
   if(loading) {
     return <Loadding />
   }
@@ -144,6 +175,16 @@ const QuestionScreen = ({ navigation }) => {
             <PaperText text={score} style={styles.textWhite} />
           </View>
         </View>
+        <ViewVertical>
+          <Text style={styles.textWhite}>User 1: {room?.user1?.username}</Text>
+          <Text style={styles.textWhite}> score: {room?.user1?.score}</Text>
+        </ViewVertical>
+
+        <ViewVertical>
+          <Text style={styles.textWhite}>User 1: {room?.user2?.username}</Text>
+          <Text style={styles.textWhite}> score: {room?.user2?.score}</Text>
+        </ViewVertical>
+
         <View style={styles.question}>
           <View style={styles.title}>
             <Title style={styles.titleText}>

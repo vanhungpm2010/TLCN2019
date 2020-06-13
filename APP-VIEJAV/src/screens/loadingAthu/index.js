@@ -5,7 +5,7 @@ import api from "@services/base";
 import Navigator from "@navigation/Navigator";
 import { UserACtion } from "@actions/userAction";
 import { connect } from "react-redux";
-import { startSocketIO } from '../../services/socketIO';
+import { startSocketIO, socketInitial } from '../../services/socketIO';
 
 class Athu extends Component {
   constructor(props) {
@@ -16,10 +16,12 @@ class Athu extends Component {
   checkAthu = async () => {
     const token = await Storage.getToken();
     const user = await Storage.getUserInfo();
-    console.log("token sas", token);
+    console.log("token sas", token, user);
     if (token) {
       api.init({ token });
+      socketInitial(user.id)
       startSocketIO(user);
+      // emitStartGame()
       this.props.dispatch(UserACtion.getUser());
 
       console.log("token", token);

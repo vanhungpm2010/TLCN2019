@@ -30,8 +30,8 @@ const request = async (options, isHeader = true) => {
     client.defaults.headers.common.Authorization = null;
   }
   const onSuccess = response => {
-    console.log('respone',response.data)
-    console.log('status',response.status)
+    // console.log('respone',response.data)
+    // console.log('status',response.status)
     // console.log('[RESPONSE]', JSON.stringify(response, null, 2));
     if (response && response.status !== 200 && response.status !== 202) {
       throw response.data ? response.data.message : "";
