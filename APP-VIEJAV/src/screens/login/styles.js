@@ -14,6 +14,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  logo: {
+    width: 150,
+    height: 150,
+    margin: 0
+  },
   rememberAndForgot: {
     width: "100%",
     display: "flex",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { Image, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from "react-native-flash-message";
@@ -24,14 +24,26 @@ import Button from '../../components/Button';
 import Navigator from '../../navigator/Navigator';
 import LoadingPage from '../loading';
 import { getErrorMessage } from '../../untils/helper';
-
+import {UserACtion} from"../../actions/userAction";
+import {notiUser} from "../../services/socketIO"
 const NotificationList = (props: any) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch=useDispatch();
+  const notiRedux=useSelector(state => state.UserReducer.noti)
+
+  console.log(notiRedux, notiRedux?.length);
+  
 
   useEffect(() => {
-    getList();
+    if(notiRedux?.length === 0 || notiRedux === undefined) {
+      getList();
+    }
   }, []);
+
+  useEffect(() => {
+    dispatch(notiUser(UserACtion.addNoti))
+  });
 
   const getList = async () => {
     setIsLoading(true);
@@ -39,7 +51,7 @@ const NotificationList = (props: any) => {
       const data = await WebService.getListNoti();
       await WebService.seenNotify();
 
-      setData(data.result);
+      dispatch(UserACtion.getNoti(data.result));
 
     } catch (error) {
       showMessage({
@@ -88,9 +100,9 @@ const NotificationList = (props: any) => {
   return (
     <ViewVertical style={{ backgroundColor: '#fff' }}>
       <ViewVertical style={styles.container}>
-        {(data && data.length > 0)
+        {(notiRedux && notiRedux.length > 0)
           ? <FlatList
-            data={data}
+            data={notiRedux}
             keyExtractor={item => {
               return item._id
             }}

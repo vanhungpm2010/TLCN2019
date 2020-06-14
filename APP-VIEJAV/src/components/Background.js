@@ -7,11 +7,12 @@ import {
 } from "react-native";
 
 import { background } from "../assets";
-const Background = ({ children, source }) => (
+const Background = ({ children, source, blurRadius }) => (
 	<ImageBackground
 		source={source || background}
 		resizeMode="cover"
 		style={styles.background}
+		blurRadius={blurRadius}
 	>
 		<KeyboardAvoidingView style={styles.container} behavior={Platform.OS == "ios" ? "padding" : "height"}>
 			{children}

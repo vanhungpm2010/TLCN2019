@@ -13,8 +13,8 @@ export default StyleSheet.create({
         marginBottom: 50
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 150,
+        height: 150,
     },
     header:{ 
         width: "100%", 

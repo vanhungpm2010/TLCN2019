@@ -103,7 +103,7 @@ const ProfileScreen = ({ navigation }) => {
         email: data.email,
         avatar: data.avatar
       });
-      props.dispatch(UserACtion.getUser());
+      dispatch(UserACtion.getUser());
       showMessage({
         message: "Sửa Avatar Thành Công",
         type: "success"

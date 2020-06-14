@@ -29,4 +29,5 @@ export const updateSeenNotify = '/notify/updateSeen';
 
 // Game
 export const inviteFriend = '/game/invite-friend';
-export const acceptGame = '/game/accept'
+export const acceptGame = '/game/accept';
+export const getQuestions = '/challenge/random';

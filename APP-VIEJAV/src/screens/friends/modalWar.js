@@ -22,14 +22,19 @@ import PaperText from "../../components/PaperText";
 import Button from "../../components/Button";
 
 import styles from "./styles";
+import Storage from '../../storages'
+import { rejectGame } from '../../services/socketIO';
 
-const ModalWar = ({ isVisible, onClose }) => {
+const ModalWar = ({ isVisible, onClose, receiver, roomId }) => {
   const [timeWait, setTimeWait] = useState(15);
-
+  const [user, setUser] = useState(null);
+  
   useEffect(() => {
     if (!timeWait) {
+      rejectGame(roomId)
       setTimeWait(15);
       onClose();
+      alert('Reject nhesssss')
     }
     let interval;
 
@@ -42,6 +47,11 @@ const ModalWar = ({ isVisible, onClose }) => {
     return () => clearInterval(interval);
   }, [timeWait, isVisible]);
 
+  useEffect(() => {
+    const user = Storage.getUserInfo();
+    setUser(user);
+  }, [])
+
   return (
     <ModalBox isVisible={isVisible}>
       <ViewHorizontal style={styles.infoContainer}>
@@ -49,8 +59,7 @@ const ModalWar = ({ isVisible, onClose }) => {
           <Avatar
             rounded
             source={{
-              uri:
-                "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+              uri: user?.avatar
             }}
             size="small"
           />
@@ -64,8 +73,7 @@ const ModalWar = ({ isVisible, onClose }) => {
           <Avatar
             rounded
             source={{
-              uri:
-                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+              uri: receiver?.avatar
             }}
             size="small"
           />

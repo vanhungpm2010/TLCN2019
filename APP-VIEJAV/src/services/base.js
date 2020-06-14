@@ -1,5 +1,5 @@
 import axios from "axios";
-import Host from "./host";
+import { Host } from "./host";
 import Navigator from "@navigation/Navigator";
 import { showMessage, hideMessage } from "react-native-flash-message";
 

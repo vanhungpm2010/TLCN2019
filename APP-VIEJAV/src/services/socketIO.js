@@ -1,4 +1,5 @@
 import socketIO from "socket.io-client";
+import { hostname } from './host';
 // Initialize Socket IO:
 // const socket = socketIO(SERVER_URL, {
 //   forceNew: true,
@@ -9,7 +10,7 @@ let socket;
 
 export const socketInitial = id => {
   // const SERVER_URL = `https://22f057b741fb.ngrok.io?user_id=${id}`;
-  const SERVER_URL = `https://japaness-2020.herokuapp.com?user_id=${id}`;
+  const SERVER_URL = `${hostname}?user_id=${id}`;
 
   console.log('socketInitial', id);
   
@@ -61,10 +62,7 @@ export const startSocketIO = (store) => {
       };
     });
   
-    socket.on("NOTIFY_USER", (message) => {
-      console.log("NOTIFY_USER", message);
-      //   store.dispatch(storePublicMessages([ message ]));
-    });
+  
 
     // socket.on('GAME_START', (response) => {
     //   console.log('responseresponse', response);
@@ -76,10 +74,16 @@ export const startSocketIO = (store) => {
   }
   
 };
+export const notiUser=(callback)=>{
+  socket.on("NOTIFY_USER", (message) => {
+    console.log("NOTIFY_USER", message);
+    callback(message)
+  });
+}
 
 export const onStartGame = (callback) => {
   socket.on('GAME_START', response => {
-    // console.log('responseresponse', response);
+    console.log('responseresponsexxxx', response);
     callback(response)
   })
 }
@@ -92,6 +96,29 @@ export const getInfoRooms = (callback) => {
 
 export const emitAnswerWar = (data) => {
   socket.emit('PLAYER_ANSWER', data);
+}
+
+export const getTimeCountDown = (callback) => {
+  socket.on('COUNT_DOWN', (response) => {
+    callback(response);
+  })
+}
+
+export const rejectGame = (data) => {
+  socket.emit('REJECT', data);
+}
+
+export const handleError = (callback) => {
+  socket.on('ERROR', (response) => {    
+    callback(response)
+  })
+}
+
+export const endGame = (callback) => {
+  socket.on('END_GAME', (response) => {
+    console.log('Enddddddd', response)
+    callback(response)
+  })
 }
 
 export const SocketDisconect = () => {

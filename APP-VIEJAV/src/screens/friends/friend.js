@@ -46,7 +46,8 @@ const Friend = ({ navigation }) => {
   const [index, setIndex] = React.useState(0);
   const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [timeWait, setTimeWait] = useState(15);
+  const [receiver, setReceiver] = useState(null);
+  const [roomId, setRoomId] = useState(null);
 
   const [routes] = React.useState([
     { key: "first", title: "Danh sách" },
@@ -80,7 +81,12 @@ const Friend = ({ navigation }) => {
     setLoading(true);
     try {
       const response = await WebService.inviteFriend({ friend_id: id });
-      if(response) setIsVisible(true);
+      if(response) {
+        setRoomId(response);
+        setIsVisible(true);
+        const receiver = friends.filter(item => item._id === id);
+        setReceiver(receiver[0])
+      }
 
     } catch (error) {
       showMessage({
@@ -214,7 +220,10 @@ const Friend = ({ navigation }) => {
   };
 
   const handleStart = (response) => {
+    console.log('responseresponse', response);
+    
     if (response) {
+      setIsVisible(false);
       navigation.navigate("QuestionScreen");
     }
   };
@@ -225,7 +234,7 @@ const Friend = ({ navigation }) => {
 
   useEffect(() => {
     onStartGame(handleStart);
-  }, []);
+  });
 
   const renderScene = SceneMap({
     first: FirstRoute,
@@ -243,7 +252,7 @@ const Friend = ({ navigation }) => {
         style={styles.container}
       />
       <LoadingPage loading={loading} />
-      <ModalWar isVisible={isVisible} onClose={() => setIsVisible(false)}/>
+      <ModalWar isVisible={isVisible} onClose={() => setIsVisible(false)} receiver={receiver} roomId={roomId}/>
     </>
   );
 };

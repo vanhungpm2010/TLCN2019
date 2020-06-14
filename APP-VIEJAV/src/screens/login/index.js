@@ -254,9 +254,9 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <Background>
+    <Background blurRadius={0.5}>
       <View style={styles.container}>
-        <Logo />
+        <Logo style={styles.logo}/>
 
         <TextInput
           labelTop="Username"

@@ -87,6 +87,9 @@ export default class WebService {
   static acceptGame = body => {
     return api.post(Url.acceptGame, body)
   }
+  static getQuestions = () => {
+    return api.get(Url.getQuestions);
+  }
 
   static getBoard = () => {
     return api.get(Url.getBoard);

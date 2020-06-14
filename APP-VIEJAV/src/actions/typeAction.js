@@ -9,6 +9,8 @@ export const IS_LOADING_REGISTER=`IS_LOADING_REGISTER`
 //Users
 export const GET_USER=`GET_USER`
 export const IS_LOADING_GET_USER=`IS_LOADING_GET_USER`
+export const ADD_NOTI=`ADD_NOTI`
+export const GET_NOTI=`GET_NOTI`
 //Courese
 export const GET_COURSES=`GET_COURSES`
 export const GET_COURSES_FALSED=`GET_COURSES_FALSED`

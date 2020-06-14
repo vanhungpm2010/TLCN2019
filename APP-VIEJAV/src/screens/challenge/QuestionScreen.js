@@ -24,9 +24,9 @@ import Answer from "./components/answer";
 import styles from "./styles";
 import Navigator from "@navigation/Navigator";
 import WebService from "../../services";
-import Host from "../../services/host";
+import { Host } from "../../services/host";
 import Loadding from "../../components/loading";
-import { getInfoRooms, emitAnswerWar } from "../../services/socketIO";
+import { getInfoRooms, emitAnswerWar, getTimeCountDown, endGame } from "../../services/socketIO";
 import {
   ViewVertical,
   ViewHorizontal,
@@ -36,31 +36,43 @@ import Storage from "@storages";
 const QuestionScreen = ({ navigation }) => {
   // const [quiz, setQuiz] = useState(initialValue);
   const [current, setCurrent] = useState({});
-  const [time, setTime] = useState(15);
+  const [time, setTime] = useState(0);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [score, setScore] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(1);
   const [data, setData] = useState([]);
   const [room, setRoom] = useState([]);
+  const [user, setUser] = useState(null);
 
   const onChoose = async (choice) => {
     const user = await Storage.getUserInfo();
+    setUser(user);
+    let point = score;
 
     if (choice !== current.answer) {
-      Navigator.navigate("ScoreScreen", { score: score });
-      return;
+      if (!room?.room) {
+        Navigator.navigate("ScoreScreen", { score: score });
+        return;
+      }
+      if (score !== 0)
+        point = score - 5;
+    } else {
+      point = score + 5;
     }
+    console.log('point', point);
 
-    if (room?.id) {
+
+    if (room?.room) {
       let dataEmit = room;
 
-      if (room.user1._id === user.id) {
+      if (room.user1._id === user.id && choice === current.answer) {
         dataEmit = {
           ...room,
           user1: { ...room.user1, score: room.user1.score + 1 },
         };
-      } else {
+      }
+      if (room.user2._id === user.id && choice === current.answer) {
         dataEmit = {
           ...room,
           user2: { ...room.user2, score: room.user2.score + 1 },
@@ -69,7 +81,7 @@ const QuestionScreen = ({ navigation }) => {
       emitAnswerWar(dataEmit);
     }
 
-    let point = score + 5;
+
     setScore(point);
     setTime(15);
     nextQuestion();
@@ -78,10 +90,10 @@ const QuestionScreen = ({ navigation }) => {
   const nextQuestion = () => {
     setCurrent(data[questionNumber + 1]);
     setQuestionNumber(questionNumber + 1);
-    if (questionNumber + 1 === 10) {
-      setQuestionNumber(1);
-      getChallenge(current.level + 1);
-    }
+    // if (questionNumber + 1 === 10) {
+    //   setQuestionNumber(1);
+    //   getChallenge(current.level + 1);
+    // }
   };
 
   const openAudio = async (url) => {
@@ -121,10 +133,25 @@ const QuestionScreen = ({ navigation }) => {
     );
   };
 
-  const getChallenge = async (level) => {
+  // const getChallenge = async (level) => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await WebService.getChallengeByLevel(level);
+  //     setData(response);
+  //     setCurrent(response[0]);
+  //   } catch (error) {
+  //     showMessage({
+  //       message: err,
+  //       type: "danger",
+  //     });
+  //   }
+  //   setLoading(false);
+  // };
+
+  const getChallenge = async () => {
     try {
       setLoading(true);
-      const response = await WebService.getChallengeByLevel(level);
+      const response = await WebService.getQuestions();
       setData(response);
       setCurrent(response[0]);
     } catch (error) {
@@ -141,31 +168,42 @@ const QuestionScreen = ({ navigation }) => {
     setRoom(info);
   };
 
+  // useEffect(() => {
+  //   // if (time == initialValue.time && !visible) {
+  //   //   startGame();
+  //   // }
+  //   if (!time) {
+  //     // props.navigation.navigate("ScoreScreen", { score: 1});
+  //     // navigation.navigate("ScoreScreen", { score: score});
+  //   }
+
+  //   let interval = setInterval(() => {
+  //     setTime((time) => time - 1);
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, [time, visible]);
+
   useEffect(() => {
-    // if (time == initialValue.time && !visible) {
-    //   startGame();
-    // }
-    if (!time) {
-      // props.navigation.navigate("ScoreScreen", { score: 1});
-      // navigation.navigate("ScoreScreen", { score: score});
-    }
-
-    let interval = setInterval(() => {
-      setTime((time) => time - 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [time, visible]);
-
-  useEffect(() => {
-    getChallenge(1);
+    getChallenge();
   }, []);
 
   useEffect(() => {
     getInfoRooms(getInfoRoom);
   }, [room]);
 
+  useEffect(() => {
+    getTimeCountDown(setTime);
+  }, [])
+
+  useEffect(() => {
+    endGame(console.log)
+  })
+
   console.log("rooommmmmm", room);
+  // let scoreWar = {
+  //   if()
+  // }
 
   if (loading) {
     return <Loadding />;
@@ -176,46 +214,47 @@ const QuestionScreen = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <PaperText
-            text={`Level ${current?.level}`}
             style={styles.textWhite}
-          />
+          >
+            {`Level ${current?.level}`}
+          </PaperText>
           <View style={styles.time}>
-            <PaperText text={time} style={styles.textWhite} />
+            <PaperText style={styles.textWhite}>{time}</PaperText>
           </View>
           <View style={styles.coin}>
             <Image width={10} source={require("../../assets/coin.png")} />
-            <PaperText text={score} style={styles.textWhite} />
+            <PaperText style={styles.textWhite}>{score}</PaperText>
           </View>
         </View>
-        {room?.id && (
+        {room?.room && (
           <ViewHorizontal style={styles.infoContainer}>
             <View style={styles.info}>
               <Avatar
                 rounded
                 source={{
-                  uri:
-                    "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                  uri: room?.user1.avatar
                 }}
                 size="medium"
               />
-              <PaperText text={"Hùng"} style={styles.textWhite} />
+              <PaperText style={styles.textWhite}>{room?.user1?.username}</PaperText>
             </View>
 
             <View style={styles.score}>
               <Image source={WAR_WHITE} style={styles.iconWar} />
-              <PaperText text={"2 - 1"} style={styles.textScore} />
+              <PaperText style={styles.textScore}>
+                {room?.user1?.score} - {room?.user2?.score}
+              </PaperText>
             </View>
 
             <View style={styles.info}>
               <Avatar
                 rounded
                 source={{
-                  uri:
-                    "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+                  uri: room?.user2.avatar
                 }}
                 size="medium"
               />
-              <PaperText text={"Việt"} style={styles.textWhite} />
+              <PaperText style={styles.textWhite}>{room?.user2?.username}</PaperText>
             </View>
           </ViewHorizontal>
         )}
@@ -224,7 +263,7 @@ const QuestionScreen = ({ navigation }) => {
           <View style={styles.title}>
             <Title style={styles.titleText}>
               Question {questionNumber}/
-              <PaperText text="10" style={styles.textWhite} />
+              <PaperText style={styles.textWhite}>10</PaperText>
             </Title>
             {/* <TouchableOpacity
               onPress={() => setVisible(true)}

@@ -143,7 +143,7 @@ function Drawer(props) {
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Logo style={styles.logo}/>
-        <Text style={{color: '#28D063', fontSize: 18}}>STUDY JAPANESE</Text>
+        <Text style={{color: '#000', fontSize: 18}}>Japanese Learning</Text>
       </View>
       <ScrollView style={styles.scrollVew}>
         {list.map((item, i) => {
