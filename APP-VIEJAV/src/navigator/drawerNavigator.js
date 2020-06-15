@@ -10,18 +10,21 @@ import Drawer from '@screens/drawer'
 import ProfileScreen from '@screens/profile';
 import LeaderBoardScreen from '@screens/leaderBoard';
 import Challenge from '../screens/challenge';
+import DashBoardScreen from '../screens/dash-board'
+import NotificationList from '../screens/notification-list';
+import FriendsScreen from '../screens/friends/friend';
 
 const DrawerNavigatorConfig = {
-  initialRouteName: 'HomeDrawer',
+  initialRouteName: 'DashBoard',
   drawerPosition: 'left',
   contentComponent:Drawer,
   drawerType:'back'
 };
 export default createDrawerNavigator(
   {
-    HomeDrawer: {
-      screen: BottomTabNavigator,
-    },
+    // HomeDrawer: {
+    //   screen: BottomTabNavigator,
+    // },
     Profile: {
       screen: ProfileScreen
     },
@@ -33,6 +36,15 @@ export default createDrawerNavigator(
     },
     Challenge: {
       screen: Challenge
+    },
+    DashBoard: {
+      screen: DashBoardScreen
+    },
+    Notifications: {
+      screen: NotificationList
+    },
+    Friends: {
+      screen: FriendsScreen
     }
   },
   DrawerNavigatorConfig,

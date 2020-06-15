@@ -28,49 +28,28 @@ function Drawer(props) {
   const list = [
     {
       id: "1",
-      title: "Home",
-      onPress: () => {
-        console.log("ok");
-        moveScreen("Home");
-      },
+      title: "Dash board",
+      onPress: () => moveScreen("DashBoard"),
       icon: "home"
     },
     {
       id: "2",
       title: "Profile",
       icon: "user-circle",
-      onPress: () => {
-        console.log("ok");
-        moveScreen("Profile");
-      }
+      onPress: () => moveScreen("Profile")
     },
     {
       id: "3",
-      title: "DashBoardScreen",
-      icon: "user-circle",
-      onPress: () => {
-        console.log("ok");
-        moveScreen("DashBoardScreen");
-      }
+      title: "Bạn bè",
+      icon: "clipboard-list",
+      onPress: () => moveScreen("Friends")
     },
-    // {
-    //   id: "3",
-    //   title: "Challenge Run",
-    //   icon: "clipboard-list",
-    //   onPress: () => {
-    //     console.log("ok");
-    //     moveScreen("Challenge");
-    //   }
-    // },
-    // {
-    //   id: "4",
-    //   title: "Bảng xếp hạng",
-    //   icon: "clipboard-list",
-    //   onPress: () => {
-    //     console.log("ok");
-    //     moveScreen("LeaderBoard");
-    //   }
-    // },
+    {
+      id: "4",
+      title: "Bảng xếp hạng",
+      icon: "clipboard-list",
+      onPress: () => moveScreen("LeaderBoard")
+    },
     {
       id: "6",
       title: "Đăng Xuất",

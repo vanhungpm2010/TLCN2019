@@ -22,5 +22,8 @@ export default {
   success: '#4CAF50',
   info: '#2196F3',
   //
-  dodgerBlue: "#2da8ff"
+  dodgerBlue: "#2da8ff",
+
+  title: '#234958',
+  pink: '#FFCDC2'
 };

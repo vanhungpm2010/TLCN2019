@@ -49,7 +49,7 @@ const colors = {
 
 const scale = SCREEN_WIDTH / 320;
 
-export function normalize(size: number) {
+export function normalize(size) {
   const newSize = size * scale;
   if (Platform.OS === 'ios') {
     return Math.round(PixelRatio.roundToNearestPixel(newSize));
@@ -99,6 +99,8 @@ const styles = StyleSheet.create({
   // header style
   backarrow: {
     top: 7,
+    width: 25,
+    height: 25
   },
   header: {
     backgroundColor: colors.white,

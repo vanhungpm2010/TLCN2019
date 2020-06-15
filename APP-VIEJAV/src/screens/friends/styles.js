@@ -9,6 +9,23 @@ const styles = StyleSheet.create({
   container: {
     // marginTop: StatusBar.currentHeight,
   },
+  backarrow: {
+    top: 7,
+    width: 25,
+    height: 25
+  },
+  header: {
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
+  },
   scene: {
     flex: 1,
   },

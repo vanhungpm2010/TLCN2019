@@ -6,11 +6,14 @@ import { showMessage } from "react-native-flash-message";
 import Text from '../../components/text.component';
 // import Header from 'components/header/header.component';
 import { ViewVertical, ViewHorizontal } from '../../components/viewBox.component';
+import Header from "../../components/header";
 
 import styles from './styles';
 import WebService from "../../services";
 import Avatar from '../../components/Avatar';
 import Button from '../../components/Button';
+
+import { ic_arrow_back } from '../../assets';
 
 // import colors from 'constants/colors';
 // import { fontSizes, fontFamilies } from 'constants/fonts';
@@ -24,25 +27,35 @@ import Button from '../../components/Button';
 import Navigator from '../../navigator/Navigator';
 import LoadingPage from '../loading';
 import { getErrorMessage } from '../../untils/helper';
-import {UserACtion} from"../../actions/userAction";
-import {notiUser} from "../../services/socketIO"
-const NotificationList = (props: any) => {
+import { UserACtion } from "../../actions/userAction";
+import { pushNotification } from "../../services/socketIO"
+
+const NotificationList = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch=useDispatch();
-  const notiRedux=useSelector(state => state.UserReducer.noti)
+  const dispatch = useDispatch();
+  
+  const notiRedux = useSelector(state => state.UserReducer.noti)
 
   console.log(notiRedux, notiRedux?.length);
-  
+
 
   useEffect(() => {
-    if(notiRedux?.length === 0 || notiRedux === undefined) {
+    if (notiRedux?.length === 0 || notiRedux === undefined) {
       getList();
     }
   }, []);
 
+  const getNotificationSocket = data => {
+    console.log(data);
+    
+    if(data) {
+      dispatch(UserACtion.addNoti(data))
+    }
+  }
+
   useEffect(() => {
-    dispatch(notiUser(UserACtion.addNoti))
+    pushNotification(getNotificationSocket)
   });
 
   const getList = async () => {
@@ -99,6 +112,19 @@ const NotificationList = (props: any) => {
 
   return (
     <ViewVertical style={{ backgroundColor: '#fff' }}>
+      <Header
+        noShadow={true}
+        stylesHeaderText={{
+          color: "#000",
+          fontSize: 15,
+          fontWeight: "bold",
+        }}
+        mainText={'Notification'}
+        stylesHeader={styles.header}
+        leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
+        leftAction={() => navigation.goBack()}
+      />
+
       <ViewVertical style={styles.container}>
         {(notiRedux && notiRedux.length > 0)
           ? <FlatList

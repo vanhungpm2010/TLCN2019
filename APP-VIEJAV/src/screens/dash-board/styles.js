@@ -1,4 +1,9 @@
 import { StyleSheet } from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import colors from '../../configs/colors'
 
 export default styles = StyleSheet.create({
   container: {
@@ -8,37 +13,96 @@ export default styles = StyleSheet.create({
     // marginTop: 20,
     backgroundColor: '#FFFFFF'
   },
-  background: {
-    width: "100%",
-    height: 200
+  topicContainer: {
+    alignItems: 'flex-end'
+    // justifyContent: 'flex-end'
   },
+  topicTitle: {
+    color: colors.title,
+    fontSize: 22,
+    fontWeight: 'bold'
+  },
+  topicText: {
+    color: colors.title,
+    paddingBottom: 15,
+    fontSize: 15,
+    paddingLeft: 5,
+    fontWeight: 'normal'
+  },
+  boxFirst: {
+    width: wp('42%'),
+    height: hp('32%'),
+    borderRadius: 10,
+    marginRight: wp('5%'),
+  },
+  boxItem: {
+    width: wp('35%'),
+    height: hp('25%'),
+    borderRadius: 10,
+    marginRight: wp('5%'),
+  },
+  backgroundItem: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  boxStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%'
+  },
+  imageStyle: {
+    borderRadius: 10
+  },
+  
   viewContainer: {
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 20,
-    alignItems: 'center',
+    // marginTop: 5,
+    // alignItems: 'center',
   },
-  boxStart: {
-    width: '100%',
-    // position: 'absolute',
-    // top: -80,
-    backgroundColor: '#FAF6F5',
-    justifyContent: "center",
-    elevation: 5,
-    borderRadius: 7,
-    paddingTop: 15,
-    paddingBottom: 15,
-    paddingLeft: 20,
-    // paddingRight: 15,
+  challengeContainer: {
+    // flex: 1,
+    backgroundColor: colors.pink,
+    borderRadius: 15,
+    paddingTop: hp('3%'),
+    paddingBottom: hp('3%'),
+    paddingLeft: wp('2%'),
+    marginTop: hp('2%'),
+    marginBottom: hp('1%'),
   },
-  textStart: {
-    fontSize: 17,
-    color: '#CB5454',
+  challengeLeft: {
+    width: '70%',
+    alignItems: 'center'
+  },  
+  btnChallenge: {
+    backgroundColor: colors.white_color,
+    width: wp('33%'),
+    borderRadius: 5
+  },
+  challengeTitle: {
+    color: colors.title,
+    fontSize: 22,
     fontWeight: 'bold',
-    paddingBottom: 15
+    textAlign: 'center'
+  },
+  challengeText: {
+    color: colors.title,
+    paddingBottom: 15,
+    fontSize: 13,
+    paddingLeft: 5,
+    fontWeight: 'normal',
+    textAlign: 'center'
+  },
+  btnTitleStyle: {
+    color: colors.title,
+    fontSize: 12,
+    paddingRight: 10
   },
   header: {
-    marginTop: 10,
+    marginTop: 10
     // backgroundColor: '#fff',
     // alignItems: 'center',
     // shadowColor: '#000',
@@ -50,14 +114,8 @@ export default styles = StyleSheet.create({
     // shadowRadius: 1.0,
     // elevation: 1,
   },
-  slogan: {
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 20,
-    elevation: 5,
-  },
   icon: {
-    elevation: 5,
+    // elevation: 5,
   },
   itemContainer: {
     paddingRight: 15
@@ -67,11 +125,31 @@ export default styles = StyleSheet.create({
     height: 70,
     borderRadius: 45
   },
+  textName: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: colors.title
+  },
   textItem: {
     color: '#333',
+    fontWeight: 'normal',
     fontSize: 13,
-    fontWeight: '700',
-    textAlign: 'center',
-    paddingTop: 12
+    color: colors.title
+  },
+  gameContainer: {
+
+  },
+  gameText: {
+    color: colors.title,
+    paddingBottom: 5,
+    fontSize: 15,
+    // paddingLeft: 5,
+    fontWeight: 'normal'
+  },
+  containerStyleBox: {
+    backgroundColor: '#BBDDEA',
+    borderRadius: 30,
+    padding: 10,
+    marginBottom: 10
   }
 })

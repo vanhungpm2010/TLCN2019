@@ -23,7 +23,7 @@ import { ListItem, Input, Avatar } from "react-native-elements";
 import { TabView, SceneMap } from "react-native-tab-view";
 import SecondRoute from "./request";
 import { onStartGame } from "../../services/socketIO";
-import { war } from "../../assets";
+import { war, ic_arrow_back } from "../../assets";
 import LoadingPage from "../loading";
 import { getErrorMessage } from "../../untils/helper";
 import ModalBox from "../../components/ModalBox";
@@ -31,7 +31,7 @@ import {
   ViewVertical,
   ViewHorizontal,
 } from "../../components/viewBox.component";
-import PaperText from "../../components/PaperText";
+import Header from "../../components/header";
 import Button from "../../components/Button";
 import ModalWar from './modalWar';
 
@@ -39,7 +39,7 @@ import styles from "./styles";
 
 const initialLayout = { width: Dimensions.get("window").width };
 
-const Friend = ({ navigation }) => {
+const FriendsScreen = ({ navigation }) => {
   const [friends, setFriends] = useState([]);
   const [searchFriends, setSearchFriends] = useState([]);
   const [text, setText] = useState("");
@@ -243,7 +243,20 @@ const Friend = ({ navigation }) => {
   });
 
   return (
-    <>
+    <ViewVertical style={{ backgroundColor: '#fff', flex: 1 }}>
+      <Header
+        noShadow={true}
+        stylesHeaderText={{
+          color: "#000",
+          fontSize: 15,
+          fontWeight: "bold",
+        }}
+        mainText={'Bạn bè'}
+        stylesHeader={styles.header}
+        leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
+        leftAction={() => navigation.goBack()}
+      />
+
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -253,11 +266,11 @@ const Friend = ({ navigation }) => {
       />
       <LoadingPage loading={loading} />
       <ModalWar isVisible={isVisible} onClose={() => setIsVisible(false)} receiver={receiver} roomId={roomId}/>
-    </>
+    </ViewVertical>
   );
 };
 
-Friend.navigationOptions = ({ navigation }) => ({
+FriendsScreen.navigationOptions = ({ navigation }) => ({
   title: "Bạn bè",
   headerLeft: (
     <TouchableOpacity
@@ -269,4 +282,4 @@ Friend.navigationOptions = ({ navigation }) => ({
   ),
 });
 
-export default Friend;
+export default FriendsScreen;

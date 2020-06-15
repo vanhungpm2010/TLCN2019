@@ -50,7 +50,7 @@ const ChallengeScreen = ({ navigation }) => {
   return (
     <Background source={require("../assets/backgroundLv4.png")}>
       <View style={styles.container}>
-        <BackButton goBack={() => navigation.navigate("Home")} />
+        <BackButton goBack={() => navigation.navigate("DashBoard")} />
 
         <TextElements h4 h4Style={{ textAlign: "center", fontWeight: "bold" }}>Challenge</TextElements>
         <TextElements h4 h4Style={{ textAlign: "center", fontWeight: "bold" }}>Now ...</TextElements>
