@@ -1,44 +1,46 @@
 import api from "./base";
-import * as Url from "./url";
+import * as url from "./url";
 
 export default class WebService {
   // Auth
   static login = async (data) => {
-    console.log(Url.loginApi);
-    return api.post(Url.loginApi, data);
+    return api.post(url.loginApi, data);
   };
 
   static loginSocial = data => {
-    return api.post(Url.loginSocial, data)
+    return api.post(url.loginSocial, data)
   }
 
   static register = async (data) => {
-    console.log(Url.registerApi);
-    return api.post(Url.registerApi, data);
+    return api.post(url.registerApi, data);
   };
-  static createCourse = async (data) => {
-    console.log(Url.createCoures);
-    return api.post(Url.createCoures, data);
-  };
+
   static putAvartar = async (data) => {
-    console.log(Url.putAvartar);
-    return api.postFormData(Url.putAvartar, data, "PUT");
+    return api.postFormData(url.putAvartar, data, "PUT");
   };
+
+  // Course
+  static createCourse = async (data) => {
+    return api.post(url.createCoures, data);
+  };
+
+  static getPublicCourse = async (limit) => {
+    return api.get(`/courses/public?limit=${limit}`)
+  }
+
   static getCourses = async () => {
-    console.log(Url.getCourses);
-    return api.get(Url.getCourses);
+    return api.get(url.getCourses);
   };
   static deleteCourses = async (id) => {
-    console.log(Url.deleteCoures);
-    return api.del(Url.deleteCoures, id);
+    console.log(url.deleteCoures);
+    return api.del(url.deleteCoures, id);
   };
   static getDetailCourses = async (id) => {
-    console.log(Url.getDetailCourses);
-    return api.get(Url.getDetailCourses, id);
+    return api.get(`/courses/${id}`);
   };
+  
   static getTopic = async (id) => {
-    console.log(Url.getTopic);
-    return api.get(Url.getTopic);
+    return api.get(url.getTopic);
   };
   static getDetailLesson = async (id) => {
     return api.get(`/topics/${id}`);
@@ -47,60 +49,57 @@ export default class WebService {
     return api.get(`/topics/${id}/learn`);
   };
   static setHistory = async (data) => {
-    console.log(Url.setHistory);
-    return api.post(Url.setHistory, data);
+    return api.post(url.setHistory, data);
   };
   //challenge
   static getChallenge = () => {
-    console.log(Url.getChallenge);
-    return api.get(Url.getChallenge);
+    return api.get(url.getChallenge);
   };
   static getDetailChanll = (id) => {
-    console.log(Url.getChallenge);
     return api.get(`/challenge/${id}`);
   };
   static getChallengeByLevel = level => {
     return api.get(`/challenge?level=${level}`)
   };
   static updateHightMark = data => {
-    return api.put(Url.updateHightMark, data)
+    return api.put(url.updateHightMark, data)
   }
 
   // Friend
   static getMe = () => {
-    return api.get(Url.getMe);
+    return api.get(url.getMe);
   };
   static getFriends = () => {
-    return api.get(Url.getFriends);
+    return api.get(url.getFriends);
   };
   static searchFriend = (name) => {
     return api.get(`/users/search?q=${name}`)
   }
   static addFriend = (body) => {
-    return api.put(Url.addFriend, body);
+    return api.put(url.addFriend, body);
   }
   
   // Game Challenge
   static inviteFriend = body => {
-    return api.post(Url.inviteFriend, body)
+    return api.post(url.inviteFriend, body)
   }
   static acceptGame = body => {
-    return api.post(Url.acceptGame, body)
+    return api.post(url.acceptGame, body)
   }
   static getQuestions = () => {
-    return api.get(Url.getQuestions);
+    return api.get(url.getQuestions);
   }
 
   static getBoard = () => {
-    return api.get(Url.getBoard);
+    return api.get(url.getBoard);
   };
 
   // Notification
   static getListNoti = () => {
-    return api.get(Url.getListNoti);
+    return api.get(url.getListNoti);
   }
   static seenNotify = () => {
-    return api.put(Url.updateSeenNotify);
+    return api.put(url.updateSeenNotify);
   }
   static deleteNotify = id => {
     return api.del(`/notify?_id=${id}`)

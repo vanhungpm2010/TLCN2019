@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import colors from '../../configs/colors'
 
 export default styles = StyleSheet.create({
   container: {
@@ -6,11 +7,30 @@ export default styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     marginTop: 10,
+    backgroundColor: '#fff'
+  },
+  backarrow: {
+    top: 7,
+    width: 25,
+    height: 25
+  },
+  header: {
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 20,
+    marginTop: 20
   },
   buttonStyle: {
     borderWidth: 1,
@@ -30,11 +50,16 @@ export default styles = StyleSheet.create({
   titleSelected: {
     color: "#fff",
   },
+  scrollContainer: {
+    flex: 1,
+    marginBottom: 30
+  },
   alphabetContainer: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+   
   },
   alphabetItem: {
     borderWidth: 1,

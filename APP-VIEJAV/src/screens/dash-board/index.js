@@ -8,13 +8,15 @@ import {
   ScrollView,
   TouchableNativeFeedback
 } from "react-native";
-import { withBadge, Avatar, Button, ListItem } from "react-native-elements";
+import { withBadge, Avatar, Button, ListItem, message } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
 // import * as Progress from 'react-native-progress';
 
-import { ViewVertical } from "../../components/viewBox.component";
+import { ViewVertical, ViewHorizontal } from "../../components/viewBox.component";
 import Header from "../../components/header";
 import ButtonPaper from "../../components/ButtonPaper";
+import { getErrorMessage } from '../../untils/helper';
+import LoadingPage from '../loading';
 
 import {
   banner,
@@ -25,23 +27,28 @@ import {
   background,
   bg_background_topic_2,
   ic_arrow_right,
-  bg_background_topic_3
+  bg_background_topic_3,
+  ig_challenge
 } from "../../assets";
+
 import { handleError } from "../../services/socketIO";
 import colors from "../../configs/colors";
 import Storage from "../../storages";
+import webservice from '../../services';
 import styles from "./styles";
 
 const DashBoardScreen = ({ navigation }) => {
   const [user, setUser] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const onSelectItem = (navigate) => {
-    console.log(navigate);
+  const onSelectItem = (navigate, id) => {
+    console.log(id);
 
-    navigation.navigate("AlphabetScreen");
+    navigation.navigate("GetCourse", {idCourese: id});
   };
 
-  const FlatItem = ({ item, onSelect }) => {
+  /**  const FlatItem = ({ item, onSelect }) => {
     const { id } = item;
     return (
       <ViewVertical style={id === "1" ? styles.boxFirst : styles.boxItem}>
@@ -52,10 +59,33 @@ const DashBoardScreen = ({ navigation }) => {
           imageStyle={styles.imageStyle}
         >
           <TouchableOpacity onPress={onSelect} style={styles.boxStyle}>
-            {/* <Progress.Circle size={30} indeterminate={true} /> */}
             <Text style={styles.textName}>{item.nameJP}</Text>
             <Text style={styles.textItem}>{item.spell}</Text>
             <Text style={styles.textItem}>{item.nameVI}</Text>
+          </TouchableOpacity>
+        </ImageBackground>
+      </ViewVertical>
+    );
+  };*/
+
+  const FlatItem = ({ item, onSelect, index }) => {
+    console.log('index',index);
+    console.log('item', item);
+    
+    
+    const { id } = item;
+    return (
+      <ViewVertical style={index === 0 ? styles.boxFirst : styles.boxItem} key={item._id}>
+        <ImageBackground
+          source={index === 0 ? bg_background_topic_2: bg_background_topic_3}
+          resizeMode="cover"
+          style={styles.backgroundItem}
+          imageStyle={styles.imageStyle}
+        >
+          <TouchableOpacity onPress={onSelect} style={styles.boxStyle}>
+            {/* <Text style={styles.textName}>{item.title}</Text>
+            <Text style={styles.textItem}>{item.spell}</Text> */}
+            <Text style={styles.textItem}>{item.title}</Text>
           </TouchableOpacity>
         </ImageBackground>
       </ViewVertical>
@@ -99,6 +129,20 @@ const DashBoardScreen = ({ navigation }) => {
     },
   ];
 
+  const getPublicCourse = async () => {
+    setLoading(true);
+    try {
+      const res = await webservice.getPublicCourse(5);
+      setCourses(res.result)
+    } catch(error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
+      });
+    }
+    setLoading(false)
+  }
+
   useEffect(() => {
     handleError(alert);
   }, []);
@@ -106,7 +150,13 @@ const DashBoardScreen = ({ navigation }) => {
   useEffect(() => {
     const user = Storage.getUserInfo();
     setUser(user);
+    getPublicCourse();
   }, []);
+
+  useEffect(() => {
+    
+    
+  }, [])
 
   return (
     <ViewVertical style={styles.container}>
@@ -152,20 +202,21 @@ const DashBoardScreen = ({ navigation }) => {
         <ViewVertical style={styles.topicContainer}>
           <FlatList
             horizontal
-            data={listView}
-            keyExtractor={(item) => item.id}
+            data={courses}
+            keyExtractor={(item) => item._id}
             showsHorizontalScrollIndicator={false}
             // style={styles.topicContainer}
-            renderItem={({ item }) => (
+            renderItem={({item, index}) => (
               <FlatItem
                 item={item}
-                onSelect={() => onSelectItem(item.navigate)}
+                onSelect={() => onSelectItem(item.navigate, item._id)}
+                index={index}
               />
             )}
           />
         </ViewVertical>
 
-        <ViewVertical style={styles.challengeContainer}>
+        <ViewHorizontal style={styles.challengeContainer}>
           <ViewVertical style={styles.challengeLeft}>
             <Text style={styles.challengeTitle}>チャレンジラン</Text>
             <Text style={styles.challengeText}>Đường đua tranh tài</Text>
@@ -180,7 +231,10 @@ const DashBoardScreen = ({ navigation }) => {
               icon={<Icon name="running" size={15} color={colors.title} />}
             />
           </ViewVertical>
-        </ViewVertical>
+          <ViewVertical style={styles.challengeRight}>
+              <Image source={ig_challenge}/>
+          </ViewVertical>
+        </ViewHorizontal>
 
         <ViewVertical style={styles.gameContainer}>
           <Text style={styles.topicTitle}>知的ゲーム</Text>
@@ -190,9 +244,9 @@ const DashBoardScreen = ({ navigation }) => {
             containerStyle={styles.containerStyleBox}
             leftAvatar={{ source: background }}
             title={"チャレンジラン"}
-            subtitle={"Đường đua tranh tài"}
+            subtitle={"Học và kiểm tra"}
             rightElement={<Image source={ic_arrow_right} />}
-            onPress={() => navigation.navigate('Profile')}
+            onPress={() => navigation.navigate('Lesson')}
           />
 
           <ListItem
@@ -211,6 +265,8 @@ const DashBoardScreen = ({ navigation }) => {
           })} */}
         </ViewVertical>
       </ScrollView>
+      
+      <LoadingPage loading={loading}/>
     </ViewVertical>
   );
 };

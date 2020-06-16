@@ -23,12 +23,12 @@ const LeaderBoardScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const getBoard = async () => {
-    try{ 
+    try {
       setIsLoading(true);
       const data = await WebService.getBoard();
       const { result } = data.response;
       setBoard(result);
-    } catch(error) {
+    } catch (error) {
       showMessage({
         message: err,
         type: "danger",
@@ -41,6 +41,9 @@ const LeaderBoardScreen = ({ navigation }) => {
     getBoard();
   }, []);
 
+  console.log('boardboardboard', board);
+
+
   return (
     <Background>
       <View style={styles.container}>
@@ -51,6 +54,10 @@ const LeaderBoardScreen = ({ navigation }) => {
 
         <View style={styles.onTop}>
           <View style={styles.user}>
+            <View style={styles.level}>
+              <IconComponent name="heart" size={15} color={colors.red} />
+              <Text style={styles.textLevel}>2</Text>
+            </View>
             <Avatar
               size={85}
               rounded
@@ -82,6 +89,10 @@ const LeaderBoardScreen = ({ navigation }) => {
             <Paragraph children="25,175" style={styles.point} /> */}
           </View>
           <View style={styles.user}>
+          <View style={styles.level}>
+              <IconComponent name="heart" size={15} color={colors.red} />
+              <Text style={styles.textLevel}>3</Text>
+            </View>
             <Avatar
               size={85}
               rounded
@@ -99,22 +110,34 @@ const LeaderBoardScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={{ flexDirection: "row" }}>
-          <View style={styles.level}>
-            <IconComponent name="heart" size={15} color={colors.red} />
-            <Text style={styles.textLevel}>4</Text>
-            {/* <Paragraph children={"4"} style={styles.textLevel} /> */}
-          </View>
-          <View style={styles.box}>
-            <View style={styles.headerBox}>
-              <Avatar size={40} />
-              <Text style={styles.textName}>Enesto Howel</Text>
-              {/* <Paragraph children="Enesto Howel" style={styles.textName} /> */}
-            </View>
-            <Text style={styles.pointBox}>20,107</Text>
-            {/* <Paragraph children={"20,107"} style={styles.pointBox} /> */}
-          </View>
-        </View>
+        {board.length > 3 && board.map((item, index) => {
+          if (index > 2) {
+            return (
+              <View style={{ flexDirection: "row" }} key={index}>
+                <View style={styles.level}>
+                  <IconComponent name="heart" size={15} color={colors.red} />
+                  <Text style={styles.textLevel}>{index + 1}</Text>
+                  {/* <Paragraph children={"4"} style={styles.textLevel} /> */}
+                </View>
+                <View style={styles.box}>
+                  <View style={styles.headerBox}>
+                  <Avatar
+                    size={40}
+                    rounded
+                    source={board && board[index] ? board[index].avatar : null}
+                  />
+                    <Text style={styles.textName}>{item.username}</Text>
+                    {/* <Paragraph children="Enesto Howel" style={styles.textName} /> */}
+                  </View>
+                  <Text style={styles.pointBox}>{board[index]?.markHight?.challenge}</Text>
+                  {/* <Paragraph children={"20,107"} style={styles.pointBox} /> */}
+                </View>
+              </View>
+            )
+          }
+        })}
+
+
 
         {/* <View style={{ flexDirection: "row" }}>
           <View style={styles.level}>
@@ -173,7 +196,7 @@ const LeaderBoardScreen = ({ navigation }) => {
         </View> */}
       </View>
 
-      <LoadingPage loading={isLoading}/>
+      <LoadingPage loading={isLoading} />
     </Background>
   );
 };

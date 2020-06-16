@@ -10,7 +10,7 @@ import Styles from "./styles";
 function SoundCourse(props) {
   const _speak = () => {
     var thingToSay = props.mean;
-    Speech.speak(thingToSay,{language :props.language});
+    Speech.speak(thingToSay,{language : 'ja'});
   };
 
   return (

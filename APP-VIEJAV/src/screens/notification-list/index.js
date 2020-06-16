@@ -37,7 +37,7 @@ const NotificationList = ({ navigation }) => {
   
   const notiRedux = useSelector(state => state.UserReducer.noti)
 
-  console.log(notiRedux, notiRedux?.length);
+  console.log('notiRedux', notiRedux);
 
 
   useEffect(() => {

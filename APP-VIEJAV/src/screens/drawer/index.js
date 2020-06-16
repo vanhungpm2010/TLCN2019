@@ -28,31 +28,43 @@ function Drawer(props) {
   const list = [
     {
       id: "1",
-      title: "Dash board",
+      title: "ホームページ",
+      subtitle: 'Trang chủ',
       onPress: () => moveScreen("DashBoard"),
       icon: "home"
     },
     {
       id: "2",
-      title: "Profile",
+      title: "自己紹介ページ",
+      subtitle: 'Trang cá nhân',
       icon: "user-circle",
       onPress: () => moveScreen("Profile")
     },
     {
       id: "3",
-      title: "Bạn bè",
+      title: "フレンズ",
+      subtitle: 'Bạn bè',
       icon: "clipboard-list",
       onPress: () => moveScreen("Friends")
     },
     {
       id: "4",
-      title: "Bảng xếp hạng",
+      title: "スコアボード",
+      subtitle: 'Bảng thành tích',
       icon: "clipboard-list",
       onPress: () => moveScreen("LeaderBoard")
     },
     {
-      id: "6",
-      title: "Đăng Xuất",
+      id: '6',
+      title: 'アルファベット',
+      subtitle: 'Bảng chữ cái',
+      icon: 'clipboard-list',
+      onPress: () => moveScreen('Alphabet')
+    },
+    {
+      id: "7",
+      title: "ログアウト",
+      subtitle: 'Đăng xuất',
       icon: "sign-out-alt",
       onPress: () => {
         console.log("ok");
@@ -60,81 +72,26 @@ function Drawer(props) {
       }
     },
   ];
-  // console.log("user",props.user)
-  const hanldeEditPress = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 0.2
-    });
-    if (result.cancelled) {
-      showMessage({
-        message: "Bạn chưa chọn ảnh xong",
-        type: "danger"
-      });
-      return;
-    }
-    let localUri = result.uri;
-    let filename = localUri.split("/").pop();
-    let match = /\.(\w+)$/.exec(filename);
-    let typeFile = match ? `image/${match[1]}` : `image`;
-    if (!FilterImage(typeFile)) {
-      showMessage({
-        message: "Chỉ chọn ảnh jpg,png",
-        type: "danger"
-      });
-      return;
-    }
-    let avatar = new FormData();
-    avatar.append("avatar", {
-      uri: localUri,
-      name: filename,
-      type: "image/jpeg"
-    });
-    console.log("vanviet", avatar);
-    setLoading(true);
-    Api.putAvartar(avatar)
-      .then(async data => {
-        await Storage.saveUserInfo({
-          username: data.username,
-          email: data.email,
-          avatar: data.avatar
-        });
-        props.dispatch(UserACtion.getUser());
-        console.log(data);
-        setLoading(false);
-        showMessage({
-          message: "Sửa Avatar Thành Công",
-          type: "success"
-        });
-      })
-      .catch(err => {
-        console.log("err", err);
-        setLoading(false);
-        showMessage({
-          message: "Chọn ảnh quá lớn!",
-          type: "danger"
-        });
-      });
-  };
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Logo style={styles.logo}/>
-        <Text style={{color: '#000', fontSize: 18}}>Japanese Learning</Text>
+        {/* <Text style={{color: '#000', fontSize: 18}}>Japanese Learning</Text> */}
       </View>
-      <ScrollView style={styles.scrollVew}>
+      <ScrollView style={styles.scrollVew} showsVerticalScrollIndicator={false}>
         {list.map((item, i) => {
           return (
             <TouchableOpacity key={i} onPress={item.onPress}>
               <ListItem
                 containerStyle={styles.listItem}
                 titleStyle={styles.titleItem}
+                subtitleStyle={styles.subtitleItem}
                 title={item.title}
+                subtitle={item.subtitle}
                 leftIcon={<Icon name={item.icon} size={17} color={"#707D82"} />}
-                bottomDivider
-                chevron={<Icon name={"chevron-right"} color={"#707D82"} />}
+                // bottomDivider
+                // chevron={<Icon name={"chevron-right"} color={"#707D82"} />}
               />
             </TouchableOpacity>
           );

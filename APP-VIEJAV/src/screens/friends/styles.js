@@ -70,6 +70,32 @@ const styles = StyleSheet.create({
   timeContainer: {
     alignItems: "center",
   },
+  boxFooter: {
+    flex: 1,
+    paddingTop: 10,
+    justifyContent: 'space-between',
+  },
+  btnAcceptRequest: {
+    backgroundColor: '#BBDDEA',
+    // width: '45%',
+    borderRadius: 10,
+    textTransform: "none",
+    padding: 10,
+    marginRight: 5,
+  },
+  btnCancelRequest: {
+    backgroundColor: colors.white_color,
+    borderRadius: 10,
+    textTransform: "none",
+    padding: 10,
+    elevation: 2
+  },
+  btnTextAccept: {
+    color: '#fff'
+  },
+  btnTextCancel: {
+    color: '#BBDDEA'
+  }
 });
 
 export default styles;

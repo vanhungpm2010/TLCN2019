@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { connect } from "react-redux";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import Loading from "@components/loading";
@@ -11,29 +11,33 @@ import SoundCourse from "./soundCourse";
 import PropTypes from "prop-types";
 import Service from "@services";
 import Styles from "./styles";
+import Header from '../../components/header';
+import { ViewVertical } from "../../components/viewBox.component";
+import { ic_arrow_back } from '../../assets'
 
 export default class GetCourse extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      loading: false
     };
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: "",
-    headerTitleStyle: { color: "#ffffff", fontSize: 20 },
-    headerStyle: { backgroundColor: "#536DFE", color: "white" },
-    headerTintColor: "white"
-  });
-  componentDidMount() {
-    const id = { id: this.props.navigation.getParam("idCourese") };
-    console.log('id', id)
+  getData(id){
+    this.setState({ loading: true })
     Service.getDetailCourses(id)
-      .then(data => {
-        this.setState({ data: data.contents });
-      })
-      .catch(err => console.log(err));
+    .then(data => {
+      this.setState({ data: data.contents, loading: false });
+    })
+    .catch(err => console.log(err));
+  }
+
+  componentDidMount() {    
+    const id = this.props.navigation.getParam("idCourese");
+    
+    this.getData(id)
+    
   }
   _handleToMemmory=()=>{
     const { data } = this.state;
@@ -42,12 +46,33 @@ export default class GetCourse extends Component {
   }
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
-    console.log("props moi", nextProps);
+    const idNext = nextProps.navigation.getParam("idCourese");
+    const id = this.props.navigation.getParam("idCourese");
+
+    if(idNext !== id){
+      this.getData(idNext)
+    }
   }
   render() {
-    const { data } = this.state;
+    const { data, loading } = this.state;
+    const { navigation } = this.props;
+    
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+      <ViewVertical style={{ flex: 1, backgroundColor: '#fff'}}>
+      <Header
+        noShadow={true}
+        stylesHeaderText={{
+          color: "#000",
+          fontSize: 15,
+          fontWeight: "bold",
+        }}
+        mainText={'Chủ đề'}
+        stylesHeader={Styles.header}
+        leftComponent={<Image source={ic_arrow_back} style={Styles.backarrow} />}
+        leftAction={() => navigation.goBack()}
+      />
+
+      {!loading ? <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
         {/* slide */}
         <Text style={Styles.title}>Thẻ</Text>
         <View style={Styles.containerSlider}>
@@ -60,6 +85,7 @@ export default class GetCourse extends Component {
         <View style={{ backgroundColor: "#E8EAF6", paddingBottom: 20 }}>
           <Text style={Styles.title}>Game</Text>
           <TouchableOpacity
+            onPress={() => navigation.navigate('CourseTest', { id: navigation.getParam("idCourese") })}
             style={{
               ...Styles.cardGame,
               height: 100,
@@ -68,7 +94,7 @@ export default class GetCourse extends Component {
           >
             <Icon name="clone" size={30} color={"#00E676"}></Icon>
             <Text style={{ ...Styles.titleGame, color: "#00E676" }}>
-              Ghép Thẻ
+              Kiem tra
             </Text>
           </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
@@ -102,7 +128,8 @@ export default class GetCourse extends Component {
            return( <SoundCourse key={index} text={value.text} mean={value.mean} language={value.language}/>);
           })}
         </View>
-      </ScrollView>
+      </ScrollView> : <Loading />}
+      </ViewVertical>
     );
   }
 }

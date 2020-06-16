@@ -2,15 +2,14 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
     container:{ 
-        backgroundColor: "#ffffff", 
+        backgroundColor: "#C0DDF4", 
         flex: 1, 
         elevation: 5,
         paddingTop: 50
     },
     logoContainer: {
         justifyContent:'center',
-        alignItems:'center',
-        marginBottom: 50
+        alignItems:'center'
     },
     logo: {
         width: 150,
@@ -29,14 +28,23 @@ export default StyleSheet.create({
         padding: 10
     },
     listItem:{ 
-        flex: 1, 
+        // flex: 1, 
         backgroundColor: "#EDEDED",
         marginBottom: 7,
         borderRadius: 10,
-        borderColor: "#EDEDED",
+        padding: 7,
+        paddingLeft: 15
+        // borderColor: "#EDEDED",
+        // backgroundColor: 'transparent'
     },
     titleItem: {
-        color: "#707D82" 
+        fontSize: 20,
+        color: '#16334A',
+        fontWeight: 'bold'
+    },
+    subtitleItem: {
+        color: '#16334A',
+        fontSize: 14
     },
     badge: {
         color: '#ffffff',

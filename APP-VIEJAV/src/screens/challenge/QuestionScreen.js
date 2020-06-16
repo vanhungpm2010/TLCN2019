@@ -31,18 +31,19 @@ import {
   ViewVertical,
   ViewHorizontal,
 } from "../../components/viewBox.component";
+
 import Storage from "@storages";
 
 const QuestionScreen = ({ navigation }) => {
   // const [quiz, setQuiz] = useState(initialValue);
   const [current, setCurrent] = useState({});
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(15);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [score, setScore] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(1);
   const [data, setData] = useState([]);
-  const [room, setRoom] = useState([]);
+  const [room, setRoom] = useState({});
   const [user, setUser] = useState(null);
 
   const onChoose = async (choice) => {
@@ -66,16 +67,16 @@ const QuestionScreen = ({ navigation }) => {
     if (room?.room) {
       let dataEmit = room;
 
-      if (room.user1._id === user.id && choice === current.answer) {
+      if (room?.user1?._id === user.id && choice === current.answer) {
         dataEmit = {
           ...room,
-          user1: { ...room.user1, score: room.user1.score + 1 },
+          user1: { ...room.user1, score: room.user1.score + point },
         };
       }
-      if (room.user2._id === user.id && choice === current.answer) {
+      if (room?.user2?._id === user.id && choice === current.answer) {
         dataEmit = {
           ...room,
-          user2: { ...room.user2, score: room.user2.score + 1 },
+          user2: { ...room.user2, score: room.user2.score + point },
         };
       }
       emitAnswerWar(dataEmit);
@@ -83,28 +84,28 @@ const QuestionScreen = ({ navigation }) => {
 
 
     setScore(point);
-    setTime(15);
+    // setTime(15);
     nextQuestion();
   };
 
   const nextQuestion = () => {
     setCurrent(data[questionNumber + 1]);
     setQuestionNumber(questionNumber + 1);
-    // if (questionNumber + 1 === 10) {
-    //   setQuestionNumber(1);
-    //   getChallenge(current.level + 1);
-    // }
+    if (questionNumber + 1 === 10 && !room?.room) {
+      setQuestionNumber(1);
+      getChallenge(current.level + 1);
+    }
   };
 
   const openAudio = async (url) => {
-    try {
+    try {      
       const playbackObject = await Audio.Sound.createAsync(
-        { uri: url },
+        { uri: `${Host}/assets/challenge/audio/${url}` },
         { shouldPlay: true }
       );
       await playbackObject.playAsync();
     } catch (error) {
-      Alert.alert("Lỗi khi phát audio");
+      // Alert.alert("Lỗi khi phát audio");
     }
   };
 
@@ -133,22 +134,22 @@ const QuestionScreen = ({ navigation }) => {
     );
   };
 
-  // const getChallenge = async (level) => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await WebService.getChallengeByLevel(level);
-  //     setData(response);
-  //     setCurrent(response[0]);
-  //   } catch (error) {
-  //     showMessage({
-  //       message: err,
-  //       type: "danger",
-  //     });
-  //   }
-  //   setLoading(false);
-  // };
+  const getChallenge = async (level) => {
+    try {
+      setLoading(true);
+      const response = await WebService.getChallengeByLevel(level);
+      setData(response);
+      setCurrent(response[0]);
+    } catch (error) {
+      showMessage({
+        message: err,
+        type: "danger",
+      });
+    }
+    setLoading(false);
+  };
 
-  const getChallenge = async () => {
+  const getChallengeWar = async () => {
     try {
       setLoading(true);
       const response = await WebService.getQuestions();
@@ -168,24 +169,36 @@ const QuestionScreen = ({ navigation }) => {
     setRoom(info);
   };
 
-  // useEffect(() => {
-  //   // if (time == initialValue.time && !visible) {
-  //   //   startGame();
-  //   // }
-  //   if (!time) {
-  //     // props.navigation.navigate("ScoreScreen", { score: 1});
-  //     // navigation.navigate("ScoreScreen", { score: score});
-  //   }
+  useEffect(() => {
+    // if (time == initialValue.time && !visible) {
+    //   startGame();
+    // }
+    let interval;
+    if(!room.room) {
+      if (!time) {
+        // props.navigation.navigate("ScoreScreen", { score: 1});
+        navigation.navigate("ScoreScreen", { score: score});
+      }
+  
+      interval = setInterval(() => {
+        setTime((time) => time - 1);
+      }, 1000);
+    }
+    
 
-  //   let interval = setInterval(() => {
-  //     setTime((time) => time - 1);
-  //   }, 1000);
+    return () => clearInterval(interval);
+  }, [time]);
 
-  //   return () => clearInterval(interval);
-  // }, [time, visible]);
+  const gameFinish = data => {
+    navigation.navigate("ScoreScreen", { data: data});
+  }
 
   useEffect(() => {
-    getChallenge();
+    if(room?.room) {
+      getChallengeWar();
+    } else {
+      getChallenge(1)
+    }
   }, []);
 
   useEffect(() => {
@@ -197,7 +210,7 @@ const QuestionScreen = ({ navigation }) => {
   }, [])
 
   useEffect(() => {
-    endGame(console.log)
+    endGame(gameFinish)
   })
 
   console.log("rooommmmmm", room);
@@ -232,7 +245,7 @@ const QuestionScreen = ({ navigation }) => {
               <Avatar
                 rounded
                 source={{
-                  uri: room?.user1.avatar
+                  uri: room?.user1?.avatar
                 }}
                 size="medium"
               />
@@ -250,7 +263,7 @@ const QuestionScreen = ({ navigation }) => {
               <Avatar
                 rounded
                 source={{
-                  uri: room?.user2.avatar
+                  uri: room?.user2?.avatar
                 }}
                 size="medium"
               />
@@ -275,7 +288,7 @@ const QuestionScreen = ({ navigation }) => {
           </View>
           <Image
             style={styles.image}
-            source={{ uri: `${Host}/assets/challenge/photo/${current.image}` }}
+            source={{ uri: `${Host}/assets/challenge/photo/${current?.image}` }}
           />
           <PaperText
             text={

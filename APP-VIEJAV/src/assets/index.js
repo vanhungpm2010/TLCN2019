@@ -27,3 +27,5 @@ export const bg_background_topic_2 = require('./background_topic_2.png');
 export const ic_arrow_right = require('./ic_arrow_right.png');
 export const ic_arrow_back = require('./ic_arrow_back.png');
 export const bg_background_topic_3 = require('./background_topic_3.png');
+
+export const ig_challenge = require('./ig_challenge.png')

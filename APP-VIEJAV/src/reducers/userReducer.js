@@ -13,7 +13,9 @@ export default function loginReducer(state = initialState, action) {
     case typeAction.GET_NOTI:
       return { ...state, noti: action.noti };
     case typeAction.ADD_NOTI:
-      return { ...state, noti: [...state.noti, ...action.noti] };
+      const { noti } = action;
+      const stateNotify = state.noti.filter(i => i._id !== noti._id);
+      return { ...state, noti: [action.noti, ...stateNotify] };
     default:
       return state;
   }

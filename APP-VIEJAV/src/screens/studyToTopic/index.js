@@ -1,17 +1,24 @@
 import React, { Component } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Image } from "react-native";
 import { connect } from "react-redux";
 import Loading from "@components/loading";
 import { CoursesACtion } from "@actions/CoursesAction";
 import Topic from "./Topic";
-import Service from "@services";
+import Service from "../../services";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import PropTypes from "prop-types";
-import Styles from "./styles";
+
+import Header from '../../components/header';
+import { ic_arrow_back } from "../../assets";
+
+import styles from "./styles";
 
 class StudyTopPic extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      courses: []
+    }
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -21,11 +28,20 @@ class StudyTopPic extends Component {
     headerTintColor: "white"
   });
 
+  async getList(id) {
+    try {
+      const res = await Service.getDetailCourses(id);      
+      this.setState({ courses: res.contents })
+    } catch(error) {
+
+    }
+  }
+
   //WARNING! To be deprecated in React v17. Use componentDidMount instead.
   componentDidMount() {
     {
       console.log("didmout ne");
-      this.props.dispatch(CoursesACtion._getCoursesRequest());
+      this.getList('5eca17576e9efb22c4e088b7');
     }
   }
   _actionDeleteCourese = id => {
@@ -53,22 +69,35 @@ class StudyTopPic extends Component {
     this.props.navigation.navigate("GetCourese",{ idCourese: id})
   };
   render() {
-    const { courses, loading } = this.props;
-    console.log("courses", courses);
-    const { avatar } = courses;
+    // const { courses, loading } = this.props;
+    // console.log(courses);
+        // const { avatar } = courses;
 
     return (
       <View style={{ flex: 1, backgroundColor: "#EEEEEE" }}>
+        <Header
+        noShadow={true}
+        stylesHeaderText={{
+          color: "#000",
+          fontSize: 15,
+          fontWeight: "bold",
+        }}
+        mainText={'Chủ đề'}
+        stylesHeader={styles.header}
+        leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
+        leftAction={() => navigation.goBack()}
+      />
+
         <ScrollView>
-          {courses.courses
-            ? courses.courses.map((data, index) => {
+          {this.state.courses
+            ? this.state.courses.map((data, index) => {
                 return (
                   <Topic
                     id={data._id}
                     key={index}
-                    avatar={avatar}
+                    // avatar={}
                     title={data.title}
-                    lenght={data.contents.length}
+                    lenght={this.state.courses.length}
                     _actionDeleteCourese={() =>
                       this._actionDeleteCourese(data._id)
                     }
@@ -78,7 +107,7 @@ class StudyTopPic extends Component {
               })
             : null}
         </ScrollView>
-        {loading && <Loading />}
+        {/* {loading && <Loading />} */}
       </View>
     );
   }

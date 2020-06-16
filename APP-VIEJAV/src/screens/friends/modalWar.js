@@ -25,14 +25,14 @@ import styles from "./styles";
 import Storage from '../../storages'
 import { rejectGame } from '../../services/socketIO';
 
-const ModalWar = ({ isVisible, onClose, receiver, roomId }) => {
-  const [timeWait, setTimeWait] = useState(15);
+const ModalWar = ({ isVisible, onClose, receiver, roomId, time }) => {
+  const [timeWait, setTimeWait] = useState(time);
   const [user, setUser] = useState(null);
   
   useEffect(() => {
     if (!timeWait) {
       rejectGame(roomId)
-      setTimeWait(15);
+      setTimeWait(time);
       onClose();
       alert('Reject nhesssss')
     }

@@ -222,7 +222,7 @@ class Detail extends Component {
       visibleLost,
       loading
     } = this.state;
-console.log(righQuiz)
+    
     return (
       <View style={{ flex: 1, backgroundColor: "#FFE082" }}>
         {endQuiz ? (

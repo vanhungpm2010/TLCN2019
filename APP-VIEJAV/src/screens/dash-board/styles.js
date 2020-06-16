@@ -77,6 +77,10 @@ export default styles = StyleSheet.create({
     width: '70%',
     alignItems: 'center'
   },  
+  challengeRight: {
+    width: '25%',
+    alignItems: 'center'
+  },
   btnChallenge: {
     backgroundColor: colors.white_color,
     width: wp('33%'),
@@ -134,7 +138,8 @@ export default styles = StyleSheet.create({
     color: '#333',
     fontWeight: 'normal',
     fontSize: 13,
-    color: colors.title
+    color: colors.title,
+    textAlign: 'center'
   },
   gameContainer: {
 

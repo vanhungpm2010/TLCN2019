@@ -1,4 +1,4 @@
-import WebService from "@services";
+import WebService from '../services';
 import * as typeAction from "./typeAction";
 import Storage from "@storages";
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -27,10 +27,10 @@ function _deleteCourses (id) {
     id
   };
 }
-function _getCoursesRequest() {
+function _getCoursesRequest(id) {
   return dispatch => {
     dispatch({ type: typeAction.IS_LOADING_COURSES });
-    WebService.getCourses()
+    WebService.getDetailCourses(id)
       .then(async data => {
         dispatch(_getCoursesSuccess(data));
       })

@@ -42,13 +42,14 @@ const initialLayout = { width: Dimensions.get("window").width };
 const FriendsScreen = ({ navigation }) => {
   const [friends, setFriends] = useState([]);
   const [searchFriends, setSearchFriends] = useState([]);
+  const [requestFriends, setRequestFriends] = useState([])
   const [text, setText] = useState("");
   const [index, setIndex] = React.useState(0);
   const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [receiver, setReceiver] = useState(null);
   const [roomId, setRoomId] = useState(null);
-
+  const [timeWait, setTimeWait] = useState(30);
   const [routes] = React.useState([
     { key: "first", title: "Danh sách" },
     { key: "second", title: "Tìm kiếm" },
@@ -81,7 +82,7 @@ const FriendsScreen = ({ navigation }) => {
     setLoading(true);
     try {
       const response = await WebService.inviteFriend({ friend_id: id });
-      if(response) {
+      if (response) {
         setRoomId(response);
         setIsVisible(true);
         const receiver = friends.filter(item => item._id === id);
@@ -103,6 +104,7 @@ const FriendsScreen = ({ navigation }) => {
     try {
       const data = await WebService.getFriends();
       setFriends(data.friends);
+      setRequestFriends(data.requestFriend);
     } catch (error) {
       showMessage({
         message: getErrorMessage(error),
@@ -125,6 +127,17 @@ const FriendsScreen = ({ navigation }) => {
     />
   );
 
+  const ThirdRoute = () => (
+    <FlatList
+      keyExtractor={keyExtractor}
+      data={requestFriends}
+      renderItem={renderItemRequest}
+      refreshing={isRefreshing}
+      onRefresh={() => onRefresh()}
+      onEndReachedThreshold={0}
+    />
+  )
+
   const renderItemSearch = ({ item }) => {
     return (
       <ListItem
@@ -134,8 +147,8 @@ const FriendsScreen = ({ navigation }) => {
           item.isOnline ? (
             "Online"
           ) : (
-            <Text style={{ color: "gray" }}>Offline</Text>
-          )
+              <Text style={{ color: "gray" }}>Offline</Text>
+            )
         }
         leftAvatar={{
           source: item.avatar && { uri: item.avatar },
@@ -146,12 +159,44 @@ const FriendsScreen = ({ navigation }) => {
         chevron
         rightTitle={
           item?.type == "notFriend" ? (
-            <TouchableOpacity onPress={() => addFriend(item._id)}>
+            <TouchableOpacity onPress={() => addFriend(item._id, true)}>
               <Icon name="user-plus" size={14} color="black" />
             </TouchableOpacity>
           ) : (
-            ""
-          )
+              ""
+            )
+        }
+      />
+    );
+  };
+
+  const renderItemRequest = ({ item }) => {
+    return (
+      <ListItem
+        keyExtractor={keyExtractor}
+        title={item.username}
+        // subtitle={
+        //   item.isOnline ? (
+        //     "Online"
+        //   ) : (
+        //     <Text style={{ color: "gray" }}>Offline</Text>
+        //   )
+        // }
+        leftAvatar={{
+          source: item.avatar && { uri: item.avatar },
+          // title: item.name[0],
+        }}
+
+        subtitleStyle={{ color: "green" }}
+        bottomDivider
+        // chevron
+        rightTitle={
+          <TouchableOpacity
+            onPress={() => addFriend(item._id, false)}
+            style={styles.btnAcceptRequest}
+          >
+            <Text style={styles.btnTextAccept}>Đồng ý</Text>
+          </TouchableOpacity>
         }
       />
     );
@@ -182,7 +227,7 @@ const FriendsScreen = ({ navigation }) => {
         leftIconContainerStyle={{ paddingRight: 10 }}
         leftIcon={<Icon name="search" size={14} color="black" />}
         rightIcon={
-          <TouchableOpacity onPress={search}>
+          <TouchableOpacity onPress={search} style={styles.btnAcceptRequest}>
             <Text>Search</Text>
           </TouchableOpacity>
         }
@@ -201,29 +246,31 @@ const FriendsScreen = ({ navigation }) => {
     getList();
   };
 
-  const addFriend = (id) => {
-    WebService.addFriend({ friend_id: id, is_request: true })
+  const addFriend = (id, request) => {
+    setLoading(true);
+    WebService.addFriend({ friend_id: id, is_request: request })
       .then(async (data) => {
         search(text);
         showMessage({
           message: "Kết bạn thành công",
           type: "success",
         });
+        setLoading(false);
       })
       .catch((err) => {
-        console.log("bi loi", err);
         showMessage({
-          message: err,
+          message: getErrorMessage(err),
           type: "danger",
         });
+        setLoading(false);
       });
+      // setLoading(false);
   };
 
   const handleStart = (response) => {
-    console.log('responseresponse', response);
-    
     if (response) {
       setIsVisible(false);
+      setTimeWait(20);
       navigation.navigate("QuestionScreen");
     }
   };
@@ -239,7 +286,7 @@ const FriendsScreen = ({ navigation }) => {
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SearchRoute,
-    third: SecondRoute,
+    third: ThirdRoute,
   });
 
   return (
@@ -265,7 +312,11 @@ const FriendsScreen = ({ navigation }) => {
         style={styles.container}
       />
       <LoadingPage loading={loading} />
-      <ModalWar isVisible={isVisible} onClose={() => setIsVisible(false)} receiver={receiver} roomId={roomId}/>
+      <ModalWar 
+        isVisible={isVisible} 
+        onClose={() => setIsVisible(false)}
+        receiver={receiver} roomId={roomId} time={timeWait}
+      />
     </ViewVertical>
   );
 };

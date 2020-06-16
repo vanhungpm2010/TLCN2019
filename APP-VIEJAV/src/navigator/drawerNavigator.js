@@ -13,6 +13,12 @@ import Challenge from '../screens/challenge';
 import DashBoardScreen from '../screens/dash-board'
 import NotificationList from '../screens/notification-list';
 import FriendsScreen from '../screens/friends/friend';
+import GetCourse from '../screens/getCourse';
+import StudyTopPic from '../screens/studyToTopic';
+import MemmoryCard from '../screens/games/memmoryCard'
+import CourseTestScreen from '../screens/course-test';
+import Lesson from '../screens/lesson';
+import AlphabetScreen from '../screens/alphabet'
 
 const DrawerNavigatorConfig = {
   initialRouteName: 'DashBoard',
@@ -45,6 +51,24 @@ export default createDrawerNavigator(
     },
     Friends: {
       screen: FriendsScreen
+    },
+    GetCourse: {
+      screen: GetCourse
+    },
+    MemmoryCard: {
+      screen: MemmoryCard
+    },
+    ListTopic: {
+      screen: StudyTopPic
+    },
+    CourseTest: {
+      screen: CourseTestScreen
+    },
+    Lesson: {
+      screen: Lesson
+    },
+    Alphabet: {
+      screen: AlphabetScreen
     }
   },
   DrawerNavigatorConfig,

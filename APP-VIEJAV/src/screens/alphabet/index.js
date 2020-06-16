@@ -8,13 +8,14 @@ import * as Speech from "expo-speech";
 import { ViewVertical } from "../../components/viewBox.component";
 import Text from "../../components/text.component";
 import ModalBox from "../../components/ModalBox";
+import Header from '../../components/header';
 
 import WebService from "../../services";
 
 import styles from "./styles";
 import LoadingPage from "../loading";
 import { getErrorMessage } from "../../untils/helper";
-import { CLOSE, SPEAKER } from '../../assets';
+import { CLOSE, SPEAKER, ic_arrow_back } from '../../assets';
 
 const AlphabetScreen = ({ navigation }) => {
   const [isSelect, setIsSelect] = useState(false);
@@ -53,13 +54,13 @@ const AlphabetScreen = ({ navigation }) => {
   const handleSound = async () => {
     try {
       let thingToSay = current?.alt;
-     await Speech.speak(thingToSay, { language: 'ja' });
+      await Speech.speak(thingToSay, { language: 'ja' });
     } catch (error) {
       alert("Lỗi khi phát audio");
     }
   }
 
-  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize}) => {
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     const paddingToBottom = 20
     return layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom
@@ -71,9 +72,9 @@ const AlphabetScreen = ({ navigation }) => {
     }
     setLoadMore(true);
     try {
-      const response = await WebService.getAlphabet(isSelect ? 'katakana' : 'hiragana' , 28, page + 1);
+      const response = await WebService.getAlphabet(isSelect ? 'katakana' : 'hiragana', 28, page + 1);
 
-      if(!response.result) return;
+      if (!response.result) return;
       setData([...data, ...response.result]);
       setPage(page + 1);
     } catch (error) {
@@ -91,6 +92,19 @@ const AlphabetScreen = ({ navigation }) => {
 
   return (
     <ViewVertical style={styles.container}>
+      <Header
+        noShadow={true}
+        stylesHeaderText={{
+          color: "#000",
+          fontSize: 15,
+          fontWeight: "bold",
+        }}
+        mainText={'Bảng chữ cái'}
+        stylesHeader={styles.header}
+        leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
+        leftAction={() => navigation.goBack()}
+      />
+
       <View style={styles.headerContainer}>
         <View style={styles.buttonContainer}>
           <Button
@@ -117,7 +131,7 @@ const AlphabetScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <ScrollView style={{ flex: 1 }} 
+      <ScrollView style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={Animated.event(
@@ -154,7 +168,7 @@ const AlphabetScreen = ({ navigation }) => {
         style={styles.modalbox}
       >
         <TouchableOpacity style={styles.icContainer} onPress={() => setIsVisible(false)}>
-            <Image source={CLOSE} style={styles.icClose}/>
+          <Image source={CLOSE} style={styles.icClose} />
         </TouchableOpacity>
 
         <Image
@@ -164,7 +178,7 @@ const AlphabetScreen = ({ navigation }) => {
         />
 
         <TouchableOpacity style={styles.icSoundContainer} onPress={handleSound}>
-            <Image source={SPEAKER} style={styles.icSound}/>
+          <Image source={SPEAKER} style={styles.icSound} />
         </TouchableOpacity>
       </ModalBox>
 

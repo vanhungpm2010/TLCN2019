@@ -11,37 +11,83 @@ import Paragraph from "../components/Paragraph";
 import Logo from "../components/Logo";
 import colors from "../configs/colors";
 import Navigator from "@navigation/Navigator";
-import WebService from '../services'
+import WebService from '../services';
+import Storage from '../storages';
 
 const ScoreScreen = ({ route, navigation }) => {
   useEffect(() => {
     WebService.updateHightMark({ challenge: navigation?.getParam('score') })
-    .then(res => res)
-    .catch(err => alert(err))
+      .then(res => res)
+      .catch(err => alert(err))
   }, [navigation?.getParam('score')])
+
+  const data = navigation?.getParam('data');
+
+  const user = Storage.getUserInfo();
+
+  const winOrLose = (data) => {
+    if (data?.user1.win === data?.user2.win) {
+      return 'both';
+    }
+    if (data?.user1?._id === user.id) {
+      if (data?.user1?.win) {
+        return 'win'
+      }
+      return 'lose'
+    } else {
+      if (data?.user2?.win) {
+        return 'win'
+      }
+      return 'lose'
+    }
+  }
+
+  const getScore = (data) => {
+    if (data?.user1?._id === user.id) {
+      return data?.user1?.score + ' - ' + data?.user2?.score
+    }
+    return data?.user2?.score + ' - ' + data?.user1?.score
+  }
 
   return (
     <Background>
       <View style={styles.container}>
         <Logo style={styles.logo} />
 
-        <View style={styles.card}>
-          <Title>Time out</Title>
-          <Title>Game Over</Title>
-          <Paragraph children={navigation?.getParam('score')} style={styles.point} />
-          <View style={styles.trick}>
-            <Text style={styles.trickText}>.</Text>
-          </View>
-          <View style={styles.trick2}></View>
-        </View>
+        {!data ?
+          <>
+            <View style={styles.card}>
+              <Title>Time out</Title>
+              <Title>Game Over</Title>
+              <Paragraph children={navigation?.getParam('score')} style={styles.point} />
+              <View style={styles.trick}>
+                <Text style={styles.trickText}>.</Text>
+              </View>
+              <View style={styles.trick2}></View>
+            </View>
 
-        <Paragraph children={"Your Ranking: 4"} style={styles.paragraph} />
+            <Paragraph children={"Your Ranking: 4"} style={styles.paragraph} />
+          </>
+          : (
+            <View style={styles.card}>
+              <Title>Time out</Title>
+              <Title>Game Over</Title>
+              <Paragraph children={getScore(data)} style={styles.point} />
+              <Paragraph children={`You ${winOrLose(data)}`} style={styles.point} />
+              <View style={styles.trick}>
+                <Text style={styles.trickText}>.</Text>
+              </View>
+              <View style={styles.trick2}></View>
+            </View>
+          )
+        }
 
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            width: 270
+            width: 270,
+            marginTop: 20
           }}
         >
           <Button
