@@ -29,3 +29,7 @@ export const ic_arrow_back = require('./ic_arrow_back.png');
 export const bg_background_topic_3 = require('./background_topic_3.png');
 
 export const ig_challenge = require('./ig_challenge.png')
+export const ic_view_carousel = require('./ic_view_carousel.png');
+export const ic_spellcheck = require('./ic_spellcheck.png');
+export const ic_assignment = require('./ic_assignment.png');
+export const ic_record_voice_over = require('./ic_record_voice_over.png');

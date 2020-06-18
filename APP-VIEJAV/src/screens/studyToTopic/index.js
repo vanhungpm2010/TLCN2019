@@ -9,7 +9,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import PropTypes from "prop-types";
 
 import Header from '../../components/header';
-import { ic_arrow_back } from "../../assets";
+import { ic_arrow_back, ic_notifications } from "../../assets";
 
 import styles from "./styles";
 
@@ -82,10 +82,29 @@ class StudyTopPic extends Component {
           fontSize: 15,
           fontWeight: "bold",
         }}
-        mainText={'Chủ đề'}
+        mainText={'Học theo chủ đề'}
         stylesHeader={styles.header}
         leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
         leftAction={() => navigation.goBack()}
+        actionRight={[
+          {
+            // component: <BadgedIcon type="ionicon" name="md-notifications" color={"#fff"} style={styles.icon}/>,
+            component: <Image source={ic_notifications} style={styles.icon} />,
+            action: () => navigation.navigate("Notifications"),
+            styleTouchable: {
+              top: 9,
+            },
+          },
+          {
+            component: (
+              <Avatar rounded source={{ uri: user?.avatar }} size="small" />
+            ),
+            action: () => navigation.navigate("Profile"),
+            styleTouchable: {
+              top: 9,
+            },
+          },
+        ]}
       />
 
         <ScrollView>

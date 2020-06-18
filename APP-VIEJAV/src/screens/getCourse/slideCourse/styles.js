@@ -4,19 +4,19 @@ export default styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#9DD6EB"
+      backgroundColor: "#C0DDF4"
     },
     slide2: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#97CAE5"
+      backgroundColor: "#C0DDF4"
     },
     slide3: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#92BBD9"
+      backgroundColor: "#C0DDF4"
     },
     text: {
       color: "#fff",

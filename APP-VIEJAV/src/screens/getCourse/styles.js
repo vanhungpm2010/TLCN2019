@@ -19,17 +19,21 @@ export default StyleSheet.create({
     shadowRadius: 1.0,
     elevation: 1,
   },
-  title: {
-    color: "#E65100",
-    fontSize: 20,
-    borderBottomColor: "black",
-    borderBottomWidth: 2,
-    width: 70
+  titleHeader: {
+    color: "#234958",
+    fontSize: 22,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  textHeader: {
+    color: "#234958",
+    fontSize: 15,
+    textAlign: 'center'
   },
   containerSlider: { justifyContent: "center", alignItems: "center" },
   slider: {
     overflow: "hidden",
-    width: 300,
+    // width: 300,
     height: 250,
     borderBottomWidth: 5,
     borderBottomColor: "blue",
@@ -38,7 +42,9 @@ export default StyleSheet.create({
     shadowOpacity: 1,
     elevation: 3,
     backgroundColor: "white",
-    margin: 10
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10
   },
   cardGame: {
     justifyContent: "center",
@@ -82,5 +88,29 @@ export default StyleSheet.create({
   titleGame: {
     fontSize: 30,
     fontWeight: "bold"
+  },
+  progressContainer: {
+    marginBottom: 10
+  },
+  progressText: {
+    color: '#2C6694',
+    fontSize: 13,
+    fontWeight: 'bold',
+    lineHeight: 19
+  },
+  eventText: {
+    fontSize: 13,
+    color: '#2C6694',
+    paddingBottom: 10
+  },
+  containerStyleItem: {
+    padding: 10,
+    backgroundColor: '#C0DDF4',
+    borderRadius: 10,
+    marginBottom: 7
+  },
+  titleStyle: {
+    color: '#2C6694',
+    fontWeight: 'bold'
   }
 });

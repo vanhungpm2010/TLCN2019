@@ -6,7 +6,7 @@ import Styles from "./styles";
 
 export default function GetCourses(props) {
   return (
-    <Swiper>
+    <Swiper style={Styles.swiperContainer}>
       {props.data.map((value, index) => {
         return(<FlipCard
           key={index}
@@ -16,6 +16,7 @@ export default function GetCourses(props) {
           flipVertical={false}
           flip={false}
           clickable={true}
+          style={Styles.cardContainer}
         >
           {/* Face Side */}
           <View style={Styles.slide1}>
