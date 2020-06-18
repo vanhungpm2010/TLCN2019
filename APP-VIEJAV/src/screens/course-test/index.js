@@ -71,8 +71,8 @@ const CourseTestScreen = ({ navigation }) => {
                     {answer &&
                       answer.map((value, key) => {
                         <ViewHorizontal style={styles.answerContainer} key={key}>
-                          <RadioButton value={index} />
-                          <Text style={styles.answerText}>{answer}</Text>
+                          <RadioButton value={key} />
+                          <Text style={styles.answerText}>{value}</Text>
                         </ViewHorizontal>;
                       })}
                   </RadioButton.Group>
