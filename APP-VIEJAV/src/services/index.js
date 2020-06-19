@@ -38,7 +38,12 @@ export default class WebService {
   static getDetailCourses = async (id) => {
     return api.get(`/courses/${id}`);
   };
-  
+  static getLearnByCourse = id => {
+    return api.get(`/courses/${id}/learn`)
+  }
+
+
+  // Topic
   static getTopic = async (id) => {
     return api.get(url.getTopic);
   };
@@ -51,6 +56,7 @@ export default class WebService {
   static setHistory = async (data) => {
     return api.post(url.setHistory, data);
   };
+
   //challenge
   static getChallenge = () => {
     return api.get(url.getChallenge);

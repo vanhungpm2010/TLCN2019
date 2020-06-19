@@ -39,7 +39,7 @@ export default class GetCourse extends Component {
   getData(id) {
     this.setState({ loading: true });
     Service.getDetailCourses(id)
-      .then((data) => {
+      .then((data) => { 
         this.setState({ data: data.contents, loading: false });
       })
       .catch((err) => console.log(err));
@@ -66,6 +66,7 @@ export default class GetCourse extends Component {
   render() {
     const { data, loading, user } = this.state;
     const { navigation } = this.props;
+    const id = this.props.navigation.getParam('idCourese');
     const CardList = [
       {
         icon: ic_view_carousel,
@@ -77,7 +78,7 @@ export default class GetCourse extends Component {
         icon: ic_spellcheck,
         title: '語彙テスト',
         rightTitle: 'Kiểm tra từ vựng',
-        onPress: () => navigation.navigate('CourseTest')
+        onPress: () => navigation.navigate('CourseTest', { idCourse: id })
       },
       {
         icon: ic_assignment,

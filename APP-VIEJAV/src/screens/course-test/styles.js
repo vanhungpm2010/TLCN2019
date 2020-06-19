@@ -20,10 +20,15 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   container: {
-    padding: 10
+    padding: 10,
+    marginBottom: 20
   },
+  questionContainer: {
+    padding: 5
+  },  
   questionText: {
-
+    color: '#2C6694',
+    fontWeight: 'bold'
   },
   answerContainer: {
     alignItems: 'center',
@@ -32,7 +37,17 @@ const styles = StyleSheet.create({
   },
   answerText: {
     
-  }
+  },
+  controlContainer: {
+    alignItems: 'flex-end',
+    marginBottom: 20
+  },
+  btnSubmit: {
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: '#C0DDF4'
+  },
 });
 
 export default styles;
