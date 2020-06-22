@@ -119,7 +119,7 @@ const NotificationList = ({ navigation }) => {
           fontSize: 15,
           fontWeight: "bold",
         }}
-        mainText={'Notification'}
+        mainText={'Thông báo'}
         stylesHeader={styles.header}
         leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
         leftAction={() => navigation.goBack()}

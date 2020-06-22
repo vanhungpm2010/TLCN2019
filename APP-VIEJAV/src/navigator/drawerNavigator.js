@@ -14,18 +14,65 @@ import DashBoardScreen from '../screens/dash-board'
 import NotificationList from '../screens/notification-list';
 import FriendsScreen from '../screens/friends/friend';
 import GetCourse from '../screens/getCourse';
-import StudyTopPic from '../screens/studyToTopic';
+import StudyTopicScreen from '../screens/studyToTopic';
 import MemmoryCard from '../screens/games/memmoryCard'
-import CourseTestScreen from '../screens/course-test';
+import ChoiceTestScreen from '../screens/course-test/choice-test';
 import Lesson from '../screens/lesson';
 import AlphabetScreen from '../screens/alphabet'
+import WritingTestScreen from '../screens/course-test/writing-test';
+import MemoryCardScreen from '../screens/getCourse/memoryCard';
+import HistoryScreen from '../screens/history';
+import MyTopicScreen from '../screens/studyToTopic/myTopic'
+import AddTopicScreen from '../screens/studyToTopic/addTopic';
+import PronounceScreen from '../screens/pronounce';
 
 const DrawerNavigatorConfig = {
   initialRouteName: 'DashBoard',
   drawerPosition: 'left',
-  contentComponent:Drawer,
+  contentComponent: Drawer,
   drawerType:'back'
 };
+const config = {
+  mode: "modal",
+  headerMode: "none"
+};
+
+const TopicStackNavigator = createStackNavigator({
+  ListTopic: {
+    screen: StudyTopicScreen
+  },
+  MyTopicScreen: {
+    screen: MyTopicScreen
+  },
+  AddTopicScreen: {
+    screen: AddTopicScreen
+  }
+}, config)
+
+const CourseStackNavigator = createStackNavigator({
+  GetCourse: {
+    screen: GetCourse
+  },
+  MemmoryCard: {
+    screen: MemmoryCard
+  },
+  ChoiceTestScreen: {
+    screen: ChoiceTestScreen
+  },
+  WritingTestScreen: {
+    screen: WritingTestScreen
+  },
+  MemoryCardScreen: {
+    screen: MemoryCardScreen
+  },
+  HistoryScreen: {
+    screen: HistoryScreen
+  },
+  PronounceScreen: {
+    screen: PronounceScreen
+  }
+}, config)
+
 export default createDrawerNavigator(
   {
     // HomeDrawer: {
@@ -52,24 +99,25 @@ export default createDrawerNavigator(
     Friends: {
       screen: FriendsScreen
     },
-    GetCourse: {
-      screen: GetCourse
+    Course: {
+      screen: CourseStackNavigator
     },
-    MemmoryCard: {
-      screen: MemmoryCard
-    },
-    ListTopic: {
-      screen: StudyTopPic
-    },
-    CourseTest: {
-      screen: CourseTestScreen
+    Topic: {
+      screen: TopicStackNavigator
     },
     Lesson: {
       screen: Lesson
     },
     Alphabet: {
       screen: AlphabetScreen
-    }
+    },
+    
+    // MyTopicScreen: {
+    //   screen: MyTopicScreen
+    // },
+    // AddTopicScreen: {
+    //   screen: AddTopicScreen
+    // }
   },
   DrawerNavigatorConfig,
 );

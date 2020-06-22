@@ -31,6 +31,39 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   containerSlider: { justifyContent: "center", alignItems: "center" },
+  containerViewSlider: {
+    marginLeft: 10,
+    marginRight: 10,
+    justifyContent: "center", alignItems: "center"
+  },
+  headerContainer: {
+    overflow: "hidden",
+    // width: 300,
+    height: 250,
+    // borderBottomWidth: 5,
+    // borderBottomColor: "blue",
+    shadowOffset: { width: 10, height: 10 },
+    shadowColor: "black",
+    shadowOpacity: 1,
+    elevation: 1,
+    backgroundColor: "#C0DDF4",
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  headerTextContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '30%',
+    // width: '100%',
+    // backgroundColor: '#C0DDF4'
+  },
+  headerText: {
+    color: '#234958',
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
   slider: {
     overflow: "hidden",
     // width: 300,
@@ -112,5 +145,12 @@ export default StyleSheet.create({
   titleStyle: {
     color: '#2C6694',
     fontWeight: 'bold'
-  }
+  },
+  progress: {
+    // position: 'absolute',
+    // bottom: 10,
+    backgroundColor: '#C0DDF4',
+    borderWidth: 0
+    // width: '90%'
+  },
 });

@@ -259,7 +259,7 @@ const Login = ({ navigation }) => {
         <Logo style={styles.logo}/>
 
         <TextInput
-          labelTop="Username"
+          labelTop="Tài khoản"
           returnKeyType="next"
           value={username.value}
           onChangeText={text => setUsername({ value: text, error: "" })}
@@ -271,7 +271,7 @@ const Login = ({ navigation }) => {
         />
 
         <TextInput
-          labelTop="Password"
+          labelTop="Mật khẩu"
           placeholder="Password"
           returnKeyType="done"
           value={password.value}
@@ -286,7 +286,7 @@ const Login = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => navigation.navigate("ForgotPasswordScreen")}
             >
-              <Text style={styles.label}>Forgot your password?</Text>
+              <Text style={styles.label}>Quên mật khẩu?</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -296,23 +296,23 @@ const Login = ({ navigation }) => {
           buttonStyle={styles.btnLogin}
           type="clear"
           onPress={_onLoginPressed}
-          title="Sign In"
+          title="Đăng nhập"
           titleStyle={styles.titleButton}
         />
 
         <View>
-          <Text>Or use one of your social profile</Text>
+          <Text>Hoặc sử dụng tài khoản</Text>
         </View>
 
         <View style={styles.social}>
-          <Button
+          {/* <Button
             containerStyle={styles.btnGoogle}
             icon={<Icon name="google" size={15} color="white" />}
             title="Google"
             titleStyle={styles.titleSocial}
             // onPress={signInWithGoogleAsync}
             type="clear"
-          />
+          /> */}
 
           <Button
             containerStyle={styles.btnFacebook}
@@ -325,11 +325,11 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.label}>Don’t have an account? </Text>
+          <Text style={styles.label}>Bạn không có tài khoản? </Text>
           <TouchableOpacity
             onPress={() => Navigator.navigate("Register")}
           >
-            <Text style={styles.link}>Sign up</Text>
+            <Text style={styles.link}>Đăng ký</Text>
           </TouchableOpacity>
         </View>
       </View>

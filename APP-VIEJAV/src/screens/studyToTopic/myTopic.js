@@ -159,8 +159,17 @@ import { ViewVertical, ViewHorizontal } from '../../components/viewBox.component
 import styles from './styles';
 import { ic_arrow_back, banner } from '../../assets'
 import { Input, ListItem, Button } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const StudyTopicScreen = ({ navigation }) => {
+const MyTopicScreen = ({ navigation }) => {
+  const onSettings = () => {
+    console.log('settings');
+  }
+
+  const handleOpen = () => {
+    console.log('handleOpen');
+  }
+
   return (
     <ViewVertical style={{ backgroundColor: '#fff', flex: 1 }}>
       <Header
@@ -173,19 +182,18 @@ const StudyTopicScreen = ({ navigation }) => {
         // mainText={'Học theo chủ đề'}
         stylesHeader={styles.header}
         leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
-        leftAction={() => navigation.navigate('DashBoard')}
+        leftAction={() => navigation.goBack()}
       />
       <ViewVertical style={styles.container}>
         <ViewHorizontal style={styles.headerContainer}>
           <ViewVertical>
-            <Text style={styles.titleHeader}>トピックス一覧</Text>
-            <Text style={styles.textHeader}>Danh sách chủ đề</Text>
+            <Text style={styles.titleHeader}>あなたの主題</Text>
+            <Text style={styles.textHeader}>Chủ đề của bạn</Text>
           </ViewVertical>
-
-          <Button
-            onPress={() => navigation.navigate('MyTopicScreen')}
+          <Button 
+            onPress={() => navigation.navigate('AddTopicScreen')}
             type='clear'
-            title='Chủ đề của bạn'
+            title='Tạo chủ đề'
             icon={
               <Icon
                 name="playlist-add"
@@ -193,20 +201,11 @@ const StudyTopicScreen = ({ navigation }) => {
                 color="#16334A"
               />
             }
-            iconRight
-            buttonStyle={styles.btnStyle}
-            titleStyle={styles.buttonTitleStyle}
+            iconRight     
+            buttonStyle={styles.buttonStyle}  
+            titleStyle={styles.buttonTitleStyle}   
           />
         </ViewHorizontal>
-
-        <Input
-          placeholder='Ví dụ: Món ăn'
-          rightIcon={{ type: 'font-awesome', name: 'search', size: 15 }}
-          containerStyle={styles.containerStyle}
-          inputContainerStyle={styles.inputContainerStyle}
-          inputStyle={styles.inputStyle}
-        // rightIconContainerStyle={styles.rightIconContainerStyle}
-        />
 
         <ListItem
           containerStyle={[styles.containerStyle, { padding: 10 }]}
@@ -219,7 +218,13 @@ const StudyTopicScreen = ({ navigation }) => {
               <Text style={styles.subtitleStyle}>{`Người tạo: Admin`}</Text>
             </ViewVertical>
           }
-
+          onPress={handleOpen}
+          rightIcon={{
+            color: '#16334A',
+            size: 30,
+            name: 'settings',
+            onPress: onSettings
+          }}
         />
       </ViewVertical>
 
@@ -227,4 +232,4 @@ const StudyTopicScreen = ({ navigation }) => {
   )
 }
 
-export default StudyTopicScreen;
+export default MyTopicScreen;

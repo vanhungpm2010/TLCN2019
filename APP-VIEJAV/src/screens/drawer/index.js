@@ -57,9 +57,9 @@ function Drawer(props) {
     {
       id: '6',
       title: 'アルファベット',
-      subtitle: 'Bảng chữ cái',
+      subtitle: 'Danh sách chủ đề',
       icon: 'clipboard-list',
-      onPress: () => moveScreen('Alphabet')
+      onPress: () => moveScreen('Topic')
     },
     {
       id: "7",

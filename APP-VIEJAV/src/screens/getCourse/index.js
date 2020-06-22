@@ -19,11 +19,12 @@ import { ViewVertical } from '../../components/viewBox.component';
 import {
   ic_arrow_back,
   ic_notifications,
-  ic_notifications_none,
+  ic_offline_pin,
   ic_view_carousel,
   ic_spellcheck,
   ic_assignment,
-  ic_record_voice_over
+  ic_record_voice_over,
+  background
 } from '../../assets';
 
 export default class GetCourse extends Component {
@@ -40,7 +41,7 @@ export default class GetCourse extends Component {
     this.setState({ loading: true });
     Service.getDetailCourses(id)
       .then((data) => { 
-        this.setState({ data: data.contents, loading: false });
+        this.setState({ data, loading: false });
       })
       .catch((err) => console.log(err));
   }
@@ -65,6 +66,8 @@ export default class GetCourse extends Component {
   }
   render() {
     const { data, loading, user } = this.state;
+    console.log(data);
+    
     const { navigation } = this.props;
     const id = this.props.navigation.getParam('idCourese');
     const CardList = [
@@ -72,25 +75,31 @@ export default class GetCourse extends Component {
         icon: ic_view_carousel,
         title: 'フラッシュカード',
         rightTitle: 'Thẻ ghi nhớ',
-        onPress: () => navigation.navigate('CourseTest')
+        onPress: () => navigation.navigate('MemoryCardScreen', {data: data?.contents})
       },
       {
         icon: ic_spellcheck,
+        title: '筆記試験',
+        rightTitle: 'Kiểm tra viết',
+        onPress: () => navigation.navigate('WritingTestScreen', { idCourse: id })
+      },
+      {
+        icon: ic_offline_pin,
         title: '語彙テスト',
-        rightTitle: 'Kiểm tra từ vựng',
-        onPress: () => navigation.navigate('CourseTest', { idCourse: id })
+        rightTitle: 'Kiểm tra trắc nghiệm',
+        onPress: () => navigation.navigate('ChoiceTestScreen', { idCourse: id })
       },
       {
         icon: ic_assignment,
         title: 'まとめ知識',
         rightTitle: 'Tổng quan kiến thức',
-        onPress: () => navigation.navigate('CourseTest')
+        onPress: () => navigation.navigate('HistoryScreen')
       },
       {
         icon: ic_record_voice_over,
         title: '話し中',
         rightTitle: 'Cách phát âm',
-        onPress: () => navigation.navigate('CourseTest')
+        onPress: () => navigation.navigate('PronounceScreen', { data: data?.contents })
       },
     ];
 
@@ -145,17 +154,25 @@ export default class GetCourse extends Component {
             <Text style={Styles.titleHeader}>トピックで学ぶ</Text>
             <Text style={Styles.textHeader}>Học theo chủ đề</Text>
             {/* <View style={Styles.containerSlider}> */}
-            <View style={Styles.slider}>
-              <SildeCourese data={data} />
+            <View style={Styles.headerContainer}>
+              {/* <SildeCourese data={data} /> */}
+              <Image 
+                source={data?.avatar ? { uri: data.avatar } : background} 
+                resizeMode='cover'
+                style={{ height: '70%', width: '100%' }}
+              />
+              <ViewVertical style={Styles.headerTextContainer}>
+                <Text style={Styles.headerText}>Mons an</Text>
+              </ViewVertical>
             </View>
             {/* </View> */}
             {/* endslide */}
 
             <ViewVertical style={Styles.progressContainer}>
               <Text style={Styles.progressText}>
-                Tiến độ hoàn thành của chủ đề: 75%
+                Tiến độ hoàn thành của chủ đề: {data?.complete}%
               </Text>
-              <Progress.Bar progress={0.75} width={200} />
+              <Progress.Bar progress={0.75} width={300} color={'#2C6694'} style={Styles.progress}/>
             </ViewVertical>
 
             <ViewVertical style={Styles.eventContainer}>
@@ -168,7 +185,7 @@ export default class GetCourse extends Component {
                     return (
                       <ListItem
                         key={index}
-                        leftElement={<Image source={item.icon} />}
+                        leftElement={<Image source={item.icon} style={{width: 20, height: 20}} resizeMode='contain'/>}
                         title={item.title}
                         rightTitle={item.rightTitle}
                         titleStyle={Styles.titleStyle}
@@ -232,19 +249,6 @@ export default class GetCourse extends Component {
             </View>
             {/* endgame */}
             {/* phat am*/}
-            <View>
-              <Text style={Styles.title}>Phát Âm</Text>
-              {data.map((value, index) => {
-                return (
-                  <SoundCourse
-                    key={index}
-                    text={value.text}
-                    mean={value.mean}
-                    language={value.language}
-                  />
-                );
-              })}
-            </View>
           </ScrollView>
         ) : (
           <Loading />

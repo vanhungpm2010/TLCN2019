@@ -22,6 +22,13 @@ export default styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold'
   },
+  progress: {
+    paddingBottom: 20
+  },
+  textStyle: {
+    color: '#234958',
+    fontSize: 13
+  },  
   topicText: {
     color: colors.title,
     paddingBottom: 15,
@@ -67,19 +74,26 @@ export default styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: colors.pink,
     borderRadius: 15,
-    paddingTop: hp('3%'),
-    paddingBottom: hp('3%'),
+    // paddingTop: hp('3%'),
+    // paddingBottom: hp('3%'),
     paddingLeft: wp('2%'),
     marginTop: hp('2%'),
     marginBottom: hp('1%'),
   },
   challengeLeft: {
-    width: '70%',
-    alignItems: 'center'
+    width: '60%',
+    alignItems: 'center',
+    paddingTop: hp('3%'),
+    paddingBottom: hp('3%'),
   },  
   challengeRight: {
-    width: '25%',
-    alignItems: 'center'
+    width: '40%',
+    // alignItems: 'center',
+    paddingTop: hp('3%'),
+    paddingBottom: hp('3%'),
+    backgroundColor: '#BBDDEA',
+    borderTopRightRadius: 10,
+    borderBottomRightRadius: 10,
   },
   btnChallenge: {
     backgroundColor: colors.white_color,

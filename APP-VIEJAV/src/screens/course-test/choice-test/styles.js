@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import colors from '../../configs/colors';
+import colors from '../../../configs/colors';
 
 const styles = StyleSheet.create({
   backarrow: {
@@ -42,11 +42,24 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: 20
   },
+  scoreContainer: {
+    flex: 1
+  },  
   btnSubmit: {
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
     backgroundColor: '#C0DDF4'
+  },
+  btnReturn: {
+    flex: 1,
+    backgroundColor: '#16334A',
+    marginTop: 20,
+    marginRight: 5
+  },
+  btnTitleStyle: {
+    color: '#fff',
+    fontSize: 13
   },
 });
 

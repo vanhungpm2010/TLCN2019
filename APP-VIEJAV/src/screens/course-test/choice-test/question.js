@@ -3,7 +3,7 @@ import styles from "./styles";
 import {
   ViewVertical,
   ViewHorizontal,
-} from "../../components/viewBox.component";
+} from "../../../components/viewBox.component";
 import { RadioButton } from "react-native-paper";
 import { Text, Image, ScrollView, TouchableOpacity } from "react-native";
 
@@ -16,7 +16,7 @@ const QuestionComponent = ({ item, index, chooseAnswer, answer }) => {
       </Text>
       <ViewVertical>
         <RadioButton.Group
-          onValueChange={(value) => chooseAnswer(value, index, item.answer_id)}
+          onValueChange={(value) => chooseAnswer(value, index, item._id, item.answer_id)}
           value={answer}
         >
           {answers &&

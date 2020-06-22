@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { withBadge, Avatar, Button, ListItem, message } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
-// import * as Progress from 'react-native-progress';
+import * as Progress from 'react-native-progress';
 
 import { ViewVertical, ViewHorizontal } from "../../components/viewBox.component";
 import Header from "../../components/header";
@@ -83,6 +83,17 @@ const DashBoardScreen = ({ navigation }) => {
           imageStyle={styles.imageStyle}
         >
           <TouchableOpacity onPress={onSelect} style={styles.boxStyle}>
+            {/* <Progress.Circle progress={0.75} width={300} color={'#2C6694'} style={styles.progress}/> */}
+            <Progress.Circle 
+              size={65} 
+              showsText={true} 
+              progress={0.75} 
+              color={'#2C6694'} 
+              indeterminate={false} 
+              style={styles.progress}
+              formatText={() => `15%`}
+              textStyle={styles.textStyle}
+            />
             {/* <Text style={styles.textName}>{item.title}</Text>
             <Text style={styles.textItem}>{item.spell}</Text> */}
             <Text style={styles.textItem}>{item.title}</Text>
@@ -226,13 +237,17 @@ const DashBoardScreen = ({ navigation }) => {
               type="clear"
               buttonStyle={styles.btnChallenge}
               titleStyle={styles.btnTitleStyle}
-              onPress={() => navigation.navigate("ChallengeScreen")}
+              onPress={() => navigation.navigate("ListTopic")}
               iconRight
               icon={<Icon name="running" size={15} color={colors.title} />}
             />
           </ViewVertical>
           <ViewVertical style={styles.challengeRight}>
-              <Image source={ig_challenge}/>
+            <TouchableOpacity onPress={() => navigation.navigate('Alphabet')}>
+              <Text style={styles.challengeTitle}>アルファベット</Text>
+              <Text style={styles.challengeText}>Bảng chữ cái</Text>
+            </TouchableOpacity>
+            {/* <Image source={ig_challenge}/> */}
           </ViewVertical>
         </ViewHorizontal>
 

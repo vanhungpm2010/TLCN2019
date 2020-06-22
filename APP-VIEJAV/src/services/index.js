@@ -21,7 +21,7 @@ export default class WebService {
 
   // Course
   static createCourse = async (data) => {
-    return api.post(url.createCoures, data);
+    return api.postFormData(url.createCoures, data, 'POST');
   };
 
   static getPublicCourse = async (limit) => {

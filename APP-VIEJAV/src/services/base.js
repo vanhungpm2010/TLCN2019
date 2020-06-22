@@ -92,9 +92,13 @@ const postFormData = (api, formData,method) => {
       //   EventRegister.emit('unauth', '');
       //   return;
       // }
+      console.log(response);
+      
       return response.data;
     })
     .catch((error) => {
+      console.log(error);
+      
       // if (error.response.status === RESPONSE_STATUS.Authorization) {
       //   EventRegister.emit('unauth', '');
       //   // return;

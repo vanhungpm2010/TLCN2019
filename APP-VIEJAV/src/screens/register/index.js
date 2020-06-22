@@ -396,7 +396,7 @@ const Register = ({ navigation }) => {
 
         <Logo />
         <TextInput
-          labelTop="Username"
+          labelTop="Tài khoản"
           returnKeyType="next"
           value={username.value}
           onChangeText={(text) => setUsername({ value: text, error: "" })}
@@ -405,7 +405,7 @@ const Register = ({ navigation }) => {
           autoCapitalize="none"
         />
         <TextInput
-          labelTop="Email Adress"
+          labelTop="Địa chỉ Email"
           returnKeyType="next"
           value={email.value}
           onChangeText={(text) => setEmail({ value: text, error: "" })}
@@ -418,7 +418,7 @@ const Register = ({ navigation }) => {
         />
 
         <TextInput
-          labelTop="Password"
+          labelTop="Mật khẩu"
           returnKeyType="done"
           value={password.value}
           onChangeText={(text) => setPassword({ value: text, error: "" })}
@@ -427,7 +427,7 @@ const Register = ({ navigation }) => {
           secureTextEntry
         />
         <TextInput
-          labelTop="Retype Password"
+          labelTop="Nhập lại mật khẩu"
           returnKeyType="done"
           value={rePassword.value}
           onChangeText={(text) => setRePassword({ value: text, error: "" })}
@@ -452,14 +452,14 @@ const Register = ({ navigation }) => {
           buttonStyle={styles.btnSignUp}
           type="clear"
           onPress={_onSignUpPressed}
-          title="Sign In"
+          title="Đăng ký"
           titleStyle={styles.titleButton}
         />
 
         <View style={styles.row}>
-          <Text style={styles.label}>Already have an account? </Text>
+          <Text style={styles.label}>Bạn đã có tài khoản? </Text>
           <TouchableOpacity onPress={() => Navigator.navigate("Login")}>
-            <Text style={styles.link}>Login</Text>
+            <Text style={styles.link}>Đăng nhập</Text>
           </TouchableOpacity>
         </View>
       </View>

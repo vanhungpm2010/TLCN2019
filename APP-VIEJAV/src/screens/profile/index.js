@@ -150,20 +150,20 @@ const ProfileScreen = ({ navigation }) => {
 
           <View style={styles.float}>
             <View style={{ flex: 7 }}>
-              <Text style={styles.paragraph}>Birth Date</Text>
+              <Text style={styles.paragraph}>Ngày sinh</Text>
               {/* <Paragraph children="Birth Date" style={styles.paragraph}/> */}
               <Text style={styles.input}>Oct 25, 1857</Text>
             </View>
 
             <View style={{ flex: 3 }}>
-              <Text style={styles.paragraph}>Gender</Text>
+              <Text style={styles.paragraph}>Giới tính</Text>
               {/* <Paragraph children="Gender" style={styles.paragraph}/> */}
-              <Text style={styles.input}>Male</Text>
+              <Text style={styles.input}>Nam</Text>
             </View>
           </View>
 
           {/* <Paragraph children="Contact Number" style={styles.paragraph}/> */}
-          <Text style={styles.paragraph}>Contact Number</Text>
+          <Text style={styles.paragraph}>Số điện thoại</Text>
           <Text style={styles.input}>(+84) 1654 452 124</Text>
         </Card>
 
@@ -182,7 +182,7 @@ const ProfileScreen = ({ navigation }) => {
         </Card> */}
 
         <TouchableOpacity style={styles.button} onPress={_onLogoutPressed}>
-          <Text style={styles.buttonText}>Log out</Text>
+          <Text style={styles.buttonText}>Đăng xuất</Text>
         </TouchableOpacity>
       </ScrollView>
 
