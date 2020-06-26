@@ -1,22 +1,35 @@
-import React from 'react';
-import { Text, Image, ScrollView } from 'react-native'
-import { ListItem } from 'react-native-elements';
+import React, { useEffect, useState } from "react";
+import { Text, Image, ScrollView } from "react-native";
+import { ListItem } from "react-native-elements";
 
-import { ViewVertical } from '../../components/viewBox.component'
-import Header from '../../components/header'
+import { ViewVertical } from "../../components/viewBox.component";
+import Header from "../../components/header";
 
-import styles from './styles';
-import { ic_arrow_back } from '../../assets'
+import styles from "./styles";
+import { ic_arrow_back } from "../../assets";
+import webservice from "../../services";
 
 const HistoryScreen = ({ navigation }) => {
+  const [data, setData] = useState(null);
+
+  const getData = async (id) => {
+    try {
+      const res = await webservice.getHistory(id);
+      setData(res);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getData(navigation.getParam("idCourse"));
+  }, [navigation.getParam("idCourse")]);
+
   return (
     <ViewVertical style={styles.container}>
       <Header
         noShadow={true}
         stylesHeaderText={{
-          color: '#000',
+          color: "#000",
           fontSize: 15,
-          fontWeight: 'bold',
+          fontWeight: "bold",
         }}
         stylesHeader={styles.header}
         leftComponent={
@@ -24,39 +37,69 @@ const HistoryScreen = ({ navigation }) => {
         }
         leftAction={() => navigation.goBack()}
       >
-        <ViewVertical style={{ paddingTop: 50 }}>
+        <ViewVertical style={{ paddingTop: 10 }}>
           <Text style={styles.titleHeader}>まとめ知識</Text>
           <Text style={styles.textHeader}>Tổng quan kiến thức</Text>
         </ViewVertical>
       </Header>
 
-
-
       <ScrollView
         style={{
           flex: 1,
-          backgroundColor: 'white',
+          backgroundColor: "white",
           paddingLeft: 15,
           paddingRight: 15,
-          paddingTop: 50
+          paddingTop: 20,
         }}
       >
-        {/* slide */}
+        {/* often */}
+        <Text style={styles.titleItem}>間違った言葉</Text>
+        <Text style={styles.subtitleItem}>Các từ sai nhiều</Text>
+        {data &&
+          data?.oftenWrong?.map((item, index) => (
+            <ListItem
+              key={index}
+              title={item?.content?.mean}
+              titleStyle={styles.titleStyle}
+              rightTitleStyle={styles.rightTitleStyle}
+              rightTitle="Thẻ ghi nhớ"
+              containerStyle={styles.listItem1}
+            />
+        ))}
 
+        {/* Sometime */}
+        <Text style={styles.titleItem}>言葉はしばしば間違っています</Text>
+        <Text style={styles.subtitleItem}>Các từ thường sai</Text>
+        {data &&
+          data?.sometimesWrong?.map((item, index) => (
+            <ListItem
+              key={index}
+              title={item?.content?.mean}
+              titleStyle={styles.titleStyle}
+              rightTitleStyle={styles.rightTitleStyle}
+              rightTitle="Thẻ ghi nhớ"
+              containerStyle={styles.listItem2}
+            />
+          ))}
+
+        {/* Correct */}
 
         <Text style={styles.titleItem}>習得した言葉</Text>
         <Text style={styles.subtitleItem}>Các từ nắm vững</Text>
-
-        <ListItem
-          title='フラッシュカード'
-          titleStyle={styles.titleStyle}
-          rightTitleStyle={styles.rightTitleStyle}
-          rightTitle='Thẻ ghi nhớ'
-          containerStyle={styles.listItem}
-        />
+        {data &&
+          data?.master?.map((item, index) => (
+            <ListItem
+              key={index}
+              title={item?.content?.mean}
+              titleStyle={styles.titleStyle}
+              rightTitleStyle={styles.rightTitleStyle}
+              rightTitle="Thẻ ghi nhớ"
+              containerStyle={styles.listItem3}
+            />
+          ))}
       </ScrollView>
     </ViewVertical>
-  )
-}
+  );
+};
 
 export default HistoryScreen;

@@ -31,7 +31,7 @@
 
 //   async getList(id) {
 //     try {
-//       const res = await Service.getDetailCourses(id);      
+//       const res = await Service.getDetailCourses(id);
 //       this.setState({ courses: res.contents })
 //     } catch(error) {
 
@@ -148,30 +148,87 @@
 //   loading: PropTypes.bool
 // };
 
+import React, { useEffect, useState } from "react";
+import { Image, Text, Alert, RefreshControl } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { Input, ListItem, Button } from "react-native-elements";
+import { showMessage } from "react-native-flash-message";
 
-import React from 'react';
-import { Image, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Header from "../../components/header";
+import {
+  ViewVertical,
+  ViewHorizontal,
+} from "../../components/viewBox.component";
+import Loading from "../loading";
 
-import Header from '../../components/header';
-import { ViewVertical, ViewHorizontal } from '../../components/viewBox.component';
-
-import styles from './styles';
-import { ic_arrow_back, banner } from '../../assets'
-import { Input, ListItem, Button } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getErrorMessage } from "../../untils/helper";
+import styles from "./styles";
+import { ic_arrow_back, banner } from "../../assets";
+import webservice from "../../services";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 const MyTopicScreen = ({ navigation }) => {
-  const onSettings = () => {
-    console.log('settings');
-  }
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleOpen = () => {
-    console.log('handleOpen');
-  }
+  const onSettings = (id) => {
+    Alert.alert(
+      "Cài đặt",
+      "",
+      [
+        {
+          text: "Sửa",
+          onPress: () =>
+            navigation.navigate("AddTopicScreen", { idCourse: id }),
+          style: "destructive",
+        },
+        {
+          text: "Xóa",
+          onPress: () => handleDelete(id),
+          style: "cancel",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const handleDelete = async (id) => {
+    setLoading(true);
+    try {
+      await webservice.deleteCourses(id);
+      showMessage({
+        message: "Xóa thành công",
+        type: "success",
+      });
+    } catch (error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
+      });
+    }
+    setLoading(false);
+  };
+
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const data = await webservice.getCourses();
+      setData(data);
+    } catch (error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
+      });
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
-    <ViewVertical style={{ backgroundColor: '#fff', flex: 1 }}>
+    <ViewVertical style={{ backgroundColor: "#fff", flex: 1 }}>
       <Header
         noShadow={true}
         stylesHeaderText={{
@@ -181,7 +238,9 @@ const MyTopicScreen = ({ navigation }) => {
         }}
         // mainText={'Học theo chủ đề'}
         stylesHeader={styles.header}
-        leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
+        leftComponent={
+          <Image source={ic_arrow_back} style={styles.backarrow} />
+        }
         leftAction={() => navigation.goBack()}
       />
       <ViewVertical style={styles.container}>
@@ -190,46 +249,73 @@ const MyTopicScreen = ({ navigation }) => {
             <Text style={styles.titleHeader}>あなたの主題</Text>
             <Text style={styles.textHeader}>Chủ đề của bạn</Text>
           </ViewVertical>
-          <Button 
-            onPress={() => navigation.navigate('AddTopicScreen')}
-            type='clear'
-            title='Tạo chủ đề'
-            icon={
-              <Icon
-                name="playlist-add"
-                size={15}
-                color="#16334A"
-              />
-            }
-            iconRight     
-            buttonStyle={styles.buttonStyle}  
-            titleStyle={styles.buttonTitleStyle}   
+          <Button
+            onPress={() => navigation.navigate("AddTopicScreen")}
+            type="clear"
+            title="Tạo chủ đề"
+            icon={<Icon name="playlist-add" size={15} color="#16334A" />}
+            iconRight
+            buttonStyle={styles.buttonStyle}
+            titleStyle={styles.buttonTitleStyle}
           />
         </ViewHorizontal>
 
-        <ListItem
-          containerStyle={[styles.containerStyle, { padding: 10 }]}
-          title={'Ten chu de'}
-          titleStyle={styles.titleStyleItem}
-          leftElement={<Image source={banner} style={styles.imageItem} />}
-          subtitle={
-            <ViewVertical>
-              <Text style={styles.subtitleStyle}>{`Bao gồm: 15 thuật toán`}</Text>
-              <Text style={styles.subtitleStyle}>{`Người tạo: Admin`}</Text>
-            </ViewVertical>
-          }
-          onPress={handleOpen}
-          rightIcon={{
-            color: '#16334A',
-            size: 30,
-            name: 'settings',
-            onPress: onSettings
-          }}
-        />
+        {!loading ? (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: 15 }}
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={getData} />
+            }
+          >
+            {data &&
+              data?.courses?.map((item, index) => {
+                return (
+                  <ListItem
+                    key={index}
+                    containerStyle={[styles.containerStyle, { padding: 10 }]}
+                    title={item.title}
+                    titleStyle={styles.titleStyleItem}
+                    leftElement={
+                      <Image
+                        source={{
+                          uri: `https://japaness-2020.herokuapp.com/api/avatars/${item.avatar}`,
+                        }}
+                        style={styles.imageItem}
+                      />
+                    }
+                    subtitle={
+                      <ViewVertical>
+                        <Text style={styles.subtitleStyle}>
+                          Bao gồm: {item?.contents?.length} thuật toán
+                        </Text>
+                        <Text style={styles.subtitleStyle}>
+                          Người tạo: {data?.username}
+                        </Text>
+                      </ViewVertical>
+                    }
+                    onPress={() =>
+                      navigation.navigate("GetCourse", {
+                        idCourese: item._id,
+                        go_back_key: "MyTopicScreen",
+                      })
+                    }
+                    rightIcon={{
+                      color: "#16334A",
+                      size: 30,
+                      name: "settings",
+                      onPress: () => onSettings(item._id),
+                    }}
+                  />
+                );
+              })}
+          </ScrollView>
+        ) : (
+          <Loading />
+        )}
       </ViewVertical>
-
     </ViewVertical>
-  )
-}
+  );
+};
 
 export default MyTopicScreen;

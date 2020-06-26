@@ -26,7 +26,12 @@ import Navigator from "@navigation/Navigator";
 import WebService from "../../services";
 import { Host } from "../../services/host";
 import Loadding from "../../components/loading";
-import { getInfoRooms, emitAnswerWar, getTimeCountDown, endGame } from "../../services/socketIO";
+import {
+  getInfoRooms,
+  emitAnswerWar,
+  getTimeCountDown,
+  endGame,
+} from "../../services/socketIO";
 import {
   ViewVertical,
   ViewHorizontal,
@@ -45,6 +50,7 @@ const QuestionScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [room, setRoom] = useState({});
   const [user, setUser] = useState(null);
+  const [correct, setCorrect] = useState({});
 
   const onChoose = async (choice) => {
     const user = await Storage.getUserInfo();
@@ -56,13 +62,17 @@ const QuestionScreen = ({ navigation }) => {
         Navigator.navigate("ScoreScreen", { score: score });
         return;
       }
-      if (score !== 0)
-        point = score - 5;
+      if (score !== 0) point = score - 5;
     } else {
       point = score + 5;
     }
-    console.log('point', point);
 
+    setCorrect({ 
+      index: choice, 
+      value: choice !== current.answer 
+    });
+
+    console.log("point", point);
 
     if (room?.room) {
       let dataEmit = room;
@@ -82,10 +92,13 @@ const QuestionScreen = ({ navigation }) => {
       emitAnswerWar(dataEmit);
     }
 
-
     setScore(point);
+    setTimeout(() => {
+      nextQuestion();
+      setCorrect({})
+    }, 3000);
+
     // setTime(15);
-    nextQuestion();
   };
 
   const nextQuestion = () => {
@@ -98,7 +111,7 @@ const QuestionScreen = ({ navigation }) => {
   };
 
   const openAudio = async (url) => {
-    try {      
+    try {
       const playbackObject = await Audio.Sound.createAsync(
         { uri: `${Host}/assets/challenge/audio/${url}` },
         { shouldPlay: true }
@@ -174,30 +187,29 @@ const QuestionScreen = ({ navigation }) => {
     //   startGame();
     // }
     let interval;
-    if(!room.room) {
+    if (!room.room) {
       if (!time) {
         // props.navigation.navigate("ScoreScreen", { score: 1});
         navigation.navigate("ScoreScreen", { score: score});
       }
-  
+
       interval = setInterval(() => {
         setTime((time) => time - 1);
       }, 1000);
     }
-    
 
     return () => clearInterval(interval);
   }, [time]);
 
-  const gameFinish = data => {
-    navigation.navigate("ScoreScreen", { data: data});
-  }
+  const gameFinish = (data) => {
+    navigation.navigate("ScoreScreen", { data: data });
+  };
 
   useEffect(() => {
-    if(room?.room) {
+    if (room?.room) {
       getChallengeWar();
     } else {
-      getChallenge(1)
+      getChallenge(1);
     }
   }, []);
 
@@ -207,13 +219,13 @@ const QuestionScreen = ({ navigation }) => {
 
   useEffect(() => {
     getTimeCountDown(setTime);
-  }, [])
+  }, []);
 
   useEffect(() => {
-    endGame(gameFinish)
-  })
+    endGame(gameFinish);
+  });
 
-  console.log("rooommmmmm", room);
+  console.log("rooommmmmm", correct);
   // let scoreWar = {
   //   if()
   // }
@@ -226,9 +238,7 @@ const QuestionScreen = ({ navigation }) => {
     <Background source={require("../../assets/backgroundLv1.png")}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <PaperText
-            style={styles.textWhite}
-          >
+          <PaperText style={styles.textWhite}>
             {`Level ${current?.level}`}
           </PaperText>
           <View style={styles.time}>
@@ -245,11 +255,13 @@ const QuestionScreen = ({ navigation }) => {
               <Avatar
                 rounded
                 source={{
-                  uri: room?.user1?.avatar
+                  uri: room?.user1?.avatar,
                 }}
                 size="medium"
               />
-              <PaperText style={styles.textWhite}>{room?.user1?.username}</PaperText>
+              <PaperText style={styles.textWhite}>
+                {room?.user1?.username}
+              </PaperText>
             </View>
 
             <View style={styles.score}>
@@ -263,11 +275,13 @@ const QuestionScreen = ({ navigation }) => {
               <Avatar
                 rounded
                 source={{
-                  uri: room?.user2?.avatar
+                  uri: room?.user2?.avatar,
                 }}
                 size="medium"
               />
-              <PaperText style={styles.textWhite}>{room?.user2?.username}</PaperText>
+              <PaperText style={styles.textWhite}>
+                {room?.user2?.username}
+              </PaperText>
             </View>
           </ViewHorizontal>
         )}
@@ -304,12 +318,14 @@ const QuestionScreen = ({ navigation }) => {
           value={current?.choice_1}
           openAudio={() => openAudio(current?.choice_1_voice)}
           choose={() => onChoose(1)}
+          wrong={correct?.index === 1 ? correct?.value : undefined}
         />
 
         <Answer
           value={current?.choice_2}
           openAudio={() => openAudio(current?.choice_2_voice)}
           choose={() => onChoose(2)}
+          wrong={correct?.index === 2 ? correct?.value : undefined}
         />
 
         <View style={styles.footer}>

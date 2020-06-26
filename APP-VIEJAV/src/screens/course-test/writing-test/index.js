@@ -1,21 +1,86 @@
-import React, { useState } from 'react';
-import { Text, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, Image, TouchableOpacity } from 'react-native';
 import { Avatar, Input } from 'react-native-elements'
 import * as Progress from 'react-native-progress';
-
+import { showMessage } from "react-native-flash-message";
 
 import { ViewVertical } from '../../../components/viewBox.component';
 import Header from '../../../components/header'
 import styles from './styles';
 import { ic_arrow_back, ic_notifications } from '../../../assets';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import webservice from '../../../services';
+import { change_alias, getErrorMessage } from "../../../untils/helper";
 
 const WritingTestScreen = ({ navigation }) => {
-  const onNext = () => {
+  const [data, setData] = useState([]);
+  const [user, setUser] = useState(null);
+  const [text, setText] = useState('');
+  const [current, setCurrent] = useState(null);
+  const [dataSubmit, setDataSubmit] = useState([]);
 
+  const onNext = () => {
+    dataSubmit.push({ content: current.course._id, rightAnwser: 0 });
+    finishTest(dataSubmit)
   };
 
-  const [user, setUser] = useState(null)
+  const finishTest = async value => {
+    if(current.index === data.length - 1) {
+      const body = {
+        topic: navigation.getParam('idCourse'),
+        contents: value
+      }
+
+      try {
+        const res = await webservice.setHistory(body);
+        navigation.navigate('FinishTestScreen', { idCourse: navigation.getParam('idCourse')});
+        
+      } catch(error) {
+        showMessage({
+          message: getErrorMessage(error),
+          type: "danger",
+        });
+      }
+      
+      return;
+      // Call api
+    }
+    setCurrent({ course: data[current.index + 1], index: current.index + 1 })
+  }
+
+  const onSubmit = () => {
+    const textSubmit = change_alias(text).toLowerCase();
+    const textCorrect = change_alias(current?.course?.text).toLowerCase() || undefined;
+    if(textSubmit === textCorrect) {
+      dataSubmit.push({ content: current.course._id, rightAnwser: 1 })
+    }
+    else {
+      dataSubmit.push({ content: current.course._id, rightAnwser: 0 })
+    };
+
+    setDataSubmit(dataSubmit);
+    finishTest(dataSubmit)
+  }
+
+  const getData = async (id) => {
+    // this.setState({ loading: true });
+    try {
+      const response = await webservice.getDetailCourses(id);
+      setData(response.contents);
+      setCurrent({ course: response?.contents[0], index: 0 })
+    } catch(error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
+      });
+    }
+  }
+
+  useEffect(() => {
+    getData(navigation.getParam('idCourse'));
+  }, [navigation.getParam('idCourse')])
+
+  console.log('current', current);
+  
   return (
     <ViewVertical style={{
       flex: 1,
@@ -44,14 +109,16 @@ const WritingTestScreen = ({ navigation }) => {
 
         <ViewVertical style={styles.bodyContainer}>
           <ViewVertical style={styles.boxContainer}>
-            <Text style={styles.boxText}>フラッシュカード</Text>
-            <Progress.Bar progress={0.75} width={300} style={styles.progress} color={'#2C6694'}/>
+            <Text style={styles.boxText}>{current?.course?.mean}</Text>
+            <Progress.Bar progress={(current?.index / data?.length) || 0} width={300} style={styles.progress} color={'#2C6694'}/>
           </ViewVertical>
           <Input 
             placeholder='Từ này nghĩa là'
             inputContainerStyle={styles.inputText}
             // containerStyle={styles.inputText} 
-            inputStyle={styles.inputStyle} 
+            onChangeText={value => setText(value)}
+            inputStyle={styles.inputStyle}
+            onSubmitEditing={onSubmit}
           />
           <TouchableOpacity onPress={onNext}>
             <Text style={styles.cancelText}>Tôi không biết câu trả lời</Text>

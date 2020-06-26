@@ -25,6 +25,7 @@ import HistoryScreen from '../screens/history';
 import MyTopicScreen from '../screens/studyToTopic/myTopic'
 import AddTopicScreen from '../screens/studyToTopic/addTopic';
 import PronounceScreen from '../screens/pronounce';
+import FinishTestScreen from '../screens/course-test/finishTest';
 
 const DrawerNavigatorConfig = {
   initialRouteName: 'DashBoard',
@@ -70,6 +71,9 @@ const CourseStackNavigator = createStackNavigator({
   },
   PronounceScreen: {
     screen: PronounceScreen
+  },
+  FinishTestScreen: {
+    screen: FinishTestScreen
   }
 }, config)
 
@@ -103,7 +107,7 @@ export default createDrawerNavigator(
       screen: CourseStackNavigator
     },
     Topic: {
-      screen: TopicStackNavigator
+      screen: TopicStackNavigator,
     },
     Lesson: {
       screen: Lesson

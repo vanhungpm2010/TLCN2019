@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   boxText: {
     fontSize: 25,
     color: '#2C6694',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   progress: {
     position: 'absolute',

@@ -34,4 +34,5 @@ export const ic_spellcheck = require('./ic_spellcheck.png');
 export const ic_assignment = require('./ic_assignment.png');
 export const ic_record_voice_over = require('./ic_record_voice_over.png');
 export const ic_offline_pin = require('./ic_offline_pin.png');
-export const ic_picture = require('./ic_picture.png')
+export const ic_picture = require('./ic_picture.png');
+export const ic_plus = require('./ic_plus.png');

@@ -6,17 +6,27 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  TouchableNativeFeedback
+  RefreshControl,
 } from "react-native";
-import { withBadge, Avatar, Button, ListItem, message } from "react-native-elements";
+import {
+  withBadge,
+  Avatar,
+  Button,
+  ListItem,
+  message,
+} from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import * as Progress from 'react-native-progress';
+import * as Progress from "react-native-progress";
+import { showMessage } from "react-native-flash-message";
 
-import { ViewVertical, ViewHorizontal } from "../../components/viewBox.component";
+import {
+  ViewVertical,
+  ViewHorizontal,
+} from "../../components/viewBox.component";
 import Header from "../../components/header";
 import ButtonPaper from "../../components/ButtonPaper";
-import { getErrorMessage } from '../../untils/helper';
-import LoadingPage from '../loading';
+import { getErrorMessage } from "../../untils/helper";
+import LoadingPage from "../loading";
 
 import {
   banner,
@@ -28,13 +38,13 @@ import {
   bg_background_topic_2,
   ic_arrow_right,
   bg_background_topic_3,
-  ig_challenge
+  ig_challenge,
 } from "../../assets";
 
 import { handleError } from "../../services/socketIO";
 import colors from "../../configs/colors";
 import Storage from "../../storages";
-import webservice from '../../services';
+import webservice from "../../services";
 import styles from "./styles";
 
 const DashBoardScreen = ({ navigation }) => {
@@ -45,7 +55,10 @@ const DashBoardScreen = ({ navigation }) => {
   const onSelectItem = (navigate, id) => {
     console.log(id);
 
-    navigation.navigate("GetCourse", {idCourese: id});
+    navigation.navigate("GetCourse", {
+      idCourese: id,
+      go_back_key: "DashBoard",
+    });
   };
 
   /**  const FlatItem = ({ item, onSelect }) => {
@@ -69,29 +82,31 @@ const DashBoardScreen = ({ navigation }) => {
   };*/
 
   const FlatItem = ({ item, onSelect, index }) => {
-    console.log('index',index);
-    console.log('item', item);
-    
-    
+    console.log("index", index);
+    console.log("item", item);
+
     const { id } = item;
     return (
-      <ViewVertical style={index === 0 ? styles.boxFirst : styles.boxItem} key={item._id}>
+      <ViewVertical
+        style={index === 0 ? styles.boxFirst : styles.boxItem}
+        key={item._id}
+      >
         <ImageBackground
-          source={index === 0 ? bg_background_topic_2: bg_background_topic_3}
+          source={index === 0 ? bg_background_topic_2 : bg_background_topic_3}
           resizeMode="cover"
           style={styles.backgroundItem}
           imageStyle={styles.imageStyle}
         >
           <TouchableOpacity onPress={onSelect} style={styles.boxStyle}>
             {/* <Progress.Circle progress={0.75} width={300} color={'#2C6694'} style={styles.progress}/> */}
-            <Progress.Circle 
-              size={65} 
-              showsText={true} 
-              progress={0.75} 
-              color={'#2C6694'} 
-              indeterminate={false} 
+            <Progress.Circle
+              size={65}
+              showsText={true}
+              progress={item.complete / 100}
+              color={"#2C6694"}
+              indeterminate={false}
               style={styles.progress}
-              formatText={() => `15%`}
+              formatText={() => `${item.complete.toFixed(2)}%` }
               textStyle={styles.textStyle}
             />
             {/* <Text style={styles.textName}>{item.title}</Text>
@@ -104,32 +119,6 @@ const DashBoardScreen = ({ navigation }) => {
   };
 
   // const BadgedIcon = withBadge(1)(<Image source={ic_notifications}/>);
-  const listView = [
-    {
-      id: "1",
-      nameJP: "食物",
-      nameVI: "Món ăn",
-      spell: "Shokumotsu",
-      navigate: "Home",
-      background: bg_background_topic_2,
-    },
-    {
-      id: "2",
-      nameJP: "食物",
-      nameVI: "Món ăn",
-      spell: "Shokumotsu",
-      navigate: "Home",
-      background: bg_background_topic_2,
-    },
-    {
-      id: "3",
-      nameJP: "食物",
-      nameVI: "Món ăn",
-      spell: "Shokumotsu",
-      navigate: "Home",
-      background: bg_background_topic_3,
-    },
-  ];
 
   const GAME = [
     {
@@ -144,15 +133,15 @@ const DashBoardScreen = ({ navigation }) => {
     setLoading(true);
     try {
       const res = await webservice.getPublicCourse(5);
-      setCourses(res.result)
-    } catch(error) {
+      setCourses(res.result);
+    } catch (error) {
       showMessage({
         message: getErrorMessage(error),
         type: "danger",
       });
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
     handleError(alert);
@@ -163,11 +152,6 @@ const DashBoardScreen = ({ navigation }) => {
     setUser(user);
     getPublicCourse();
   }, []);
-
-  useEffect(() => {
-    
-    
-  }, [])
 
   return (
     <ViewVertical style={styles.container}>
@@ -206,6 +190,9 @@ const DashBoardScreen = ({ navigation }) => {
       <ScrollView
         style={styles.viewContainer}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={getPublicCourse} />
+        }
       >
         <Text style={styles.topicTitle}>トピックで学ぶ</Text>
         <Text style={styles.topicText}>Học theo chủ đề</Text>
@@ -217,7 +204,7 @@ const DashBoardScreen = ({ navigation }) => {
             keyExtractor={(item) => item._id}
             showsHorizontalScrollIndicator={false}
             // style={styles.topicContainer}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <FlatItem
                 item={item}
                 onSelect={() => onSelectItem(item.navigate, item._id)}
@@ -237,13 +224,13 @@ const DashBoardScreen = ({ navigation }) => {
               type="clear"
               buttonStyle={styles.btnChallenge}
               titleStyle={styles.btnTitleStyle}
-              onPress={() => navigation.navigate("ListTopic")}
+              onPress={() => navigation.navigate("Challenge")}
               iconRight
               icon={<Icon name="running" size={15} color={colors.title} />}
             />
           </ViewVertical>
           <ViewVertical style={styles.challengeRight}>
-            <TouchableOpacity onPress={() => navigation.navigate('Alphabet')}>
+            <TouchableOpacity onPress={() => navigation.navigate("Alphabet")}>
               <Text style={styles.challengeTitle}>アルファベット</Text>
               <Text style={styles.challengeText}>Bảng chữ cái</Text>
             </TouchableOpacity>
@@ -261,7 +248,7 @@ const DashBoardScreen = ({ navigation }) => {
             title={"チャレンジラン"}
             subtitle={"Học và kiểm tra"}
             rightElement={<Image source={ic_arrow_right} />}
-            onPress={() => navigation.navigate('Lesson')}
+            onPress={() => navigation.navigate("Lesson")}
           />
 
           <ListItem
@@ -270,7 +257,7 @@ const DashBoardScreen = ({ navigation }) => {
             title={"チャレンジラン"}
             subtitle={"Đường đua tranh tài"}
             rightElement={<Image source={ic_arrow_right} />}
-            rightContentContainerStyle={{backgroundColor: 'transparent'}}
+            rightContentContainerStyle={{ backgroundColor: "transparent" }}
           />
 
           {/* {GAME.map((item, index) => {
@@ -280,8 +267,8 @@ const DashBoardScreen = ({ navigation }) => {
           })} */}
         </ViewVertical>
       </ScrollView>
-      
-      <LoadingPage loading={loading}/>
+
+      <LoadingPage loading={loading} />
     </ViewVertical>
   );
 };

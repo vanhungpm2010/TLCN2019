@@ -1,21 +1,23 @@
-import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { connect } from 'react-redux';
-import { Avatar, ListItem } from 'react-native-elements';
-import { showMessage, hideMessage } from 'react-native-flash-message';
-import * as Progress from 'react-native-progress';
+import React, { Component } from "react";
+import { View, Text, RefreshControl, ScrollView, Image } from "react-native";
+import { connect } from "react-redux";
+import { Avatar, ListItem } from "react-native-elements";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import * as Progress from "react-native-progress";
 
-import Loading from '@components/loading';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import Api from '@services';
-import { CoursesACtion } from '@actions/CoursesAction';
-import SildeCourese from './slideCourse';
-import SoundCourse from './soundCourse';
-import PropTypes from 'prop-types';
-import Service from '@services';
-import Styles from './styles';
-import Header from '../../components/header';
-import { ViewVertical } from '../../components/viewBox.component';
+import Loading from "@components/loading";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import Api from "@services";
+import { CoursesACtion } from "@actions/CoursesAction";
+import SildeCourese from "./slideCourse";
+import SoundCourse from "./soundCourse";
+import PropTypes from "prop-types";
+import Service from "@services";
+import Styles from "./styles";
+import Header from "../../components/header";
+import { ViewVertical } from "../../components/viewBox.component";
+import Storage from "../../storages";
+
 import {
   ic_arrow_back,
   ic_notifications,
@@ -24,8 +26,8 @@ import {
   ic_spellcheck,
   ic_assignment,
   ic_record_voice_over,
-  background
-} from '../../assets';
+  background,
+} from "../../assets";
 
 export default class GetCourse extends Component {
   constructor(props) {
@@ -40,25 +42,26 @@ export default class GetCourse extends Component {
   getData(id) {
     this.setState({ loading: true });
     Service.getDetailCourses(id)
-      .then((data) => { 
+      .then((data) => {
         this.setState({ data, loading: false });
       })
       .catch((err) => console.log(err));
   }
 
   componentDidMount() {
-    const id = this.props.navigation.getParam('idCourese');
-
+    const id = this.props.navigation.getParam("idCourese");
+    const user = Storage.getUserInfo();
+    this.setState({ user });
     this.getData(id);
   }
   _handleToMemmory = () => {
     const { data } = this.state;
-    this.props.navigation.navigate('MemmoryCard', { data: data });
+    this.props.navigation.navigate("MemmoryCard", { data: data });
   };
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
-    const idNext = nextProps.navigation.getParam('idCourese');
-    const id = this.props.navigation.getParam('idCourese');
+    const idNext = nextProps.navigation.getParam("idCourese");
+    const id = this.props.navigation.getParam("idCourese");
 
     if (idNext !== id) {
       this.getData(idNext);
@@ -66,65 +69,71 @@ export default class GetCourse extends Component {
   }
   render() {
     const { data, loading, user } = this.state;
-    console.log(data);
-    
+
     const { navigation } = this.props;
-    const id = this.props.navigation.getParam('idCourese');
+    const { state, navigate, goBack } = navigation;
+    const params = state.params || {};
+    const id = this.props.navigation.getParam("idCourese");
+
     const CardList = [
       {
         icon: ic_view_carousel,
-        title: 'フラッシュカード',
-        rightTitle: 'Thẻ ghi nhớ',
-        onPress: () => navigation.navigate('MemoryCardScreen', {data: data?.contents})
+        title: "フラッシュカード",
+        rightTitle: "Thẻ ghi nhớ",
+        onPress: () =>
+          navigation.navigate("MemoryCardScreen", { data: data?.contents }),
       },
       {
         icon: ic_spellcheck,
-        title: '筆記試験',
-        rightTitle: 'Kiểm tra viết',
-        onPress: () => navigation.navigate('WritingTestScreen', { idCourse: id })
+        title: "筆記試験",
+        rightTitle: "Kiểm tra viết",
+        onPress: () =>
+          navigation.navigate("WritingTestScreen", { idCourse: id }),
       },
       {
         icon: ic_offline_pin,
-        title: '語彙テスト',
-        rightTitle: 'Kiểm tra trắc nghiệm',
-        onPress: () => navigation.navigate('ChoiceTestScreen', { idCourse: id })
+        title: "語彙テスト",
+        rightTitle: "Kiểm tra trắc nghiệm",
+        onPress: () =>
+          navigation.navigate("ChoiceTestScreen", { idCourse: id }),
       },
       {
         icon: ic_assignment,
-        title: 'まとめ知識',
-        rightTitle: 'Tổng quan kiến thức',
-        onPress: () => navigation.navigate('HistoryScreen')
+        title: "まとめ知識",
+        rightTitle: "Tổng quan kiến thức",
+        onPress: () => navigation.navigate("HistoryScreen", { idCourse: id }),
       },
       {
         icon: ic_record_voice_over,
-        title: '話し中',
-        rightTitle: 'Cách phát âm',
-        onPress: () => navigation.navigate('PronounceScreen', { data: data?.contents })
+        title: "話し中",
+        rightTitle: "Cách phát âm",
+        onPress: () =>
+          navigation.navigate("PronounceScreen", { data: data?.contents }),
       },
     ];
 
     return (
-      <ViewVertical style={{ flex: 1, backgroundColor: '#fff' }}>
+      <ViewVertical style={{ flex: 1, backgroundColor: "#fff" }}>
         <Header
           noShadow={true}
           stylesHeaderText={{
-            color: '#000',
+            color: "#000",
             fontSize: 15,
-            fontWeight: 'bold',
+            fontWeight: "bold",
           }}
           // mainText={'Học theo chủ đề'}
           stylesHeader={Styles.header}
           leftComponent={
             <Image source={ic_arrow_back} style={Styles.backarrow} />
           }
-          leftAction={() => navigation.goBack()}
+          leftAction={() => navigate(params.go_back_key)}
           actionRight={[
             {
               // component: <BadgedIcon type="ionicon" name="md-notifications" color={"#fff"} style={styles.icon}/>,
               component: (
                 <Image source={ic_notifications} style={styles.icon} />
               ),
-              action: () => navigation.navigate('Notifications'),
+              action: () => navigation.navigate("Notifications"),
               styleTouchable: {
                 top: 9,
               },
@@ -133,7 +142,7 @@ export default class GetCourse extends Component {
               component: (
                 <Avatar rounded source={{ uri: user?.avatar }} size="small" />
               ),
-              action: () => navigation.navigate('Profile'),
+              action: () => navigation.navigate("Profile"),
               styleTouchable: {
                 top: 9,
               },
@@ -145,10 +154,13 @@ export default class GetCourse extends Component {
           <ScrollView
             style={{
               flex: 1,
-              backgroundColor: 'white',
+              backgroundColor: "white",
               paddingLeft: 20,
               paddingRight: 20,
             }}
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={() => this.getData(params.idCourese)} />
+            }
           >
             {/* slide */}
             <Text style={Styles.titleHeader}>トピックで学ぶ</Text>
@@ -156,13 +168,13 @@ export default class GetCourse extends Component {
             {/* <View style={Styles.containerSlider}> */}
             <View style={Styles.headerContainer}>
               {/* <SildeCourese data={data} /> */}
-              <Image 
-                source={data?.avatar ? { uri: data.avatar } : background} 
-                resizeMode='cover'
-                style={{ height: '70%', width: '100%' }}
+              <Image
+                source={data?.avatar ? { uri: data.avatar } : background}
+                resizeMode="cover"
+                style={{ height: "70%", width: "100%" }}
               />
               <ViewVertical style={Styles.headerTextContainer}>
-                <Text style={Styles.headerText}>Mons an</Text>
+                <Text style={Styles.headerText}>{data?.title}</Text>
               </ViewVertical>
             </View>
             {/* </View> */}
@@ -170,14 +182,19 @@ export default class GetCourse extends Component {
 
             <ViewVertical style={Styles.progressContainer}>
               <Text style={Styles.progressText}>
-                Tiến độ hoàn thành của chủ đề: {data?.complete}%
+                Tiến độ hoàn thành của chủ đề: {data?.complete?.toFixed(2)}%
               </Text>
-              <Progress.Bar progress={0.75} width={300} color={'#2C6694'} style={Styles.progress}/>
+              <Progress.Bar
+                progress={data?.complete / 100 || 0}
+                width={300}
+                color={"#2C6694"}
+                style={Styles.progress}
+              />
             </ViewVertical>
 
             <ViewVertical style={Styles.eventContainer}>
               <Text style={Styles.eventText}>
-                Chủ đề bao gồm: 10 thẻ ghi nhớ
+                Chủ đề bao gồm: {data?.contents?.length} thẻ ghi nhớ
               </Text>
 
               {CardList
@@ -185,7 +202,13 @@ export default class GetCourse extends Component {
                     return (
                       <ListItem
                         key={index}
-                        leftElement={<Image source={item.icon} style={{width: 20, height: 20}} resizeMode='contain'/>}
+                        leftElement={
+                          <Image
+                            source={item.icon}
+                            style={{ width: 20, height: 20 }}
+                            resizeMode="contain"
+                          />
+                        }
                         title={item.title}
                         rightTitle={item.rightTitle}
                         titleStyle={Styles.titleStyle}
@@ -202,8 +225,8 @@ export default class GetCourse extends Component {
             </ViewVertical>
 
             {/* game */}
-            <View style={{ backgroundColor: '#E8EAF6', paddingBottom: 20 }}>
-              {/* <Text style={Styles.title}>Game</Text> */}
+            {/* <View style={{ backgroundColor: '#E8EAF6', paddingBottom: 20 }}>
+              <Text style={Styles.title}>Game</Text>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('CourseTest', {
@@ -246,7 +269,7 @@ export default class GetCourse extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
             {/* endgame */}
             {/* phat am*/}
           </ScrollView>

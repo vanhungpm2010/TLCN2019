@@ -3,6 +3,7 @@ import colors from "../../configs/colors";
 
 export default StyleSheet.create({
   container: {
+    // flex: 1,
     paddingRight: 15,
     paddingLeft: 15
   },
@@ -56,7 +57,7 @@ export default StyleSheet.create({
   containerStyle: {
     paddingRight: 0,
     paddingLeft: 0,
-    marginBottom: 20,
+    marginBottom: 10,
     padding: 0,
   },
   inputContainerStyle: {
@@ -121,7 +122,8 @@ export default StyleSheet.create({
     backgroundColor: '#EBF6FF',
     borderRadius: 15,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 15
   },
   imageSelect: {
     width: '100%',
@@ -131,5 +133,108 @@ export default StyleSheet.create({
   iconSelect: {
     width: 28,
     height: 28
-  }
+  },
+  box: {
+    backgroundColor: '#EBF6FF',
+    borderRadius: 15,
+    padding: 5,
+    paddingLeft: 45,
+    paddingRight: 45,
+    paddingBottom: 25,
+    alignItems: 'center',
+    position: 'relative',
+    marginBottom: 30
+  },
+  inputBoxContainerStyle: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#C0DDF4',
+    paddingLeft: 10,
+    paddingRight: 10,
+    margin: 0
+  },
+  inputStyleBox: {
+    fontSize: 14,
+    color: '#2C6694',
+    textAlign: 'center'
+  },
+  textCount: {
+    color: '#2C6694',
+    fontSize: 15,
+    textAlign: 'center',
+    marginBottom: 10
+  },
+  textCountBold: {
+    fontWeight: 'bold'
+  },
+  btnContainerStyle: {
+    width: 40,
+    height: 40,
+    position: 'absolute',
+    bottom: -20,
+    zIndex: 100
+  },
+  buttonStyle: {
+    backgroundColor: '#BBDDEA',
+    padding: 0,
+    margin: 0,
+    borderRadius: 18
+  },
+  containerStyleItem: {
+    backgroundColor: '#EBF6FF',
+    borderRadius: 15,
+    marginBottom: 10
+  },
+  titleStyle: {
+    fontWeight: 'bold',
+    fontSize: 13,
+    color: '#2C6694'
+  },
+  rightTitleStyle: {
+    fontSize: 13,
+    color: '#2C6694'
+  },
+  containerStyleSave: {
+    borderWidth: 3,
+    borderColor: '#EBF6FF',
+    alignItems: 'flex-end',
+    // position: 'absolute',
+    bottom: 10,
+    // elevation: 3
+  },
+  buttonStyleSave: {
+    backgroundColor: '#C0DDF4',
+    paddingLeft: 40,
+    paddingRight: 40,
+    borderRadius: 15
+  },
+  titleStyleSave: {
+    color: '#2C6694',
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  containerStyleModal: {
+    backgroundColor: '#EBF6FF',
+    borderRadius: 13,
+    marginBottom: 10
+  },
+  inputModalContainerStyle: {
+    backgroundColor: '#EBF6FF',
+    borderBottomWidth: 0,
+    paddingLeft: 10,
+    paddingRight: 10,
+    margin: 0
+  },
+  modal: {
+    backgroundColor: '#C0DDF4'
+  },  
+  titleStyleUpdate: {
+    color: '#2C6694',
+    fontSize: 15
+  },
+  buttonStyleUpdate: {
+    backgroundColor: '#EBF6FF',
+    paddingLeft: 40,
+    paddingRight: 40,
+    borderRadius: 20
+  },
 });

@@ -29,11 +29,10 @@ export default class WebService {
   }
 
   static getCourses = async () => {
-    return api.get(url.getCourses);
+    return api.get(url.getCoursesPrivate);
   };
   static deleteCourses = async (id) => {
-    console.log(url.deleteCoures);
-    return api.del(url.deleteCoures, id);
+    return api.del(`/courses?id=${id}`);
   };
   static getDetailCourses = async (id) => {
     return api.get(`/courses/${id}`);
@@ -53,9 +52,14 @@ export default class WebService {
   static getQuizDetail = async (id) => {
     return api.get(`/topics/${id}/learn`);
   };
+
+  // History
   static setHistory = async (data) => {
     return api.post(url.setHistory, data);
   };
+  static getHistory = id => {
+    return api.get(`/histories/vocabulary-history/${id}`)
+  }
 
   //challenge
   static getChallenge = () => {

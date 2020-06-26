@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Text, Image, ScrollView, TouchableOpacity } from "react-native";
-import { RadioButton } from "react-native-paper";
+import { showMessage } from "react-native-flash-message";
 
 import {
   ViewVertical,
@@ -12,6 +12,7 @@ import webservice from "../../../services";
 import Loading from "../../loading";
 import ModalScore from "./modalScore";
 
+import { getErrorMessage } from "../../../untils/helper";
 import { ic_arrow_back } from "../../../assets";
 import styles from "./styles";
 
@@ -49,11 +50,12 @@ class ChoiceTestScreen extends Component {
       console.log('answeranswer', answer);
       
 
-      this.setState({ listQuestions: data, loading: false });
+      this.setState({ listQuestions: data });
     } catch (error) { }
+    this.setState({ loading: false });
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
     const { answer } = this.state;
     const score = answer.filter((item) => item.rightAnwser === 1).length;
 
@@ -63,6 +65,17 @@ class ChoiceTestScreen extends Component {
     const body = {
       topic: id,
       contents: answer
+    }
+
+    try {
+      await webservice.setHistory(body);
+      this.props.navigation.navigate('FinishTestScreen', { idCourse: navigation.getParam('idCourse')});
+      
+    } catch(error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
+      });
     }
 
     

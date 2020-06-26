@@ -6,12 +6,14 @@ export const registerApi= `/users`
 export const putAvartar= `/avatars`
 export const createCoures= `/courses`
 export const deleteCoures= `/courses`
-export const getCourses= `/users/get-courses-latest`
+export const getCoursesPrivate= `/users/get-courses-latest`
 export const getDetailCourses= `/courses`
 //topics
 export const getTopic= `/topics`
+
 //history
-export const setHistory= `/histories/set-history`
+export const setHistory= `/histories/update-history`;
+// export const vocabularyHistory = id => `histories/vocabulary-history/${id}`
 //challenge
 export const getChallenge= `challenge`
 export const updateHightMark = '/users/hight-mark';
