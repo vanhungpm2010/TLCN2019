@@ -33,7 +33,9 @@ import {
 } from "../../components/viewBox.component";
 import Header from "../../components/header";
 import Button from "../../components/Button";
-import ModalWar from './modalWar';
+import ModalWar from "./modalWar";
+import SearchRoute from "./search";
+import RequestFriend from './request';
 
 import styles from "./styles";
 
@@ -42,7 +44,7 @@ const initialLayout = { width: Dimensions.get("window").width };
 const FriendsScreen = ({ navigation }) => {
   const [friends, setFriends] = useState([]);
   const [searchFriends, setSearchFriends] = useState([]);
-  const [requestFriends, setRequestFriends] = useState([])
+  const [requestFriends, setRequestFriends] = useState([]);
   const [text, setText] = useState("");
   const [index, setIndex] = React.useState(0);
   const [loading, setLoading] = useState(false);
@@ -50,6 +52,7 @@ const FriendsScreen = ({ navigation }) => {
   const [receiver, setReceiver] = useState(null);
   const [roomId, setRoomId] = useState(null);
   const [timeWait, setTimeWait] = useState(30);
+  const [currentSelect, setCurrentSelect] = useState(0);
   const [routes] = React.useState([
     { key: "first", title: "Danh sách" },
     { key: "second", title: "Tìm kiếm" },
@@ -85,10 +88,9 @@ const FriendsScreen = ({ navigation }) => {
       if (response) {
         setRoomId(response);
         setIsVisible(true);
-        const receiver = friends.filter(item => item._id === id);
-        setReceiver(receiver[0])
+        const receiver = friends.filter((item) => item._id === id);
+        setReceiver(receiver[0]);
       }
-
     } catch (error) {
       showMessage({
         message: getErrorMessage(error),
@@ -127,16 +129,20 @@ const FriendsScreen = ({ navigation }) => {
     />
   );
 
-  const ThirdRoute = () => (
-    <FlatList
-      keyExtractor={keyExtractor}
-      data={requestFriends}
-      renderItem={renderItemRequest}
-      refreshing={isRefreshing}
-      onRefresh={() => onRefresh()}
-      onEndReachedThreshold={0}
-    />
-  )
+  const ThirdRoute = () => {
+    console.log('requestFriends', requestFriends, !requestFriends);
+    
+    return requestFriends ? (
+      <FlatList
+        keyExtractor={keyExtractor}
+        data={requestFriends}
+        renderItem={renderItemRequest}
+        refreshing={isRefreshing}
+        onRefresh={() => onRefresh()}
+        onEndReachedThreshold={0}
+      />
+    ) :  <Text style={{textAlign: 'center'}}>Bạn không có lời mời nào</Text>
+  };
 
   const renderItemSearch = ({ item }) => {
     return (
@@ -147,8 +153,8 @@ const FriendsScreen = ({ navigation }) => {
           item.isOnline ? (
             "Online"
           ) : (
-              <Text style={{ color: "gray" }}>Offline</Text>
-            )
+            <Text style={{ color: "gray" }}>Offline</Text>
+          )
         }
         leftAvatar={{
           source: item.avatar && { uri: item.avatar },
@@ -163,8 +169,8 @@ const FriendsScreen = ({ navigation }) => {
               <Icon name="user-plus" size={14} color="black" />
             </TouchableOpacity>
           ) : (
-              ""
-            )
+            ""
+          )
         }
       />
     );
@@ -186,7 +192,6 @@ const FriendsScreen = ({ navigation }) => {
           source: item.avatar && { uri: item.avatar },
           // title: item.name[0],
         }}
-
         subtitleStyle={{ color: "green" }}
         bottomDivider
         // chevron
@@ -202,12 +207,12 @@ const FriendsScreen = ({ navigation }) => {
     );
   };
 
-  const search = () => {
-    if (text == "") {
+  const search = (value) => {
+    if (value == "") {
       return;
     }
 
-    WebService.searchFriend(text)
+    WebService.searchFriend(value)
       .then(async (data) => {
         setSearchFriends(data);
       })
@@ -220,27 +225,24 @@ const FriendsScreen = ({ navigation }) => {
       });
   };
 
-  const SearchRoute = () => (
-    <View style={[styles.scene]}>
-      <Input
-        placeholder="Search friend by username"
-        leftIconContainerStyle={{ paddingRight: 10 }}
-        leftIcon={<Icon name="search" size={14} color="black" />}
-        rightIcon={
-          <TouchableOpacity onPress={search} style={styles.btnAcceptRequest}>
-            <Text>Search</Text>
-          </TouchableOpacity>
-        }
-        onChangeText={(text) => setText(text)}
-        value={text}
-      />
-      <FlatList
-        keyExtractor={keyExtractor}
-        data={searchFriends}
-        renderItem={renderItemSearch}
-      />
-    </View>
-  );
+  // const SearchRoute = () => (
+  //   <View style={[styles.scene]}>
+  //     <Input
+  //           placeholder="Ví dụ: Món ăn"
+  //             rightIcon={{ type: "font-awesome", name: "search", size: 15 }}
+  //             containerStyle={styles.containerStyle}
+  //             inputContainerStyle={styles.inputContainerStyle}
+  //             inputStyle={styles.inputStyle}
+  //             onChangeText={handleSearch}
+  //             // rightIconContainerStyle={styles.rightIconContainerStyle}
+  //           />
+  //     <FlatList
+  //       keyExtractor={keyExtractor}
+  //       data={searchFriends}
+  //       renderItem={renderItemSearch}
+  //     />
+  //   </View>
+  // );
 
   const onRefresh = () => {
     getList();
@@ -264,7 +266,7 @@ const FriendsScreen = ({ navigation }) => {
         });
         setLoading(false);
       });
-      // setLoading(false);
+    // setLoading(false);
   };
 
   const handleStart = (response) => {
@@ -283,14 +285,8 @@ const FriendsScreen = ({ navigation }) => {
     onStartGame(handleStart);
   });
 
-  const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SearchRoute,
-    third: ThirdRoute,
-  });
-
   return (
-    <ViewVertical style={{ backgroundColor: '#fff', flex: 1 }}>
+    <ViewVertical style={{ backgroundColor: "#fff", flex: 1 }}>
       <Header
         noShadow={true}
         stylesHeaderText={{
@@ -298,24 +294,78 @@ const FriendsScreen = ({ navigation }) => {
           fontSize: 15,
           fontWeight: "bold",
         }}
-        mainText={'Bạn bè'}
+        mainText={"Bạn bè"}
         stylesHeader={styles.header}
-        leftComponent={<Image source={ic_arrow_back} style={styles.backarrow} />}
+        leftComponent={
+          <Image source={ic_arrow_back} style={styles.backarrow} />
+        }
         leftAction={() => navigation.goBack()}
       />
 
-      <TabView
+      {/* <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={initialLayout}
         style={styles.container}
-      />
+      /> */}
+      <View style={styles.headerContainer}>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Danh sách"
+            buttonStyle={[
+              styles.buttonStyle,
+              currentSelect === 0 && styles.buttonSelected,
+            ]}
+            titleStyle={[
+              styles.titleStyle,
+              currentSelect === 0 && styles.titleSelected,
+            ]}
+            onPress={() => setCurrentSelect(0)}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Tìm kiếm"
+            buttonStyle={[
+              styles.buttonStyle,
+              currentSelect === 1 && styles.buttonSelected,
+            ]}
+            titleStyle={[
+              styles.titleStyle,
+              currentSelect === 1 && styles.titleSelected,
+            ]}
+            onPress={() => setCurrentSelect(1)}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Lời mời"
+            buttonStyle={[
+              styles.buttonStyle,
+              currentSelect === 2 && styles.buttonSelected,
+            ]}
+            titleStyle={[
+              styles.titleStyle,
+              currentSelect === 2 && styles.titleSelected,
+            ]}
+            onPress={() => setCurrentSelect(2)}
+          />
+        </View>
+      </View>
+
+      {currentSelect === 0 && <FirstRoute />}
+      {currentSelect === 1 && <SearchRoute />}
+      {currentSelect === 2 && <RequestFriend />}
+
       <LoadingPage loading={loading} />
-      <ModalWar 
-        isVisible={isVisible} 
+      <ModalWar
+        isVisible={isVisible}
         onClose={() => setIsVisible(false)}
-        receiver={receiver} roomId={roomId} time={timeWait}
+        receiver={receiver}
+        roomId={roomId}
+        time={timeWait}
       />
     </ViewVertical>
   );

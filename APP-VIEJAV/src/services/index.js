@@ -27,6 +27,9 @@ export default class WebService {
   static getPublicCourse = async (limit) => {
     return api.get(`/courses/public?limit=${limit}`)
   }
+  static getListCurrentPublic = () => {
+    return api.get(url.getListCurrent);
+  }
 
   static getCourses = async () => {
     return api.get(url.getCoursesPrivate);
@@ -52,6 +55,9 @@ export default class WebService {
   static getQuizDetail = async (id) => {
     return api.get(`/topics/${id}/learn`);
   };
+  static searchTopic = (title, isPublic = true) => {
+    return api.get(`/courses/find?q=${title}&public=${isPublic}`)
+  }
 
   // History
   static setHistory = async (data) => {

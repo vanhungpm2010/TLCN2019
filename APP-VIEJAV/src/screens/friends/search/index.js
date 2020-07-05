@@ -5,51 +5,51 @@ import {
   StatusBar,
   Text,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { ListItem, Input, FlatList } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { showMessage } from "react-native-flash-message";
 
+import webservice from "../../../services";
+import Loading from "../../loading";
+
 const SearchRoute = (props) => {
   const [text, onChangeText] = useState("");
   const [friends, setFriends] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const keyExtractor = (item, index) => index.toString();
-
-  const renderItem = ({ item }) => {
-    return (
-      <ListItem
-      keyExtractor={keyExtractor}
-      title={item.username}
-      subtitle={item.isOnline ? "Online" : "Offline"}
-      leftAvatar={{
-        source: item.avatar && { uri: item.avatar },
-        // title: item.name[0],
-      }}
-      subtitleStyle={{ color: "green" }}
-      bottomDivider
-      chevron
-      rightTitle={
-        item.type && item.type == "notFriend" ? (
-          <TouchableOpacity onPress={() => addFriend(item._id)}>
-            <Icon name="user-plus" size={14} color="black" />
-          </TouchableOpacity>
-        ) : (
-          ""
-        )
-      }
-    />
-    )
-    
-    };
-
-  const search = () => {
-    if (text == "") {
-      getList();
-      return;
-    }
-    WebService.searchFriend(text)
+  const addFriend = (id, request) => {
+    setLoading(true);
+    webservice
+      .addFriend({ friend_id: id, is_request: request })
       .then(async (data) => {
+        search(text);
+        showMessage({
+          message: "Kết bạn thành công",
+          type: "success",
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        showMessage({
+          message: getErrorMessage(err),
+          type: "danger",
+        });
+        setLoading(false);
+      });
+    // setLoading(false);
+  };
+  const search = (value) => {
+    // if (value == "") {
+    //   getList();
+    //   return;
+    // }
+    webservice
+      .searchFriend(value)
+      .then(async (data) => {
+        console.log(data);
+
         setFriends(data);
       })
       .catch((err) => {
@@ -62,24 +62,57 @@ const SearchRoute = (props) => {
   };
 
   return (
-    <View style={[styles.scene, { backgroundColor: "#673ab7" }]}>
+    <View style={[styles.scene]}>
       <Input
         placeholder="Search friend by username"
         leftIconContainerStyle={{ paddingRight: 10 }}
         leftIcon={<Icon name="search" size={14} color="black" />}
-        rightIcon={
-          <TouchableOpacity onPress={search}>
-            <Text>Search</Text>
-          </TouchableOpacity>
-        }
-        onChangeText={(text) => onChangeText(text)}
-        value={text}
+        // rightIcon={
+        //   <TouchableOpacity onPress={search}>
+        //     <Text>Search</Text>
+        //   </TouchableOpacity>
+        // }
+        onChangeText={search}
       />
-      <FlatList
-        keyExtractor={keyExtractor}
-        data={friends}
-        renderItem={renderItem}
-    />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ marginBottom: 15 }}
+      >
+        {friends &&
+          friends.map((item, index) => {
+            return (
+              <ListItem
+                key={index}
+                title={item.username}
+                subtitle={
+                  item.isOnline ? (
+                    "Online"
+                  ) : (
+                    <Text style={{ color: "gray" }}>Offline</Text>
+                  )
+                }
+                leftAvatar={{
+                  source: item.avatar && { uri: item.avatar },
+                  // title: item.name[0],
+                }}
+                subtitleStyle={{ color: "green" }}
+                bottomDivider
+                chevron
+                rightTitle={
+                  item?.type == "notFriend" ? (
+                    <TouchableOpacity onPress={() => addFriend(item._id, true)}>
+                      <Icon name="user-plus" size={14} color="black" />
+                    </TouchableOpacity>
+                  ) : (
+                    ""
+                  )
+                }
+              />
+            );
+          })}
+      </ScrollView>
+
+      <Loading loading={loading} />
     </View>
   );
 };

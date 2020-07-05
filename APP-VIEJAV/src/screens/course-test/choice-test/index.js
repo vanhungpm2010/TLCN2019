@@ -59,7 +59,7 @@ class ChoiceTestScreen extends Component {
     const { answer } = this.state;
     const { navigation } = this.props;
 
-    const score = answer.filter((item) => item.rightAnwser === 1).length;
+    // const score = answer.filter((item) => item.rightAnwser === 1).length;
 
 
     const id = navigation.getParam("idCourse");
@@ -153,13 +153,13 @@ class ChoiceTestScreen extends Component {
         </ScrollView>
 
         <Loading loading={loading} />
-        <ModalScore
+        {/* <ModalScore
           isVisible={isVisible}
           score={score}
           onReturn={this.onReturn}
           onClose={this.backToCourse}
-          length={listQuestions.length}
-        />
+          length={listQuestions?.length}
+        /> */}
       </ViewVertical>
     );
   }

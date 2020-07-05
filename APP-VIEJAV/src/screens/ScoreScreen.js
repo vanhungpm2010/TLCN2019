@@ -96,7 +96,7 @@ const ScoreScreen = ({ route, navigation }) => {
           <Button
             style={styles.btnClose}
             mode="contained"
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => navigation.navigate("DashBoard")}
           >
             <Text
               style={{ fontWeight: "bold", color: "rgba(244, 144, 12, 0.8)" }}

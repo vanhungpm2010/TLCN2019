@@ -52,7 +52,7 @@ const DashBoardScreen = ({ navigation }) => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const onSelectItem = (navigate, id) => {
+  const onSelectItem = id => {
     console.log(id);
 
     navigation.navigate("GetCourse", {
@@ -111,7 +111,7 @@ const DashBoardScreen = ({ navigation }) => {
             />
             {/* <Text style={styles.textName}>{item.title}</Text>
             <Text style={styles.textItem}>{item.spell}</Text> */}
-            <Text style={styles.textItem}>{item.title}</Text>
+            <Text style={styles.textItem}>{item?.topic?.title}</Text>
           </TouchableOpacity>
         </ImageBackground>
       </ViewVertical>
@@ -132,8 +132,8 @@ const DashBoardScreen = ({ navigation }) => {
   const getPublicCourse = async () => {
     setLoading(true);
     try {
-      const res = await webservice.getPublicCourse(5);
-      setCourses(res.result);
+      const res = await webservice.getListCurrentPublic();
+      setCourses(res);
     } catch (error) {
       showMessage({
         message: getErrorMessage(error),
@@ -152,6 +152,9 @@ const DashBoardScreen = ({ navigation }) => {
     setUser(user);
     getPublicCourse();
   }, []);
+
+  console.log('courses', courses);
+  
 
   return (
     <ViewVertical style={styles.container}>
@@ -207,7 +210,7 @@ const DashBoardScreen = ({ navigation }) => {
             renderItem={({ item, index }) => (
               <FlatItem
                 item={item}
-                onSelect={() => onSelectItem(item.navigate, item._id)}
+                onSelect={() => onSelectItem(item?.topic?._id)}
                 index={index}
               />
             )}

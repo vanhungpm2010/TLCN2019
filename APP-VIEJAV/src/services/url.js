@@ -36,3 +36,4 @@ export const getQuestions = '/challenge/random';
 
 // Course
 export const getCoursePublic = limit => `/courses/public?limit=${limit}`;
+export const getListCurrent = '/histories/current-history';

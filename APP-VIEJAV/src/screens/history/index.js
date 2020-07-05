@@ -4,6 +4,7 @@ import { ListItem } from "react-native-elements";
 
 import { ViewVertical } from "../../components/viewBox.component";
 import Header from "../../components/header";
+import Loading from '../loading';
 
 import styles from "./styles";
 import { ic_arrow_back } from "../../assets";
@@ -11,19 +12,19 @@ import webservice from "../../services";
 
 const HistoryScreen = ({ navigation }) => {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getData = async (id) => {
+    setLoading(true)
     try {
       const res = await webservice.getHistory(id);
       setData(res);
     } catch (error) {}
+    setLoading(false)
   };
   useEffect(() => {
     getData(navigation.getParam("idCourse"));
   }, [navigation.getParam("idCourse")]);
-
-  console.log(data);
-  
 
   return (
     <ViewVertical style={styles.container}>
@@ -101,6 +102,7 @@ const HistoryScreen = ({ navigation }) => {
             />
           ))}
       </ScrollView>
+      <Loading loading={loading}/>
     </ViewVertical>
   );
 };

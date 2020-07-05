@@ -209,6 +209,21 @@ const MyTopicScreen = ({ navigation }) => {
     setLoading(false);
   };
 
+  const handleSearch = async (value) => {
+    // const search = await data.filter(
+    //   (item) => change_alias(item.title).toLowerCase().indexOf(value) >= 0
+    // );
+    try {
+      const search = await webservice.searchTopic(value, false);
+      setData(search);
+    } catch (error) {
+      showMessage({
+        message: getErrorMessage(error),
+        type: "danger",
+      });
+    }
+  };
+
   const getData = async () => {
     setLoading(true);
     try {
@@ -268,6 +283,15 @@ const MyTopicScreen = ({ navigation }) => {
               <RefreshControl refreshing={loading} onRefresh={getData} />
             }
           >
+            <Input
+              placeholder="Ví dụ: Món ăn"
+              rightIcon={{ type: "font-awesome", name: "search", size: 15 }}
+              containerStyle={styles.containerStyle}
+              inputContainerStyle={styles.inputContainerStyle}
+              inputStyle={styles.inputStyle}
+              onChangeText={handleSearch}
+              // rightIconContainerStyle={styles.rightIconContainerStyle}
+            />
             {data &&
               data?.courses?.map((item, index) => {
                 return (

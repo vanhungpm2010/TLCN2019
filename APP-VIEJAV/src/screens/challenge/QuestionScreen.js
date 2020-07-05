@@ -85,10 +85,12 @@ const QuestionScreen = ({ navigation }) => {
             user1: { ...room.user1, score: room.user1.score + 5 },
           };
         } else {
-          dataEmit = {
-            ...room,
-            user1: { ...room.user1, score: room.user1.score - 5 },
-          };
+          if (room.user1.score !== 0) {
+            dataEmit = {
+              ...room,
+              user1: { ...room.user1, score: room.user1.score - 5 },
+            };
+          }
         }
       } else {
         if (choice === current.answer) {
@@ -97,10 +99,12 @@ const QuestionScreen = ({ navigation }) => {
             user2: { ...room.user2, score: room.user2.score + 5 },
           };
         } else {
-          dataEmit = {
-            ...room,
-            user2: { ...room.user2, score: room.user2.score - 5 },
-          };
+          if (room.user1.score !== 0) {
+            dataEmit = {
+              ...room,
+              user2: { ...room.user2, score: room.user2.score - 5 },
+            };
+          }
         }
       }
 
@@ -121,7 +125,7 @@ const QuestionScreen = ({ navigation }) => {
     setTimeout(() => {
       nextQuestion();
       setCorrect({});
-    }, 3000);
+    }, 1500);
 
     // setTime(15);
   };
