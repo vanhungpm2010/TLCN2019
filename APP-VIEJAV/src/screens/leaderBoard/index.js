@@ -49,7 +49,7 @@ const LeaderBoardScreen = ({ navigation }) => {
       <View style={styles.container}>
         <BackButton goBack={() => navigation.goBack()} />
         <TextElements h4 h4Style={{ textAlign: "center", fontWeight: "bold" }}>
-          LEADER BOARD
+          Bảng xếp hạng
         </TextElements>
 
         <View style={styles.onTop}>

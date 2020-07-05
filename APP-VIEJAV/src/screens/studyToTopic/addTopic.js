@@ -22,8 +22,8 @@ const AddTopicScreen = ({ navigation }) => {
   const [localUri, setLocalUri] = useState("");
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
-  const [name, setName] = useState("");
-  const [mean, setMean] = useState("");
+  const [name, setName] = useState("Cây tre");
+  const [mean, setMean] = useState("竹");
   const [contents, setContents] = useState([]);
   const [isVisible, setIsVisiable] = useState(false);
   const [current, setCurrent] = useState(null);
@@ -82,7 +82,7 @@ const AddTopicScreen = ({ navigation }) => {
       });
       return;
     }
-    setIsLoading(true);
+    setLoading(true);
     let data = new FormData();
     data.append("avatar", image);
     data.append("title", title);
@@ -108,7 +108,7 @@ const AddTopicScreen = ({ navigation }) => {
         type: "danger",
       });
     }
-    setIsLoading(false);
+    setLoading(false);
   }
 
   const addContents = () => {
@@ -223,21 +223,23 @@ const AddTopicScreen = ({ navigation }) => {
             containerStyle={styles.containerStyle}
             inputContainerStyle={styles.inputBoxContainerStyle}
             inputStyle={styles.inputStyleBox}
-            onChangeText={(value) => setName(value)}
+            onChangeText={(value) => setMean(value)}
             placeholder="Tên thẻ"
             placeholderTextColor="#C0DDF4"
-            value={name}
+            value={mean}
           />
+
           <Input
             labelStyle={styles.labelStyle}
             containerStyle={styles.containerStyle}
             inputContainerStyle={styles.inputBoxContainerStyle}
             inputStyle={styles.inputStyleBox}
-            onChangeText={(value) => setMean(value)}
+            onChangeText={(value) => setName(value)}
             placeholder="Ý nghĩa của thẻ"
             placeholderTextColor="#C0DDF4"
-            value={mean}
+            value={name}
           />
+         
           <Button
             icon={<Icon name="plus" size={35} color="white" />}
             iconRight
@@ -254,7 +256,7 @@ const AddTopicScreen = ({ navigation }) => {
               key={index}
               title={`${index + 1}. ${item.mean}`}
               subtitle={item.name}
-              rightTitle={"Thẻ ghi nhớ"}
+              rightTitle={item.text}
               containerStyle={styles.containerStyleItem}
               titleStyle={styles.titleStyle}
               rightTitleStyle={styles.rightTitleStyle}

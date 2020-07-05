@@ -235,7 +235,7 @@ const QuestionScreen = ({ navigation }) => {
   }
 
   return (
-    <Background source={require("../../assets/backgroundLv1.png")}>
+    <Background>
       <View style={styles.container}>
         <View style={styles.header}>
           <PaperText style={styles.textWhite}>

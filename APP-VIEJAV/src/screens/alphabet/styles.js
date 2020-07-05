@@ -6,8 +6,9 @@ export default styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 10,
-    backgroundColor: '#fff'
+    paddingTop: 15,
+    backgroundColor: '#fff',
+    borderWidth: 1
   },
   backarrow: {
     top: 7,
