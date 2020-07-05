@@ -57,10 +57,12 @@ class ChoiceTestScreen extends Component {
 
   onSubmit = async () => {
     const { answer } = this.state;
+    const { navigation } = this.props;
+
     const score = answer.filter((item) => item.rightAnwser === 1).length;
 
 
-    const id = this.props.navigation.getParam("idCourse");
+    const id = navigation.getParam("idCourse");
 
     const body = {
       topic: id,
@@ -69,7 +71,7 @@ class ChoiceTestScreen extends Component {
 
     try {
       await webservice.setHistory(body);
-      this.props.navigation.navigate('FinishTestScreen', { idCourse: navigation.getParam('idCourse')});
+      navigation.navigate('FinishTestScreen', { idCourse: navigation.getParam('idCourse')});
       
     } catch(error) {
       showMessage({
@@ -81,7 +83,7 @@ class ChoiceTestScreen extends Component {
     
     console.log(answer);
 
-    this.setState({ isVisible: true, score });
+    // this.setState({ isVisible: true, score });
   };
 
   onReturn = () => {

@@ -67,35 +67,60 @@ const QuestionScreen = ({ navigation }) => {
       point = score + 5;
     }
 
-    setCorrect({ 
-      index: choice, 
-      value: choice !== current.answer 
+    setCorrect({
+      index: choice,
+      value: choice !== current.answer,
     });
 
     console.log("point", point);
+    setScore(point);
 
     if (room?.room) {
       let dataEmit = room;
 
-      if (room?.user1?._id === user.id && choice === current.answer) {
-        dataEmit = {
-          ...room,
-          user1: { ...room.user1, score: room.user1.score + point },
-        };
+      if (room?.user1?._id === user.id) {
+        if (choice === current.answer) {
+          dataEmit = {
+            ...room,
+            user1: { ...room.user1, score: room.user1.score + 5 },
+          };
+        } else {
+          dataEmit = {
+            ...room,
+            user1: { ...room.user1, score: room.user1.score - 5 },
+          };
+        }
+      } else {
+        if (choice === current.answer) {
+          dataEmit = {
+            ...room,
+            user2: { ...room.user2, score: room.user2.score + 5 },
+          };
+        } else {
+          dataEmit = {
+            ...room,
+            user2: { ...room.user2, score: room.user2.score - 5 },
+          };
+        }
       }
-      if (room?.user2?._id === user.id && choice === current.answer) {
-        dataEmit = {
-          ...room,
-          user2: { ...room.user2, score: room.user2.score + point },
-        };
-      }
+
+      // if (room?.user1?._id === user.id && choice === current.answer) {
+      //   dataEmit = {
+      //     ...room,
+      //     user1: { ...room.user1, score: room.user1.score + point },
+      //   };
+      // } else {
+      //   dataEmit = {
+      //     ...room,
+      //     user2: { ...room.user2, score: room.user2.score + point },
+      //   };
+      // }
       emitAnswerWar(dataEmit);
     }
 
-    setScore(point);
     setTimeout(() => {
       nextQuestion();
-      setCorrect({})
+      setCorrect({});
     }, 3000);
 
     // setTime(15);
@@ -190,7 +215,7 @@ const QuestionScreen = ({ navigation }) => {
     if (!room.room) {
       if (!time) {
         // props.navigation.navigate("ScoreScreen", { score: 1});
-        navigation.navigate("ScoreScreen", { score: score});
+        navigation.navigate("ScoreScreen", { score: score });
       }
 
       interval = setInterval(() => {
@@ -223,6 +248,10 @@ const QuestionScreen = ({ navigation }) => {
 
   useEffect(() => {
     endGame(gameFinish);
+  });
+
+  useEffect(() => {
+    return () => endGame;
   });
 
   console.log("rooommmmmm", correct);

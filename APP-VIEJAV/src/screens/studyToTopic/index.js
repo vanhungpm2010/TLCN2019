@@ -172,7 +172,10 @@ const StudyTopicScreen = ({ navigation }) => {
   const handleSearch = async (value) => {
     const search = await data.filter(
       (item) => change_alias(item.title).toLowerCase().indexOf(value) >= 0
-    );
+    ) || data;
+
+    console.log(search);
+    
 
     setData(search);
   };

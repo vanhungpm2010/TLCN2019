@@ -22,6 +22,9 @@ const HistoryScreen = ({ navigation }) => {
     getData(navigation.getParam("idCourse"));
   }, [navigation.getParam("idCourse")]);
 
+  console.log(data);
+  
+
   return (
     <ViewVertical style={styles.container}>
       <Header
