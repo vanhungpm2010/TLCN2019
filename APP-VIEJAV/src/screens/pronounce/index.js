@@ -19,8 +19,9 @@ const PronounceScreen = ({ navigation }) => {
     setData(data)
   }, [navigation?.getParam('data')])
 
-  const openAudio = (mean) => {
-    Speech.speak(mean, { language: 'ja' });
+  const openAudio = async (mean) => {
+    const sound = mean.split(" ");
+    await Speech.speak(sound[sound.length - 1], { language: 'ja' });
   }
 
   return (

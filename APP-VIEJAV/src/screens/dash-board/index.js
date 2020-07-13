@@ -99,7 +99,7 @@ const DashBoardScreen = ({ navigation }) => {
         >
           <TouchableOpacity onPress={onSelect} style={styles.boxStyle}>
             {/* <Progress.Circle progress={0.75} width={300} color={'#2C6694'} style={styles.progress}/> */}
-            <Progress.Circle
+            {/* <Progress.Circle
               size={65}
               showsText={true}
               progress={item.complete / 100}
@@ -108,7 +108,7 @@ const DashBoardScreen = ({ navigation }) => {
               style={styles.progress}
               formatText={() => `${item.complete.toFixed(2)}%` }
               textStyle={styles.textStyle}
-            />
+            /> */}
             {/* <Text style={styles.textName}>{item.title}</Text>
             <Text style={styles.textItem}>{item.spell}</Text> */}
             <Text style={styles.textItem}>{item?.topic?.title}</Text>

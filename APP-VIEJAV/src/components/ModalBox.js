@@ -87,7 +87,10 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     fontSize: hp("3%"),
     lineHeight: hp("3%"),
-    textTransform: "none"
+    textTransform: "none",
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    alignContent: 'flex-start',
   }
 });
 

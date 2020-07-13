@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from 'react';
-import { Image, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import { Image, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from "react-native-flash-message";
 
@@ -34,6 +34,7 @@ const NotificationList = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const [isRefresh, setIsRefresh] = useState(false);
   
   const notiRedux = useSelector(state => state.UserReducer.noti)
 
@@ -89,14 +90,20 @@ const NotificationList = ({ navigation }) => {
           accept: true
         });
       } else {
-        await WebService.addFriend({ friend_id: sentUser._id });
-        showMessage({
-          message: 'Success',
-          type: 'success'
-        });
-        Navigator.navigate('Home');
+        if(contentMess.type === 'SHARE_COURSE') {
+          await WebService.acceptCourse({
+            course_id: contentMess.content
+          });
+        }
+        else {
+          await WebService.addFriend({ friend_id: sentUser._id });
+        }
       }
-
+      showMessage({
+        message: 'Success',
+        type: 'success'
+      });
+      Navigator.navigate('DashBoard');
     } catch (error) {
       showMessage({
         message: getErrorMessage(error),
@@ -132,6 +139,7 @@ const NotificationList = ({ navigation }) => {
             keyExtractor={item => {
               return item._id
             }}
+            refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getList} />}
             style={styles.flatContainer}
             renderItem={({ item }) => {
               return (
@@ -152,10 +160,10 @@ const NotificationList = ({ navigation }) => {
                         <Text style={styles.itemName}>
                           {item.sentUser.username}
                           <Text style={styles.itemDescription}>
-                            {item.contentMess.type == 'ADD_FRIEND'
-                              ? ' đã gửi cho bạn lời mời kết bạn.'
-                              : ' gửi lời mời tham gia thử thách'
-                            }</Text>
+                            {item.contentMess.type === 'ADD_FRIEND' && ' đã gửi cho bạn lời mời kết bạn.'}
+                            {item.contentMess.type === 'SHARE_COURSE' && ' chia sẽ khóa học với bạn'}
+                            {item.contentMess.type === 'INVITE_GAME' && ' gửi lời mời tham gia thử thách'}
+                          </Text>
                         </Text>
                         <ViewHorizontal style={styles.boxFooter}>
                           <TouchableOpacity

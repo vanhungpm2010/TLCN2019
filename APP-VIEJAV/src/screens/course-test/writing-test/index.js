@@ -14,7 +14,7 @@ import { change_alias, getErrorMessage } from "../../../untils/helper";
 const WritingTestScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [user, setUser] = useState(null);
-  const [text, setText] = useState('');
+  const [text, setText] = useState('野菜');
   const [current, setCurrent] = useState(null);
   const [dataSubmit, setDataSubmit] = useState([]);
 
@@ -48,8 +48,14 @@ const WritingTestScreen = ({ navigation }) => {
   }
 
   const onSubmit = () => {
-    const textSubmit = change_alias(text).toLowerCase();
-    const textCorrect = change_alias(current?.course?.text).toLowerCase() || undefined;
+    // const textSubmit = change_alias(text).toLowerCase();
+    // const textCorrect = change_alias(current?.course?.text).toLowerCase() || undefined;
+
+    const textSubmit = text;
+    const correct = current?.course?.mean?.split(" ");
+
+    const textCorrect = correct[correct.length - 1] || undefined;
+
     if(textSubmit === textCorrect) {
       dataSubmit.push({ content: current.course._id, rightAnwser: 1 })
     }
@@ -62,7 +68,6 @@ const WritingTestScreen = ({ navigation }) => {
   }
 
   const getData = async (id) => {
-    // this.setState({ loading: true });
     try {
       const response = await webservice.getDetailCourses(id);
       setData(response.contents);
@@ -78,8 +83,6 @@ const WritingTestScreen = ({ navigation }) => {
   useEffect(() => {
     getData(navigation.getParam('idCourse'));
   }, [navigation.getParam('idCourse')])
-
-  console.log('current', current);
   
   return (
     <ViewVertical style={{
@@ -109,7 +112,7 @@ const WritingTestScreen = ({ navigation }) => {
 
         <ViewVertical style={styles.bodyContainer}>
           <ViewVertical style={styles.boxContainer}>
-            <Text style={styles.boxText}>{current?.course?.mean}</Text>
+            <Text style={styles.boxText}>{current?.course?.text}</Text>
             <Progress.Bar progress={(current?.index / data?.length) || 0} width={300} style={styles.progress} color={'#2C6694'}/>
           </ViewVertical>
           <Input 

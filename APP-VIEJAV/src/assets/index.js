@@ -36,3 +36,4 @@ export const ic_record_voice_over = require('./ic_record_voice_over.png');
 export const ic_offline_pin = require('./ic_offline_pin.png');
 export const ic_picture = require('./ic_picture.png');
 export const ic_plus = require('./ic_plus.png');
+export const ic_share = require('./ic_share.png');

@@ -113,7 +113,7 @@ const StudyTopicScreen = ({ navigation }) => {
                   <ViewVertical>
                     <Text
                       style={styles.subtitleStyle}
-                    >{`Bao gồm: ${item?.contents?.length} thuật toán`}</Text>
+                    >{`Bao gồm: ${item?.contents?.length} thuật ngữ`}</Text>
                     <Text
                       style={styles.subtitleStyle}
                     >{`Người tạo: Admin`}</Text>

@@ -43,6 +43,12 @@ export default class WebService {
   static getLearnByCourse = id => {
     return api.get(`/courses/${id}/learn`)
   }
+  static shareCourse = body => {
+    return api.post(url.shareCourse, body);
+  }
+  static acceptCourse = body => {
+    return api.post(url.acceptCourse, body)
+  }
 
 
   // Topic

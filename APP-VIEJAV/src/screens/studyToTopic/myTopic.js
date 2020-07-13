@@ -278,7 +278,7 @@ const MyTopicScreen = ({ navigation }) => {
         {!loading ? (
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={{ marginBottom: 15 }}
+            style={{ marginBottom: 120 }}
             refreshControl={
               <RefreshControl refreshing={loading} onRefresh={getData} />
             }
@@ -311,7 +311,7 @@ const MyTopicScreen = ({ navigation }) => {
                     subtitle={
                       <ViewVertical>
                         <Text style={styles.subtitleStyle}>
-                          Bao gồm: {item?.contents?.length} thuật toán
+                          Bao gồm: {item?.contents?.length} thuật ngữ
                         </Text>
                         <Text style={styles.subtitleStyle}>
                           Người tạo: {data?.username}

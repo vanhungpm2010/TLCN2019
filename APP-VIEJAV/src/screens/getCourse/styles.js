@@ -1,5 +1,9 @@
 import { StyleSheet } from "react-native";
 import colors from '../../configs/colors'
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
 
 export default StyleSheet.create({
   backarrow: {
@@ -152,5 +156,32 @@ export default StyleSheet.create({
     backgroundColor: '#C0DDF4',
     borderWidth: 0
     // width: '90%'
+  },
+  icon: {
+    width: 25,
+    height: 25
+  },
+  modalbox: {
+    width: wp("80%"),
+    height: hp('50%'),
+    top: hp("15%"),
+    left: wp("10%")
+  },
+  containerStyleModal: {
+    padding: 10,
+    backgroundColor: '#C0DDF4',
+    borderRadius: 10,
+    marginBottom: 7,
+    width: '100%'
+  },
+  icContainer: {
+    position: 'absolute',
+    right: -5,
+    top: -5
+  },
+  icClose: {
+    width: 30,
+    height: 30,
+    tintColor: "#000"
   },
 });

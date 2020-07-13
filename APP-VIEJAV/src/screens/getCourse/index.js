@@ -1,41 +1,46 @@
-import React, { Component } from "react";
-import { View, Text, RefreshControl, ScrollView, Image } from "react-native";
-import { connect } from "react-redux";
-import { Avatar, ListItem } from "react-native-elements";
-import { showMessage, hideMessage } from "react-native-flash-message";
-import * as Progress from "react-native-progress";
+import React, { Component } from 'react';
+import { View, Text, RefreshControl, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { Avatar, ListItem } from 'react-native-elements';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import * as Progress from 'react-native-progress';
 
-import Loading from "@components/loading";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import Api from "@services";
-import { CoursesACtion } from "@actions/CoursesAction";
-import SildeCourese from "./slideCourse";
-import SoundCourse from "./soundCourse";
-import PropTypes from "prop-types";
-import Service from "@services";
-import Styles from "./styles";
-import Header from "../../components/header";
-import { ViewVertical } from "../../components/viewBox.component";
-import Storage from "../../storages";
+import Loading from '@components/loading';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Api from '@services';
+import { CoursesACtion } from '@actions/CoursesAction';
+import SildeCourese from './slideCourse';
+import SoundCourse from './soundCourse';
+import PropTypes from 'prop-types';
+import Service from '../../services';
+import Styles from './styles';
+import Header from '../../components/header';
+import { ViewVertical } from '../../components/viewBox.component';
+import Storage from '../../storages';
+import ModalBox from '../../components/ModalBox';
+import { getErrorMessage } from '../../untils/helper';
 
 import {
   ic_arrow_back,
-  ic_notifications,
+  ic_share,
   ic_offline_pin,
   ic_view_carousel,
   ic_spellcheck,
   ic_assignment,
   ic_record_voice_over,
   background,
-} from "../../assets";
+  CLOSE
+} from '../../assets';
 
 export default class GetCourse extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
+      friends: [],
       loading: false,
       user: {},
+      isVisible: false,
     };
   }
 
@@ -49,77 +54,107 @@ export default class GetCourse extends Component {
   }
 
   componentDidMount() {
-    const id = this.props.navigation.getParam("idCourese");
+    const id = this.props.navigation.getParam('idCourese');
     const user = Storage.getUserInfo();
     this.setState({ user });
     this.getData(id);
   }
   _handleToMemmory = () => {
     const { data } = this.state;
-    this.props.navigation.navigate("MemmoryCard", { data: data });
+    this.props.navigation.navigate('MemmoryCard', { data: data });
   };
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
-    const idNext = nextProps.navigation.getParam("idCourese");
-    const id = this.props.navigation.getParam("idCourese");
+    const idNext = nextProps.navigation.getParam('idCourese');
+    const id = this.props.navigation.getParam('idCourese');
 
     if (idNext !== id) {
       this.getData(idNext);
     }
   }
+
+  onShare = async () => {
+    try {
+      const data = await Service.getFriends();
+      this.setState({ friends: data.friends, isVisible: true });
+    } catch (error) {
+      showMessage({
+        type: 'danger',
+        message: getErrorMessage(error)
+      })
+    }
+  };
+
+  shareToFriends = async friend_id => {
+    try {
+      const course_id = this.props.navigation.getParam('idCourese');
+
+      const data = await Service.shareCourse({ friend_id, course_id})
+      showMessage({
+        type: 'success',
+        message: 'Chia sẻ thành công'
+      })
+    } catch (error) {
+      showMessage({
+        type: 'danger',
+        message: getErrorMessage(error)
+      })
+    }
+  }
+
   render() {
-    const { data, loading, user } = this.state;
+    const { data, loading, user, friends, isVisible } = this.state;
 
     const { navigation } = this.props;
     const { state, navigate, goBack } = navigation;
     const params = state.params || {};
-    const id = this.props.navigation.getParam("idCourese");
+    const id = this.props.navigation.getParam('idCourese');
 
     const CardList = [
       {
         icon: ic_view_carousel,
-        title: "フラッシュカード",
-        rightTitle: "Thẻ ghi nhớ",
+        title: 'フラッシュカード',
+        rightTitle: 'Thẻ ghi nhớ',
         onPress: () =>
-          navigation.navigate("MemoryCardScreen", { data: data?.contents }),
+          navigation.navigate('MemoryCardScreen', { data: data?.contents }),
       },
       {
         icon: ic_spellcheck,
-        title: "筆記試験",
-        rightTitle: "Kiểm tra viết",
+        title: '筆記試験',
+        rightTitle: 'Kiểm tra viết',
         onPress: () =>
-          navigation.navigate("WritingTestScreen", { idCourse: id }),
+          navigation.navigate('WritingTestScreen', { idCourse: id }),
       },
       {
         icon: ic_offline_pin,
-        title: "語彙テスト",
-        rightTitle: "Kiểm tra trắc nghiệm",
+        title: '語彙テスト',
+        rightTitle: 'Kiểm tra trắc nghiệm',
         onPress: () =>
-          navigation.navigate("ChoiceTestScreen", { idCourse: id }),
+          navigation.navigate('ChoiceTestScreen', { idCourse: id }),
       },
       {
         icon: ic_assignment,
-        title: "まとめ知識",
-        rightTitle: "Tổng quan kiến thức",
-        onPress: () => navigation.navigate("HistoryScreen", { idCourse: id }),
+        title: 'まとめ知識',
+        rightTitle: 'Tổng quan kiến thức',
+        onPress: () => navigation.navigate('HistoryScreen', { idCourse: id }),
       },
       {
         icon: ic_record_voice_over,
-        title: "話し中",
-        rightTitle: "Cách phát âm",
+        title: '話し中',
+        rightTitle: 'Cách phát âm',
         onPress: () =>
-          navigation.navigate("PronounceScreen", { data: data?.contents }),
+          navigation.navigate('PronounceScreen', { data: data?.contents }),
       },
     ];
 
     return (
-      <ViewVertical style={{ flex: 1, backgroundColor: "#fff" }}>
+      <ViewVertical style={{ flex: 1, backgroundColor: '#fff' }}>
         <Header
           noShadow={true}
           stylesHeaderText={{
-            color: "#000",
+            color: '#000',
             fontSize: 15,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           }}
           // mainText={'Học theo chủ đề'}
           stylesHeader={Styles.header}
@@ -128,21 +163,29 @@ export default class GetCourse extends Component {
           }
           leftAction={() => navigate(params.go_back_key)}
           actionRight={[
+            // {
+            //   // component: <BadgedIcon type="ionicon" name="md-notifications" color={"#fff"} style={styles.icon}/>,
+            //   component: (
+            //     <Image source={ic_notifications} style={styles.icon} />
+            //   ),
+            //   action: () => navigation.navigate("Notifications"),
+            //   styleTouchable: {
+            //     top: 9,
+            //   },
+            // },
+            // {
+            //   component: (
+            //     <Avatar rounded source={{ uri: user?.avatar }} size="small" />
+            //   ),
+            //   action: () => navigation.navigate("Profile"),
+            //   styleTouchable: {
+            //     top: 9,
+            //   },
+            // },
             {
               // component: <BadgedIcon type="ionicon" name="md-notifications" color={"#fff"} style={styles.icon}/>,
-              component: (
-                <Image source={ic_notifications} style={styles.icon} />
-              ),
-              action: () => navigation.navigate("Notifications"),
-              styleTouchable: {
-                top: 9,
-              },
-            },
-            {
-              component: (
-                <Avatar rounded source={{ uri: user?.avatar }} size="small" />
-              ),
-              action: () => navigation.navigate("Profile"),
+              component: <Image source={ic_share} style={Styles.icon} />,
+              action: () => this.onShare(),
               styleTouchable: {
                 top: 9,
               },
@@ -154,12 +197,15 @@ export default class GetCourse extends Component {
           <ScrollView
             style={{
               flex: 1,
-              backgroundColor: "white",
+              backgroundColor: 'white',
               paddingLeft: 20,
               paddingRight: 20,
             }}
             refreshControl={
-              <RefreshControl refreshing={loading} onRefresh={() => this.getData(params.idCourese)} />
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => this.getData(params.idCourese)}
+              />
             }
           >
             {/* slide */}
@@ -171,7 +217,7 @@ export default class GetCourse extends Component {
               <Image
                 source={data?.avatar ? { uri: data.avatar } : background}
                 resizeMode="cover"
-                style={{ height: "70%", width: "100%" }}
+                style={{ height: '70%', width: '100%' }}
               />
               <ViewVertical style={Styles.headerTextContainer}>
                 <Text style={Styles.headerText}>{data?.title}</Text>
@@ -187,7 +233,7 @@ export default class GetCourse extends Component {
               <Progress.Bar
                 progress={data?.complete / 100 || 0}
                 width={300}
-                color={"#2C6694"}
+                color={'#2C6694'}
                 style={Styles.progress}
               />
             </ViewVertical>
@@ -223,59 +269,55 @@ export default class GetCourse extends Component {
                   })
                 : null}
             </ViewVertical>
-
-            {/* game */}
-            {/* <View style={{ backgroundColor: '#E8EAF6', paddingBottom: 20 }}>
-              <Text style={Styles.title}>Game</Text>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('CourseTest', {
-                    id: navigation.getParam('idCourese'),
-                  })
-                }
-                style={{
-                  ...Styles.cardGame,
-                  height: 100,
-                  borderBottomColor: '#00E676',
-                }}
-              >
-                <Icon name="clone" size={30} color={'#00E676'}></Icon>
-                <Text style={{ ...Styles.titleGame, color: '#00E676' }}>
-                  Kiem tra
-                </Text>
-              </TouchableOpacity>
-              <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity
-                  onPress={this._handleToMemmory}
-                  style={{
-                    ...Styles.cardGameTwo,
-                    borderBottomColor: '#7986CB',
-                  }}
-                >
-                  <Icon name="database" size={30} color={'#7986CB'}></Icon>
-                  <Text style={{ ...Styles.titleGame, color: '#7986CB' }}>
-                    Thẻ Ghi Nhớ
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    ...Styles.cardGameTwo,
-                    borderBottomColor: '#FFA000',
-                  }}
-                >
-                  <Icon name="user-graduate" size={30} color={'#FFA000'}></Icon>
-                  <Text style={{ ...Styles.titleGame, color: '#FFA000' }}>
-                    Học Viết
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View> */}
-            {/* endgame */}
-            {/* phat am*/}
           </ScrollView>
         ) : (
           <Loading />
         )}
+        <ModalBox style={Styles.modalbox} isVisible={isVisible}>
+          <TouchableOpacity
+            style={Styles.icContainer}
+            onPress={() => this.setState({ isVisible: false})}
+          >
+            <Image source={CLOSE} style={Styles.icClose} />
+          </TouchableOpacity>
+          <ScrollView
+            style={{
+              flex: 1,
+              backgroundColor: 'white',
+              paddingLeft: 20,
+              paddingRight: 20,
+              width: '100%',
+            }}
+          >
+            {friends &&
+              friends.map((item, index) => {
+                console.log(item);
+                return (
+                  <ListItem
+                    key={index}
+                    leftElement={
+                      <Avatar rounded source={{ uri: item.avatar }} size="small" />
+                    }
+                    title={item.username}
+                    // rightTitle={item.rightTitle}
+                    titleStyle={Styles.titleStyle}
+                    rightTitleStyle={Styles.titleStyle}
+                    containerStyle={Styles.containerStyleModal}
+                    rightContentContainerStyle={
+                      Styles.rightContentContainerStyle
+                    }
+                    // onPress={item.onPress}
+                    rightIcon={{
+                      color: "#16334A",
+                      size: 30,
+                      name: "share",
+                      onPress: () => this.shareToFriends(item._id),
+                    }}
+                  />
+                );
+              })}
+          </ScrollView>
+        </ModalBox>
       </ViewVertical>
     );
   }
