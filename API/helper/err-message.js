@@ -35,8 +35,24 @@ module.exports = {
     status: 400,
     message: 'topic not exists'
   },
+  friendNotFound: {
+    status: 400,
+    message: 'friend has exist'
+  },
+  friendRequestNotFound: {
+    status: 400,
+    message: 'friend request has exist'
+  },
+  friendNotOnline: {
+    status: 400,
+    message: 'friend not online'
+  },
   requiredLogin: {
     status: 405,
     message: 'required login'
-  }
+  },
+  courseOfFriendIsExit: {
+    status: 405,
+    message: 'course of friend is exit'
+  },
 }

@@ -9,3 +9,12 @@ exports.readVocabulary = async (req, res, next) => {
         next(err)
     }
 }
+    exports.readLesson = async (req, res, next) => {
+        try {
+            await vocabService.readLesson()
+            res.json({ success: true })
+        }
+        catch (err) {
+            next(err)
+        }  
+}

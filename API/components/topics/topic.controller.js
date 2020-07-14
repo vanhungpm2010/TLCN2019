@@ -26,9 +26,17 @@ exports.getAll = (req, res, next) => {
 }
 
 exports.leanTopic = (req, res, next) => {
-    const { sumQuestion, _id, numberAnswer, isGuest } = req.user
+    const { sumQuestion, _id, numberAnswer, isGuest, userForWeb } = req.user
+    const payload = {
+        id: req.params.id,
+        sumQuestion: sumQuestion || 12,
+        _id,
+        isGuest: isGuest || false,
+        numberAnswer,
+        userForWeb
+    }
     topicService
-        .makeQuestion(req.params.id, sumQuestion, _id, numberAnswer, isGuest)
+        .makeQuestion(payload)
         .then(response => res.json(response))
         .catch(e => next(e))
 }

@@ -10,6 +10,7 @@ const topicSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  mean: String,
   avatar: {
     type: mongoose.Schema.ObjectId,
     ref: 'Avatar'

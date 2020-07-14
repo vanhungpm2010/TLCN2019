@@ -29,7 +29,7 @@ exports.getDetails = (id, isGuest = false) => {
 }
 
 //todo
-exports.makeQuestion = async (id, sumQuestion = 12, _id, numberAnswer, isGuest = false) => {
+exports.makeQuestion = async ({ id, sumQuestion, _id, numberAnswer, isGuest, userForWeb }) => {
     if (isGuest)
         throw error.requiredLogin
 
@@ -50,7 +50,16 @@ exports.makeQuestion = async (id, sumQuestion = 12, _id, numberAnswer, isGuest =
             throw error.topicNotFound
         vocabularies = topics.vocabularies
     }
-    return question._makeQuestion({ type: 'topic', numberQuestion: sumQuestion, numberAnswer }, vocabularies)
+    return question._makeQuestion({ type: 'topic', numberQuestion: sumQuestion, numberAnswer, userForWeb }, vocabularies)
+}
+
+exports.randomTopic = async () => {
+    const topics = await topic.find().lean()
+    const topic = topics[Math.floor(Math.random() * topics.length)];
+    return {
+        ...topics,
+        avatar: avatarCtrl.getImgUrl(topic.avatar)
+    }
 }
 
 

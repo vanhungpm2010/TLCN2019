@@ -15,4 +15,8 @@ module.exports = {
   Vocabulary: require('../components/vocabularies/vocabulary.model'),
   History: require('../components/histories/history.model'),
   Challenge: require('../components/challenge/challenge.model'),
+  Notify: require('../components/notify/notify.model'),
+  Room: require('../components/rooms/room.model'),
+  RoomConfig: require('../components/room_configs/room_config.model'),
+  Alphabet: require('../components/alphabet/alphabet.model')
 }

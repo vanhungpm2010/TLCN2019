@@ -15,7 +15,11 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.ObjectId,
       ref: 'Content'
     }
-  ]
+  ],
+  type:{
+    type:String,
+    default:"private"
+  }
 })
 
 module.exports = mongoose.model('Course', courseSchema)

@@ -1,105 +1,123 @@
-const mongoose = require('mongoose')
-const base = require('../../helper/_base_schema')
+const mongoose = require("mongoose");
+const base = require("../../helper/_base_schema");
 const type_login = {
-  FB: 'FB',
-  UN: 'UN', //username
-  EM: 'EM' //email
-}
+  FB: "FB",
+  UN: "UN", //username
+  EM: "EM", //email
+};
 const userSchema = new mongoose.Schema({
   ...base,
+  tokenNotify: [
+    {
+      type: String,
+    },
+  ],
   email: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   hash: {
     type: String,
-    required: true
+    required: true,
   },
   username: {
     type: String,
-    required: true
+    required: true,
   },
   isGuest: {
     type: Boolean,
-    default: true
+    default: true,
   },
+  fbId: String,
   typeLogin: {
     type: String,
-    default: type_login.UN
+    default: type_login.UN,
   },
-  dynamic_props: {
-
-  },
+  dynamic_props: {},
   userForWeb: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isOnline: {
     type: Boolean,
-    default: false
+    default: false,
   },
   socketId: {
-    type: String
+    type: String,
   },
   phoneNumber: {
     type: String,
-    minlength: 9
+    minlength: 9,
   },
   experience: {
     type: Number,
-    default: 0
+    default: 0,
   },
   level: {
     type: Number,
-    default: 0
+    default: 0,
   },
   countOnline: {
     type: Number,
-    default: 0
+    default: 0,
   },
   sumQuestion: {
     type: Number,
-    default: 12
+    default: 12,
   },
   numberAnswer: {
     type: Number,
-    default: 4
+    default: 4,
   },
   lession_number: {
     type: Number,
-    default: 1
+    default: 1,
   },
   friends: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    }
+      ref: "User",
+    },
+  ],
+  requestFriend: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
   ],
   avatar: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Avatar'
+    ref: "Avatar",
   },
   courses: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'Course'
-    }
+      ref: "Course",
+    },
   ],
   histories: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'History'
-    }
+      ref: "History",
+    },
   ],
   archivements: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'Archivement'
-    }
-  ]
-})
-userSchema.index({ username: 1 }, { unique: true })
-const User = mongoose.model('User', userSchema)
-User.type_login = type_login
-module.exports = User
+      ref: "Archivement",
+    },
+  ],
+  markHight: {
+    type: Object,
+    default: {
+      challenge: 0,
+      topic: 0,
+      course: 0,
+    },
+  },
+});
+userSchema.index({ username: 1 }, { unique: true });
+const User = mongoose.model("User", userSchema);
+User.type_login = type_login;
+module.exports = User;
