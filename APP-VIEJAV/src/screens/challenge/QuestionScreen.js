@@ -42,7 +42,7 @@ import Storage from "@storages";
 const QuestionScreen = ({ navigation }) => {
   // const [quiz, setQuiz] = useState(initialValue);
   const [current, setCurrent] = useState({});
-  const [time, setTime] = useState(15);
+  const [time, setTime] = useState(20);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [score, setScore] = useState(0);
@@ -216,16 +216,17 @@ const QuestionScreen = ({ navigation }) => {
     //   startGame();
     // }
     let interval;
-    if (!room.room) {
-      if (!time) {
-        // props.navigation.navigate("ScoreScreen", { score: 1});
-        navigation.navigate("ScoreScreen", { score: score });
-      }
-
-      interval = setInterval(() => {
-        setTime((time) => time - 1);
-      }, 1000);
+    if (!time) {
+      // if(room) {
+      //   endGame(gameFinish);
+      // }
+      clearInterval(interval);
+      // props.navigation.navigate("ScoreScreen", { score: 1});
+      navigation.navigate("ScoreScreen", { score: score });
     }
+    interval = setInterval(() => {
+      setTime((time) => time - 1);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [time]);
@@ -246,13 +247,13 @@ const QuestionScreen = ({ navigation }) => {
     getInfoRooms(getInfoRoom);
   }, [room]);
 
-  useEffect(() => {
-    getTimeCountDown(setTime);
-  }, []);
+  // useEffect(() => {
+  //   getTimeCountDown(setTime);
+  // }, []);
 
-  useEffect(() => {
-    endGame(gameFinish);
-  });
+  // useEffect(() => {
+    
+  // });
 
   useEffect(() => {
     return () => endGame;

@@ -104,6 +104,7 @@ export default class GetCourse extends Component {
 
   render() {
     const { data, loading, user, friends, isVisible } = this.state;
+    console.log(data);
 
     const { navigation } = this.props;
     const { state, navigate, goBack } = navigation;
@@ -182,7 +183,7 @@ export default class GetCourse extends Component {
             //     top: 9,
             //   },
             // },
-            {
+            data?.type === 'private' && {
               // component: <BadgedIcon type="ionicon" name="md-notifications" color={"#fff"} style={styles.icon}/>,
               component: <Image source={ic_share} style={Styles.icon} />,
               action: () => this.onShare(),

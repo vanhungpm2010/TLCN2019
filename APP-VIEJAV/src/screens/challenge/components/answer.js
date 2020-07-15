@@ -9,8 +9,6 @@ import Icon from "../../../components/Icon";
 import Box from "../../../components/Box";
 
 const Answer = ({ value, openAudio, choose, wrong = "" }) => {
-  console.log('wrong', wrong);
-  
   return (
   <View style={styles.anwsers}>
     <Box value={value} style={styles.boxAnwser} onPress={choose}>

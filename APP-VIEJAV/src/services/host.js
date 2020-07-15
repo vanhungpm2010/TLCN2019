@@ -2,7 +2,7 @@
 const param = '/api'
 export const hostname = "https://japaness-2020.herokuapp.com";
 
-// export const hostname = 'https://ba506789edf1.ngrok.io'
+// export const hostname = 'https://6ae8f9a0ada7.ngrok.io'
 
 
 export const Host = hostname + param;

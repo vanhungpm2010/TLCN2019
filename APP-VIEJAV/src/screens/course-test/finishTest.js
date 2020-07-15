@@ -27,6 +27,9 @@ const FinishTestScreen = ({ navigation }) => {
       <ViewVertical style={styles.box}>
         <Text style={styles.title}>完了したテスト</Text>
         <Text style={styles.text}>Kiểm tra hoàn thành</Text>
+        <Text style={styles.text}>
+          Bạn làm đúng {navigation.getParam("score")} / {navigation.getParam("count")}
+        </Text>
         <TouchableOpacity
           style={styles.btn}
           onPress={() =>

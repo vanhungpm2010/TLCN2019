@@ -24,6 +24,8 @@ const WritingTestScreen = ({ navigation }) => {
   };
 
   const finishTest = async value => {
+    const score = dataSubmit?.filter((item) => item.rightAnwser === 1).length;
+    
     if(current.index === data.length - 1) {
       const body = {
         topic: navigation.getParam('idCourse'),
@@ -32,7 +34,11 @@ const WritingTestScreen = ({ navigation }) => {
 
       try {
         const res = await webservice.setHistory(body);
-        navigation.navigate('FinishTestScreen', { idCourse: navigation.getParam('idCourse')});
+        navigation.navigate('FinishTestScreen', { 
+          idCourse: navigation.getParam('idCourse'),
+          score,
+          count: data.length
+        });
         
       } catch(error) {
         showMessage({
